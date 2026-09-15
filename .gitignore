@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env*
+!.env.example
+.ngodingpakeai/pending.json
+.ngodingpakeai/summaries.json
+.ngodingpakeai/state.json
+playwright-report/
+test-results/
+**/.DS_Store

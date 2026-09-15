@@ -1,0 +1,440 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --glass-border: rgba(255, 255, 255, 0.85);
+    --glass-border-subtle: rgba(255, 255, 255, 0.55);
+    --glass-surface: rgba(255, 255, 255, 0.78);
+    --glass-surface-elevated: rgba(255, 255, 255, 0.90);
+    --glass-rim: rgba(255, 255, 255, 0.95);
+  }
+
+  body {
+    font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #0f172a; /* High-contrast Slate 900 */
+    background-color: #f8fafc;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
+    letter-spacing: -0.025em;
+    color: #0f172a;
+  }
+
+  /* High-contrast selection */
+  ::selection {
+    background: #6366f1;
+    color: #ffffff;
+  }
+}
+
+/* ============================================================
+   3D GLASSMORPHISM CORE TOKENS (High-End Craft, Zero AI Slop)
+   ============================================================ */
+
+/* Master 3D Frosted Glass Frame (As seen in 3D pastel glassmorphism reference) */
+.glass-3d-master-frame {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.76) 0%, rgba(255, 255, 255, 0.54) 100%);
+  backdrop-filter: blur(30px) saturate(190%);
+  -webkit-backdrop-filter: blur(30px) saturate(190%);
+  border: 1.5px solid rgba(255, 255, 255, 0.90);
+  box-shadow: 
+    0 32px 75px -16px rgba(99, 102, 241, 0.14),
+    0 14px 32px -6px rgba(244, 114, 182, 0.08),
+    0 4px 12px -2px rgba(15, 23, 42, 0.03),
+    inset 0 2px 0 0 rgba(255, 255, 255, 0.98),
+    inset 0 -1.5px 0 0 rgba(255, 255, 255, 0.4);
+  position: relative;
+}
+
+/* Base 3D Glass Surface with Specular Rim & Inset Gloss */
+.glass-3d-base {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.62) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 
+    0 12px 35px -8px rgba(15, 23, 42, 0.07),
+    0 2px 6px -1px rgba(15, 23, 42, 0.03),
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 0 rgba(15, 23, 42, 0.04);
+  position: relative;
+}
+
+/* Elevated Floating 3D Glass (Modals, Nav, Hero Pillars) */
+.glass-3d-elevated {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.75) 100%);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 
+    0 10px 25px -6px rgba(15, 23, 42, 0.06),
+    0 4px 10px -2px rgba(15, 23, 42, 0.02),
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.95);
+}
+
+/* Interactive 3D Glass Card with Tactile Hover-Lift */
+.glass-3d-interactive {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.65) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 
+    0 8px 20px -6px rgba(15, 23, 42, 0.05),
+    0 2px 6px -1px rgba(15, 23, 42, 0.02),
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.95);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
+              background 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-3d-interactive:hover {
+  transform: translateY(-3px) scale(1.006);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.80) 100%);
+  border-color: rgba(255, 255, 255, 1);
+  box-shadow: 
+    0 16px 30px -8px rgba(15, 23, 42, 0.08),
+    0 6px 12px -3px rgba(15, 23, 42, 0.03),
+    inset 0 2px 0 0 rgba(255, 255, 255, 1);
+}
+
+/* Backward-compatible legacy classes mapped to 3D Glass */
+.glass-panel {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.65) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 20px -6px rgba(15, 23, 42, 0.05), inset 0 1.5px 0 0 rgba(255, 255, 255, 0.95);
+}
+
+.glass-panel-subtle {
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
+}
+
+.glass-panel-interactive {
+  composes: glass-3d-interactive;
+}
+
+/* Specular Rim Light Effect */
+.glass-specular {
+  position: relative;
+  overflow: hidden;
+}
+.glass-specular::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.95) 40%, rgba(255, 255, 255, 0.95) 60%, transparent 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ============================================================
+   POLYCHROMATIC JEWEL GLASS (Jenjang, Hadiah, Transaksi)
+   ============================================================ */
+
+/* SD / MI — Vivid Emerald Grasshopper */
+.glass-3d-emerald,
+.glass-sd {
+  background: linear-gradient(140deg, rgba(236, 253, 245, 0.92) 0%, rgba(209, 250, 229, 0.70) 100%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(110, 231, 183, 0.85);
+  box-shadow: 
+    0 6px 18px -4px rgba(16, 185, 129, 0.12),
+    0 2px 6px -1px rgba(16, 185, 129, 0.04),
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.95);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-3d-emerald:hover,
+.glass-sd:hover {
+  transform: translateY(-3px) scale(1.008);
+  box-shadow: 
+    0 12px 24px -6px rgba(16, 185, 129, 0.18),
+    0 4px 8px -2px rgba(16, 185, 129, 0.08),
+    inset 0 2px 0 0 rgba(255, 255, 255, 1);
+}
+
+/* SMP / MTs — Electric Azure Cyan */
+.glass-3d-cyan,
+.glass-smp {
+  background: linear-gradient(140deg, rgba(240, 249, 255, 0.92) 0%, rgba(224, 242, 254, 0.70) 100%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(125, 211, 252, 0.85);
+  box-shadow: 
+    0 6px 18px -4px rgba(14, 165, 233, 0.12),
+    0 2px 6px -1px rgba(14, 165, 233, 0.04),
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.95);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-3d-cyan:hover,
+.glass-smp:hover {
+  transform: translateY(-3px) scale(1.008);
+  box-shadow: 
+    0 12px 24px -6px rgba(14, 165, 233, 0.18),
+    0 4px 8px -2px rgba(14, 165, 233, 0.08),
+    inset 0 2px 0 0 rgba(255, 255, 255, 1);
+}
+
+/* SMA / SMK — Royal Cosmic Ultraviolet */
+.glass-3d-violet,
+.glass-sma {
+  background: linear-gradient(140deg, rgba(245, 243, 255, 0.92) 0%, rgba(237, 233, 254, 0.70) 100%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(196, 181, 253, 0.85);
+  box-shadow: 
+    0 6px 18px -4px rgba(139, 92, 246, 0.12),
+    0 2px 6px -1px rgba(139, 92, 246, 0.04),
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.95);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-3d-violet:hover,
+.glass-sma:hover {
+  transform: translateY(-3px) scale(1.008);
+  box-shadow: 
+    0 12px 24px -6px rgba(139, 92, 246, 0.18),
+    0 4px 8px -2px rgba(139, 92, 246, 0.08),
+    inset 0 2px 0 0 rgba(255, 255, 255, 1);
+}
+
+/* Solar Amber — Prestige, Trophy, Hadiah */
+.glass-3d-amber,
+.glass-amber {
+  background: linear-gradient(140deg, rgba(255, 251, 235, 0.95) 0%, rgba(254, 243, 199, 0.75) 100%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(252, 211, 77, 0.85);
+  box-shadow: 
+    0 6px 18px -4px rgba(245, 158, 11, 0.14),
+    0 2px 6px -1px rgba(245, 158, 11, 0.04),
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.95);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-3d-amber:hover,
+.glass-amber:hover {
+  transform: translateY(-3px) scale(1.008);
+  box-shadow: 
+    0 12px 24px -6px rgba(245, 158, 11, 0.20),
+    0 4px 8px -2px rgba(245, 158, 11, 0.08),
+    inset 0 2px 0 0 rgba(255, 255, 255, 1);
+}
+
+/* Coral Ruby — Midtrans Payment, QRIS, Urgent */
+.glass-3d-rose,
+.glass-rose {
+  background: linear-gradient(140deg, rgba(255, 241, 242, 0.92) 0%, rgba(255, 228, 230, 0.75) 100%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(253, 164, 175, 0.85);
+  box-shadow: 
+    0 6px 18px -4px rgba(244, 63, 94, 0.12),
+    0 2px 6px -1px rgba(244, 63, 94, 0.04),
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.95);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-3d-rose:hover,
+.glass-rose:hover {
+  transform: translateY(-3px) scale(1.008);
+  box-shadow: 
+    0 12px 24px -6px rgba(244, 63, 94, 0.18),
+    0 4px 8px -2px rgba(244, 63, 94, 0.08),
+    inset 0 2px 0 0 rgba(255, 255, 255, 1);
+}
+
+/* ============================================================
+   TACTILE 3D GLASS BUTTONS
+   ============================================================ */
+
+.btn-3d-primary {
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #8b5cf6 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 4px 12px -2px rgba(99, 102, 241, 0.25),
+    0 2px 4px -1px rgba(99, 102, 241, 0.12),
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.4);
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.18s ease;
+}
+.btn-3d-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 18px -3px rgba(99, 102, 241, 0.35),
+    0 3px 6px -1px rgba(99, 102, 241, 0.18),
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.55);
+}
+.btn-3d-primary:active {
+  transform: translateY(1px);
+  box-shadow: 
+    0 2px 6px -1px rgba(99, 102, 241, 0.25),
+    inset 0 1px 0 0 rgba(0, 0, 0, 0.15);
+}
+
+.btn-3d-white {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.85) 100%);
+  color: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 
+    0 8px 20px -6px rgba(15, 23, 42, 0.08),
+    0 2px 6px -1px rgba(15, 23, 42, 0.04),
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 1);
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.18s ease;
+}
+.btn-3d-white:hover {
+  transform: translateY(-2px);
+  background: #ffffff;
+  box-shadow: 
+    0 14px 28px -6px rgba(15, 23, 42, 0.12),
+    inset 0 1.5px 0 0 #ffffff;
+}
+.btn-3d-white:active {
+  transform: translateY(1px);
+  box-shadow: 
+    0 4px 10px -2px rgba(15, 23, 42, 0.08);
+}
+
+/* Secondary Frosted Glass Outline Button (As seen on reference "Features" button) */
+.btn-3d-ghost-glass {
+  background: rgba(255, 255, 255, 0.65);
+  color: #4f46e5;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(124, 58, 237, 0.35);
+  box-shadow: 
+    0 6px 18px -4px rgba(99, 102, 241, 0.12),
+    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.95);
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.18s ease,
+              border-color 0.18s ease;
+}
+.btn-3d-ghost-glass:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(124, 58, 237, 0.6);
+  color: #3730a3;
+  box-shadow: 
+    0 12px 24px -4px rgba(99, 102, 241, 0.2),
+    inset 0 1.5px 0 0 #ffffff;
+}
+.btn-3d-ghost-glass:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 10px -2px rgba(99, 102, 241, 0.1);
+}
+
+/* ============================================================
+   DYNAMIC MULTI-CHROMATIC PASTEL CAUSTIC CANVAS
+   ============================================================ */
+
+.light-mesh-bg {
+  background-color: #f6f7fb;
+  background-image: 
+    radial-gradient(at 12% 10%, rgba(221, 214, 254, 0.55) 0px, transparent 48%),
+    radial-gradient(at 88% 12%, rgba(254, 215, 170, 0.55) 0px, transparent 46%),
+    radial-gradient(at 92% 75%, rgba(224, 242, 254, 0.55) 0px, transparent 50%),
+    radial-gradient(at 8% 85%, rgba(252, 231, 243, 0.55) 0px, transparent 48%),
+    radial-gradient(at 50% 45%, rgba(254, 243, 199, 0.35) 0px, transparent 55%);
+  background-attachment: fixed;
+}
+
+/* 3D Volumetric Cloud Element Styling */
+.cloud-3d-puff {
+  background: radial-gradient(circle at 35% 25%, #ffffff 0%, #f8fafc 55%, #e2e8f0 100%);
+  box-shadow: 
+    0 20px 35px -10px rgba(99, 102, 241, 0.15),
+    0 6px 15px -3px rgba(15, 23, 42, 0.06),
+    inset 0 -5px 10px rgba(148, 163, 184, 0.28),
+    inset 0 4px 8px rgba(255, 255, 255, 1);
+  filter: drop-shadow(0 15px 25px rgba(139, 92, 246, 0.12));
+}
+
+/* Subtle mathematical grid texture */
+.math-grid-pattern {
+  background-size: 36px 36px;
+  background-image: 
+    linear-gradient(to right, rgba(99, 102, 241, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(99, 102, 241, 0.04) 1px, transparent 1px);
+}
+
+/* ============================================================
+   3D FLOATING ANIMATIONS
+   ============================================================ */
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(2deg);
+  }
+}
+
+@keyframes float-reverse {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(8px) rotate(-2deg);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 7s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+/* Tabular numbers for clean financial & timer data */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Clean custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+  border: 2px solid #f1f5f9;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

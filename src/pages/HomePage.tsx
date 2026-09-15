@@ -1,0 +1,218 @@
+import React, { useState } from 'react';
+import { Navbar } from '../components/layout/Navbar';
+import { Footer } from '../components/layout/Footer';
+import { AnnouncementBanner } from '../components/home/AnnouncementBanner';
+import { HeroSection } from '../components/home/HeroSection';
+import { ProfileSection } from '../components/home/ProfileSection';
+import { CategoryScheduleSection } from '../components/home/CategoryScheduleSection';
+import { AnnouncementListSection } from '../components/home/AnnouncementListSection';
+import { VideoGallerySection } from '../components/home/VideoGallerySection';
+import { ArchiveSection } from '../components/home/ArchiveSection';
+import { FaqContactSection } from '../components/home/FaqContactSection';
+import { CertificateVerifyModal } from '../components/certificate/CertificateVerifyModal';
+import { AuthModal } from '../components/auth/AuthModal';
+import { FormPendaftaranModal } from '../components/registration/FormPendaftaranModal';
+
+import { 
+  MOCK_KATEGORI, 
+  MOCK_PENGUMUMAN, 
+  MOCK_JADWAL, 
+  MOCK_ARSIP_SOAL, 
+  MOCK_VIDEOS, 
+  MOCK_FAQ 
+} from '../data/mockData';
+import type { KategoriLomba, Pengumuman } from '../types';
+import { CheckCircle2, UserCheck } from 'lucide-react';
+
+interface HomePageProps {
+  onNavigateToPayment?: () => void;
+  onNavigateToDashboard?: () => void;
+  onNavigateToLogin?: () => void;
+  onNavigateToGuru?: () => void;
+  onNavigateToRegistrationDetail?: () => void;
+  activeUser?: { name: string; email: string; role: string; sekolah?: string } | null;
+  onLogout?: () => void;
+}
+
+export const HomePage: React.FC<HomePageProps> = ({ 
+  onNavigateToPayment,
+  onNavigateToDashboard,
+  onNavigateToLogin,
+  onNavigateToGuru,
+  onNavigateToRegistrationDetail,
+  activeUser: externalActiveUser,
+  onLogout,
+}) => {
+  const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isFormPendaftaranOpen, setIsFormPendaftaranOpen] = useState(false);
+  const [selectedKategoriForRegister, setSelectedKategoriForRegister] = useState<KategoriLomba | null>(null);
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState<Pengumuman | null>(null);
+  const [internalUser, setInternalUser] = useState<{ name: string; email: string; role: string } | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const activeUser = externalActiveUser || internalUser;
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 4000);
+  };
+
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleSelectCategory = (category: KategoriLomba) => {
+    setSelectedKategoriForRegister(category);
+    setIsFormPendaftaranOpen(true);
+  };
+
+  const handleLoginSuccess = (user: { name: string; email: string; role: string }) => {
+    setInternalUser(user);
+    showToast(`Selamat datang, ${user.name}! Akun ${user.role} siap digunakan.`);
+    if (user.role === 'Guru Pendamping') {
+      if (onNavigateToGuru) onNavigateToGuru();
+    } else if (user.role === 'Panitia Pelaksana' || user.role === 'Super Admin' || user.role.includes('Admin') || user.role.includes('Panitia')) {
+      if (onNavigateToDashboard) onNavigateToDashboard();
+    } else {
+      if (onNavigateToRegistrationDetail) onNavigateToRegistrationDetail();
+    }
+  };
+
+  const handleLogout = () => {
+    setInternalUser(null);
+    if (onLogout) onLogout();
+    showToast('Anda telah keluar dari sesi.');
+  };
+
+  return (
+    <div className="min-h-screen light-mesh-bg text-slate-800 relative overflow-x-hidden">
+      
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-white/95 border border-slate-200 text-slate-900 text-xs font-semibold shadow-2xl animate-fade-in backdrop-blur-xl">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
+      {/* User Session Bar (if logged in) */}
+      {activeUser && (
+        <div className="fixed top-0 left-0 right-0 z-[60] bg-indigo-600 px-4 py-1 text-center text-xs font-medium text-white flex items-center justify-center gap-2">
+          <UserCheck className="w-3.5 h-3.5" />
+          <span>
+            Sesi Aktif:{' '}
+            <button 
+              onClick={onNavigateToRegistrationDetail}
+              className="underline font-bold hover:text-indigo-100 cursor-pointer"
+              title="Buka Halaman Detail Pendaftaran & Sertifikat"
+            >
+              {activeUser.name}
+            </button>{' '}
+            ({activeUser.role})
+          </span>
+          <button 
+            onClick={handleLogout}
+            className="underline ml-2 text-indigo-200 hover:text-white"
+          >
+            Keluar
+          </button>
+        </div>
+      )}
+
+      {/* Navigation Bar */}
+      <Navbar
+        onNavigate={scrollToSection}
+        onOpenAuthModal={onNavigateToLogin || (() => setIsAuthModalOpen(true))}
+        onOpenVerifyModal={() => setIsVerifyModalOpen(true)}
+        onOpenPayment={onNavigateToPayment}
+        onOpenDashboard={onNavigateToDashboard}
+        onOpenGuru={onNavigateToGuru}
+        hasActiveSessionBar={Boolean(activeUser)}
+      />
+
+      {/* Main Content Sections */}
+      <main>
+        {/* Top Breaking Announcement Banner */}
+        <AnnouncementBanner
+          announcement={MOCK_PENGUMUMAN[0]}
+          onViewAll={() => scrollToSection('pengumuman')}
+          onSelectAnnouncement={(ann) => setSelectedAnnouncement(ann)}
+        />
+
+        {/* Hero Section */}
+        <HeroSection
+          onRegisterClick={() => {
+            setSelectedKategoriForRegister(null);
+            setIsFormPendaftaranOpen(true);
+          }}
+          onExploreCategoriesClick={() => scrollToSection('kategori')}
+          onVerifyCertificateClick={() => setIsVerifyModalOpen(true)}
+        />
+
+        {/* Profil Lomba Section */}
+        <ProfileSection />
+
+        {/* Kategori Lomba & Jadwal Timeline Section */}
+        <CategoryScheduleSection
+          categories={MOCK_KATEGORI}
+          schedules={MOCK_JADWAL}
+          onSelectCategory={handleSelectCategory}
+        />
+
+        {/* Pengumuman List Section */}
+        <AnnouncementListSection
+          announcements={MOCK_PENGUMUMAN}
+          selectedAnnouncement={selectedAnnouncement}
+          onCloseModal={() => setSelectedAnnouncement(null)}
+          onOpenModal={(ann) => setSelectedAnnouncement(ann)}
+        />
+
+        {/* Arsip Soal Lomba Section */}
+        <ArchiveSection archives={MOCK_ARSIP_SOAL} />
+
+        {/* Galeri Video Kegiatan Section */}
+        <VideoGallerySection videos={MOCK_VIDEOS} />
+
+        {/* Tanya Jawab & Kontak Panitia Section */}
+        <FaqContactSection faqs={MOCK_FAQ} />
+      </main>
+
+      {/* Global Footer */}
+      <Footer />
+
+      {/* Modals */}
+      <CertificateVerifyModal
+        isOpen={isVerifyModalOpen}
+        onClose={() => setIsVerifyModalOpen(false)}
+      />
+
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onLoginSuccess={handleLoginSuccess}
+      />
+
+      <FormPendaftaranModal
+        isOpen={isFormPendaftaranOpen}
+        onClose={() => setIsFormPendaftaranOpen(false)}
+        defaultKategori={selectedKategoriForRegister}
+        currentUser={activeUser}
+        onSuccessRegister={(orderData) => {
+          showToast(`Pendaftaran ${orderData.namaSiswa} dari ${orderData.sekolah} berhasil dibuat!`);
+          if (onNavigateToRegistrationDetail) {
+            onNavigateToRegistrationDetail();
+          } else if (onNavigateToPayment) {
+            onNavigateToPayment();
+          }
+        }}
+      />
+
+    </div>
+  );
+};
