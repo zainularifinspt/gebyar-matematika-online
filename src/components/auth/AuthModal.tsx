@@ -27,13 +27,23 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   if (!isOpen) return null;
 
+  const extractDisplayName = (input: string): string => {
+    if (!input) return 'Pengguna';
+    const base = input.includes('@') ? input.split('@')[0] : input;
+    return base
+      .replace(/[._-]+/g, ' ')
+      .split(' ')
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+      .join(' ');
+  };
+
   const handleGoogleLogin = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
       onLoginSuccess?.({
-        name: 'Farhan Maulana Hakim',
-        email: 'farhan.maulana@gmail.com',
+        name: 'Pengguna Akun Google',
+        email: 'user.google@gmail.com',
         role: 'Peserta Mandiri',
       });
       onClose();
@@ -48,32 +58,33 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setTimeout(() => {
       setLoading(false);
       const idLower = username.toLowerCase().trim();
+      const displayName = extractDisplayName(username);
 
       // Super Admin Detection
-      if (idLower === 'admin' || idLower === 'superadmin' || idLower.includes('superadmin') || idLower === 'admin@gebyar.id') {
+      if (idLower === 'admin' || idLower === 'superadmin' || idLower.includes('superadmin') || idLower.includes('admin@')) {
         onLoginSuccess?.({
           name: 'Super Administrator',
           email: username.includes('@') ? username : 'superadmin@gebyar.id',
           role: 'Super Admin',
         });
-      } else if (idLower === 'panitia' || idLower.includes('panitia') || idLower === 'hendra') {
+      } else if (idLower === 'panitia' || idLower.includes('panitia') || idLower.includes('@panitia')) {
         // Panitia Staf Detection
         onLoginSuccess?.({
-          name: 'Hendra Wijaya, M.Pd',
-          email: username.includes('@') ? username : 'panitia.lomba@gebyar.id',
+          name: displayName || 'Panitia Pelaksana',
+          email: username.includes('@') ? username : 'panitia@gebyar.id',
           role: 'Panitia Pelaksana',
         });
       } else if (idLower === 'guru' || idLower.includes('guru') || idLower.includes('.sch.id')) {
         // Guru Sekolah Detection
         onLoginSuccess?.({
-          name: username.includes('@') ? username.split('@')[0] : 'Siti Rahmawati, S.Pd',
+          name: displayName || 'Guru Pendamping',
           email: username.includes('@') ? username : `${username}@sekolah.sch.id`,
           role: 'Guru Pendamping',
         });
       } else {
         // Siswa Mandiri Detection
         onLoginSuccess?.({
-          name: username.includes('@') ? username.split('@')[0] : username,
+          name: displayName || 'Peserta Mandiri',
           email: username.includes('@') ? username : `${username}@siswa.gebyar.id`,
           role: 'Peserta Mandiri',
         });
@@ -199,11 +210,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </form>
-
-        {/* Subtle note */}
-        <div className="p-3 rounded-xl glass-3d-base border border-white/90 text-[10px] text-slate-600 space-y-0.5">
-          <span>💡 Ketik <strong className="font-mono text-amber-700 font-bold">admin</strong> (Super Admin), <strong className="font-mono text-indigo-700 font-bold">panitia</strong> (Panitia), <strong className="font-mono text-purple-700 font-bold">guru</strong> (Guru), atau <strong className="font-mono text-slate-800 font-bold">siswa</strong> (Siswa).</span>
-        </div>
 
       </div>
     </div>

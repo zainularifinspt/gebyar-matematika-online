@@ -18,6 +18,8 @@ interface DashboardSidebarProps {
   onSelectTab: (tab: DashboardTab) => void;
   onExitDashboard: () => void;
   currentUser?: { name: string; email: string; role: string; sekolah?: string } | null;
+  pesertaCount?: number;
+  panitiaCount?: number;
 }
 
 export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
@@ -25,6 +27,8 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
   onSelectTab,
   onExitDashboard,
   currentUser,
+  pesertaCount = 0,
+  panitiaCount = 0,
 }) => {
   const isSuperAdmin = currentUser?.role === 'Super Admin' || 
                        currentUser?.role?.includes('Admin');
@@ -32,13 +36,13 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
   // Navigation Items: Super Admin gets exclusive access to 'panitia_mgmt'
   const navItems: { id: DashboardTab; label: string; icon: React.ReactNode; badge?: string; superAdminOnly?: boolean }[] = [
     { id: 'overview', label: 'Ringkasan & Metrik', icon: <LayoutDashboard className="w-4 h-4" /> },
-    { id: 'peserta', label: 'Data Peserta', icon: <Users className="w-4 h-4" />, badge: '1.332' },
+    { id: 'peserta', label: 'Data Peserta', icon: <Users className="w-4 h-4" />, badge: pesertaCount > 0 ? String(pesertaCount) : undefined },
     { id: 'nilai', label: 'Nilai Ujian CBT', icon: <GraduationCap className="w-4 h-4" />, badge: 'Sync' },
     { id: 'pembayaran', label: 'Status Pembayaran', icon: <CreditCard className="w-4 h-4" /> },
     { id: 'template', label: 'Template Sertifikat & Kartu', icon: <Award className="w-4 h-4" /> },
     { id: 'konten', label: 'Video & Arsip Soal', icon: <FileText className="w-4 h-4" /> },
     ...(isSuperAdmin ? [
-      { id: 'panitia_mgmt' as DashboardTab, label: 'Kelola Tim Panitia', icon: <UserCheck className="w-4 h-4 text-amber-600" />, badge: '5 Staf', superAdminOnly: true }
+      { id: 'panitia_mgmt' as DashboardTab, label: 'Kelola Tim Panitia', icon: <UserCheck className="w-4 h-4 text-amber-600" />, badge: panitiaCount > 0 ? `${panitiaCount} Staf` : undefined, superAdminOnly: true }
     ] : []),
   ];
 
@@ -137,10 +141,10 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
           <div className="space-y-1 text-[11px] text-slate-700 font-medium">
             <div className="flex justify-between">
               <span>Pendaftar Masuk</span>
-              <span className="font-black text-slate-900 font-mono tabular-nums">1.332 / 2.000</span>
+              <span className="font-black text-slate-900 font-mono tabular-nums">{pesertaCount} / 2.000</span>
             </div>
             <div className="w-full h-2 bg-white/70 rounded-full overflow-hidden p-0.5 border border-white/80">
-              <div className={`h-full rounded-full ${isSuperAdmin ? 'bg-amber-600' : 'bg-indigo-600'}`} style={{ width: '66.6%' }}></div>
+              <div className={`h-full rounded-full ${isSuperAdmin ? 'bg-amber-600' : 'bg-indigo-600'}`} style={{ width: `${Math.max(2, Math.min(100, (pesertaCount / 2000) * 100))}%` }}></div>
             </div>
           </div>
         </div>
@@ -159,13 +163,11 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
           <div className={`w-9 h-9 rounded-xl text-white font-black text-xs flex items-center justify-center shrink-0 shadow-xs ${
             isSuperAdmin ? 'bg-gradient-to-br from-amber-500 to-amber-700 ring-2 ring-amber-400/40' : 'bg-purple-600'
           }`}>
-            {isSuperAdmin ? 'SA' : 'HW'}
+            {isSuperAdmin ? 'SA' : (currentUser?.name ? currentUser.name.slice(0, 2).toUpperCase() : 'PT')}
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-xs font-black text-slate-900 truncate">
-              {isSuperAdmin 
-                ? (currentUser?.name && !currentUser.name.includes('Hendra') ? currentUser.name : 'Super Administrator') 
-                : (currentUser?.name || 'Hendra Wijaya, M.Pd')}
+              {currentUser?.name || (isSuperAdmin ? 'Super Administrator' : 'Panitia Pelaksana')}
             </p>
             <p className={`text-[10px] font-bold truncate ${
               isSuperAdmin ? 'text-amber-800 font-mono' : 'text-slate-500'

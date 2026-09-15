@@ -168,29 +168,47 @@ export const DashboardOverviewView: React.FC<DashboardOverviewViewProps> = ({
           </div>
 
           <div className="space-y-3 text-xs">
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-emerald-700">Webhook Midtrans Lunas</span>
-                <span className="text-[10px] text-slate-400">2 menit lalu</span>
-              </div>
-              <p className="text-slate-600">Order GM26-ORD-98412 lunas via QRIS. Kartu GM26-SMA-0142 terbit.</p>
-            </div>
+            {pesertaList.length === 0 ? (
+              <>
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-emerald-700">Webhook Midtrans Online</span>
+                    <span className="text-[10px] text-slate-400">Siap / Aktif</span>
+                  </div>
+                  <p className="text-slate-600">Endpoint Webhook siap menerima verifikasi transaksi instan QRIS & Virtual Account.</p>
+                </div>
 
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-cyan-700">Sinkronisasi Nilai CBT</span>
-                <span className="text-[10px] text-slate-400">14 menit lalu</span>
-              </div>
-              <p className="text-slate-600">Nilai Farhan Maulana Hakim (94) diterima via Internal API Web Ujian.</p>
-            </div>
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-cyan-700">Sinkronisasi CBT Standby</span>
+                    <span className="text-[10px] text-slate-400">Terhubung</span>
+                  </div>
+                  <p className="text-slate-600">Integrasi API Web Ujian daring siap menerima data penjurian dan skor peserta.</p>
+                </div>
 
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-indigo-700">Template E-Sertifikat Aktif</span>
-                <span className="text-[10px] text-slate-400">1 jam lalu</span>
-              </div>
-              <p className="text-slate-600">Template Dokumen GM 2026 telah diperbarui oleh Ketua Panitia.</p>
-            </div>
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-indigo-700">Penerbitan Otomatis Aktif</span>
+                    <span className="text-[10px] text-slate-400">Standar 2026</span>
+                  </div>
+                  <p className="text-slate-600">Generator QR code kartu peserta dan e-sertifikat terverifikasi aktif otomatis.</p>
+                </div>
+              </>
+            ) : (
+              pesertaList.slice(0, 3).map((p) => (
+                <div key={p.id} className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-emerald-700">
+                      {p.statusPembayaran === 'lunas' ? 'Pembayaran Terverifikasi' : 'Pendaftaran Baru'}
+                    </span>
+                    <span className="text-[10px] text-slate-400">{p.tanggalDaftar}</span>
+                  </div>
+                  <p className="text-slate-600">
+                    {p.namaSiswa} ({p.asalSekolah}) mendaftar {p.kategoriNama}.
+                  </p>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
@@ -229,32 +247,40 @@ export const DashboardOverviewView: React.FC<DashboardOverviewViewProps> = ({
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-slate-700">
-              {pesertaList.slice(0, 4).map((p) => (
-                <tr key={p.id} className="hover:bg-indigo-50/40 transition-colors">
-                  <td className="py-3 px-4 font-bold text-slate-900 font-['Outfit']">{p.namaSiswa}</td>
-                  <td className="py-3 px-4">{p.asalSekolah} ({p.kota})</td>
-                  <td className="py-3 px-4 font-bold text-indigo-700">{p.kategoriNama}</td>
-                  <td className="py-3 px-4 text-slate-600">{p.namaPendaftar} ({p.rolePendaftar})</td>
-                  <td className="py-3 px-4">
-                    {p.statusPembayaran === 'lunas' ? (
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        Lunas
-                      </span>
-                    ) : (
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                        Menunggu
-                      </span>
-                    )}
-                  </td>
-                  <td className="py-3 px-4 text-right">
-                    {p.kartuTercetak ? (
-                      <span className="text-[11px] text-emerald-700 font-bold">Tercetak Otomatis</span>
-                    ) : (
-                      <span className="text-[11px] text-slate-400">Belum Terbit</span>
-                    )}
+              {pesertaList.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-8 text-center text-slate-400 font-medium">
+                    Belum ada data pendaftar baru. Data pendaftaran daring akan otomatis muncul di sini.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                pesertaList.slice(0, 4).map((p) => (
+                  <tr key={p.id} className="hover:bg-indigo-50/40 transition-colors">
+                    <td className="py-3 px-4 font-bold text-slate-900 font-['Outfit']">{p.namaSiswa}</td>
+                    <td className="py-3 px-4">{p.asalSekolah} ({p.kota})</td>
+                    <td className="py-3 px-4 font-bold text-indigo-700">{p.kategoriNama}</td>
+                    <td className="py-3 px-4 text-slate-600">{p.namaPendaftar} ({p.rolePendaftar})</td>
+                    <td className="py-3 px-4">
+                      {p.statusPembayaran === 'lunas' ? (
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                          Lunas
+                        </span>
+                      ) : (
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                          Menunggu
+                        </span>
+                      )}
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      {p.kartuTercetak ? (
+                        <span className="text-[11px] text-emerald-700 font-bold">Tercetak Otomatis</span>
+                      ) : (
+                        <span className="text-[11px] text-slate-400">Belum Terbit</span>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

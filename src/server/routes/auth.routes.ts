@@ -155,8 +155,8 @@ export async function handleMockGoogleLogin(
   const mockSub = `google-sub-${Date.now()}`;
   const payload: GooglePayload = {
     sub: mockSub,
-    email: customEmail || (role === 'guru' ? 'siti.rahmawati@sekolah.sch.id' : 'farhan.maulana@gmail.com'),
-    name: customName || (role === 'guru' ? 'Siti Rahmawati, S.Pd' : 'Farhan Maulana Hakim'),
+    email: customEmail || (role === 'guru' ? 'guru@sekolah.sch.id' : 'peserta@gmail.com'),
+    name: customName || (role === 'guru' ? 'Guru Pendamping' : 'Peserta Mandiri'),
     email_verified: true,
   };
 

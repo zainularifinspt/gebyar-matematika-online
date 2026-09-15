@@ -43,7 +43,7 @@ export const DashboardPanitiaPage: React.FC<DashboardPanitiaPageProps> = ({
   };
 
   const handleExportCsv = () => {
-    showToast('Mengekspor rekap pendaftar (1.332 data) ke format Excel/CSV...');
+    showToast(`Mengekspor rekap pendaftar (${pesertaList.length} data) ke format Excel/CSV...`);
   };
 
   const handleSyncCbtScores = () => {
@@ -83,6 +83,7 @@ export const DashboardPanitiaPage: React.FC<DashboardPanitiaPageProps> = ({
           onSelectTab={(tab) => setActiveTab(tab)}
           onExitDashboard={onExitDashboard}
           currentUser={userProfile}
+          pesertaCount={pesertaList.length}
         />
 
         {/* Main Content Area */}

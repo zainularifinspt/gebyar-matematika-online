@@ -310,12 +310,12 @@ export const MOCK_PEMBAYARAN_AKTIF: Pembayaran = {
   status: 'menunggu_pembayaran',
   waktuBatas: '23:59:59',
   peserta: {
-    namaSiswa: 'Farhan Maulana Hakim',
-    asalSekolah: 'SMA Negeri 3 Yogyakarta',
+    namaSiswa: 'Peserta Terdaftar',
+    asalSekolah: 'Sekolah Pendaftar',
     kategoriNama: 'Olimpiade Matematika SMA / MA / SMK',
     tingkat: 'SMA/MA/SMK',
-    emailPendaftar: 'farhan.maulana@gmail.com',
-    noHp: '0812-9876-5432',
+    emailPendaftar: 'peserta@gmail.com',
+    noHp: '0812-0000-0000',
   },
 };
 
@@ -325,8 +325,8 @@ export const MOCK_KARTU_PESERTA: KartuPeserta = {
   id: 'kp-001',
   pendaftaranId: 'reg-001',
   kodeKartu: 'GM26-SMA-0142',
-  namaSiswa: 'Farhan Maulana Hakim',
-  asalSekolah: 'SMA Negeri 3 Yogyakarta',
+  namaSiswa: 'Peserta Terdaftar',
+  asalSekolah: 'Sekolah Pendaftar',
   kategori: 'Olimpiade Matematika SMA / MA / SMK',
   jadwalUjian: 'Minggu, 25 Oktober 2026 (09:00 - 11:30 WIB)',
   sesi: 'Sesi 1 (Pagi)',

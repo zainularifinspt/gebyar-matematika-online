@@ -22,58 +22,7 @@ export interface PanitiaMember {
   terakhirLogin: string;
 }
 
-const INITIAL_PANITIA: PanitiaMember[] = [
-  {
-    id: 'panitia-1',
-    nama: 'Hendra Wijaya, M.Pd',
-    email: 'hendra.wijaya@gebyar.id',
-    username: 'hendra',
-    divisi: 'Penjurian & CBT',
-    role: 'Koordinator Divisi',
-    status: 'aktif',
-    terakhirLogin: 'Hari ini, 08:45 WIB',
-  },
-  {
-    id: 'panitia-2',
-    nama: 'Rina Kusumawati, S.Si',
-    email: 'rina.kusuma@gebyar.id',
-    username: 'rina.sekretariat',
-    divisi: 'Kesekretariatan & Verifikasi',
-    role: 'Staf Panitia',
-    status: 'aktif',
-    terakhirLogin: 'Kemarin, 16:20 WIB',
-  },
-  {
-    id: 'panitia-3',
-    nama: 'Budi Santoso, S.Kom',
-    email: 'budi.santoso@gebyar.id',
-    username: 'budi.it',
-    divisi: 'IT & Infrastruktur',
-    role: 'Koordinator Divisi',
-    status: 'aktif',
-    terakhirLogin: 'Hari ini, 09:10 WIB',
-  },
-  {
-    id: 'panitia-4',
-    nama: 'Nurul Hidayah, S.Pd',
-    email: 'nurul.hidayah@gebyar.id',
-    username: 'nurul.keuangan',
-    divisi: 'Bendahara & Keuangan',
-    role: 'Staf Panitia',
-    status: 'aktif',
-    terakhirLogin: '3 hari lalu',
-  },
-  {
-    id: 'panitia-5',
-    nama: 'Dimas Pratama, S.Pd',
-    email: 'dimas.pratama@gebyar.id',
-    username: 'dimas.logistik',
-    divisi: 'Logistik & Sertifikat',
-    role: 'Staf Panitia',
-    status: 'aktif',
-    terakhirLogin: '2 hari lalu',
-  },
-];
+const INITIAL_PANITIA: PanitiaMember[] = [];
 
 export const KelolaPanitiaView: React.FC = () => {
   const [members, setMembers] = useState<PanitiaMember[]>(INITIAL_PANITIA);
@@ -289,7 +238,27 @@ export const KelolaPanitiaView: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 bg-white">
-              {filteredMembers.map((m) => (
+              {filteredMembers.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="py-12 text-center text-slate-500">
+                    <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-3 border border-amber-200">
+                      <Users className="w-6 h-6" />
+                    </div>
+                    <p className="text-sm font-bold text-slate-800 font-['Outfit']">Belum Ada Akun Staf Panitia</p>
+                    <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+                      Sebagai Super Admin, Anda memiliki hak penuh untuk menambahkan akun bagi anggota panitia pelaksana.
+                    </p>
+                    <button
+                      onClick={handleOpenAdd}
+                      className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 transition-colors shadow-xs cursor-pointer"
+                    >
+                      <UserPlus className="w-4 h-4" />
+                      <span>Tambah Panitia Pertama</span>
+                    </button>
+                  </td>
+                </tr>
+              ) : (
+                filteredMembers.map((m) => (
                 <tr key={m.id} className="hover:bg-slate-50/80 transition-colors">
                   <td className="py-3 px-4">
                     <div className="flex items-center gap-2.5">
@@ -353,7 +322,8 @@ export const KelolaPanitiaView: React.FC = () => {
                     </div>
                   </td>
                 </tr>
-              ))}
+              ))
+            )}
             </tbody>
           </table>
         </div>
