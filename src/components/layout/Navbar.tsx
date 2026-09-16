@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Award, 
   BookOpen, 
@@ -156,84 +157,96 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
 
               {/* 3D Glass Dropdown Menu */}
-              {portalDropdownOpen && (
-                <div className="absolute right-0 top-full mt-2 w-72 rounded-2xl bg-white/95 backdrop-blur-2xl border border-white/90 shadow-2xl shadow-slate-900/15 p-2 z-50 divide-y divide-slate-100/80 animate-fade-in">
-                  <div className="py-1">
-                    <button 
-                      onClick={() => { setPortalDropdownOpen(false); onOpenGuru?.(); }} 
-                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-slate-800 hover:bg-purple-50/80 hover:text-purple-900 transition-all text-left group cursor-pointer"
-                    >
-                      <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
-                        <School className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <p className="leading-tight">Portal Guru & Sekolah</p>
-                        <span className="text-[10px] text-slate-500 font-medium">Pendaftaran Kolektif & Delegasi</span>
-                      </div>
-                    </button>
+              <AnimatePresence>
+                {portalDropdownOpen && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                    transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                    className="absolute right-0 top-full mt-2 w-72 rounded-2xl bg-white/95 backdrop-blur-2xl border border-white/90 shadow-2xl shadow-slate-900/15 p-2 z-50 divide-y divide-slate-100/80"
+                  >
+                    <div className="py-1">
+                      <button 
+                        onClick={() => { setPortalDropdownOpen(false); onOpenGuru?.(); }} 
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-slate-800 hover:bg-purple-50/80 hover:text-purple-900 transition-all text-left group cursor-pointer"
+                      >
+                        <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                          <School className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <p className="leading-tight">Portal Guru & Sekolah</p>
+                          <span className="text-[10px] text-slate-500 font-medium">Pendaftaran Kolektif & Delegasi</span>
+                        </div>
+                      </button>
 
-                    <button 
-                      onClick={() => { setPortalDropdownOpen(false); onOpenDashboard?.(); }} 
-                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-slate-800 hover:bg-indigo-50/80 hover:text-indigo-900 transition-all text-left group cursor-pointer"
-                    >
-                      <div className="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
-                        <LayoutDashboard className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <p className="leading-tight">Dashboard Panitia</p>
-                        <span className="text-[10px] text-slate-500 font-medium">Administrasi & Monitoring CBT</span>
-                      </div>
-                    </button>
-                  </div>
+                      <button 
+                        onClick={() => { setPortalDropdownOpen(false); onOpenDashboard?.(); }} 
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-slate-800 hover:bg-indigo-50/80 hover:text-indigo-900 transition-all text-left group cursor-pointer"
+                      >
+                        <div className="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                          <LayoutDashboard className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <p className="leading-tight">Dashboard Panitia</p>
+                          <span className="text-[10px] text-slate-500 font-medium">Administrasi & Monitoring CBT</span>
+                        </div>
+                      </button>
+                    </div>
 
-                  <div className="py-1">
-                    <button 
-                      onClick={() => { setPortalDropdownOpen(false); onOpenPayment?.(); }} 
-                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-slate-800 hover:bg-rose-50/80 hover:text-rose-900 transition-all text-left group cursor-pointer"
-                    >
-                      <div className="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
-                        <CreditCard className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <p className="leading-tight">Status Pembayaran</p>
-                        <span className="text-[10px] text-slate-500 font-medium">Simulasi Midtrans QRIS & VA</span>
-                      </div>
-                    </button>
+                    <div className="py-1">
+                      <button 
+                        onClick={() => { setPortalDropdownOpen(false); onOpenPayment?.(); }} 
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-slate-800 hover:bg-rose-50/80 hover:text-rose-900 transition-all text-left group cursor-pointer"
+                      >
+                        <div className="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                          <CreditCard className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <p className="leading-tight">Status Pembayaran</p>
+                          <span className="text-[10px] text-slate-500 font-medium">Simulasi Midtrans QRIS & VA</span>
+                        </div>
+                      </button>
 
-                    <button 
-                      onClick={() => { setPortalDropdownOpen(false); onOpenVerifyModal?.(); }} 
-                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-slate-800 hover:bg-emerald-50/80 hover:text-emerald-900 transition-all text-left group cursor-pointer"
-                    >
-                      <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
-                        <ShieldCheck className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <p className="leading-tight">Verifikasi Sertifikat</p>
-                        <span className="text-[10px] text-slate-500 font-medium">Cek Hash & Validitas QR</span>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              )}
+                      <button 
+                        onClick={() => { setPortalDropdownOpen(false); onOpenVerifyModal?.(); }} 
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-slate-800 hover:bg-emerald-50/80 hover:text-emerald-900 transition-all text-left group cursor-pointer"
+                      >
+                        <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                          <ShieldCheck className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <p className="leading-tight">Verifikasi Sertifikat</p>
+                          <span className="text-[10px] text-slate-500 font-medium">Cek Hash & Validitas QR</span>
+                        </div>
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* 3D Glass Login Button */}
-            <button 
+            <motion.button 
+              whileHover={{ scale: 1.03, y: -1 }}
+              whileTap={{ scale: 0.97 }}
               onClick={onOpenAuthModal}
               className="btn-3d-white inline-flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl cursor-pointer"
             >
               <LogIn className="w-3.5 h-3.5 text-indigo-600" />
               <span>Masuk</span>
-            </button>
+            </motion.button>
 
             {/* 3D Glass Primary Register Button */}
-            <button 
+            <motion.button 
+              whileHover={{ scale: 1.03, y: -1 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => handleLinkClick('kategori')}
               className="btn-3d-primary inline-flex items-center gap-2 px-4.5 py-2 text-xs font-black rounded-xl cursor-pointer"
             >
               <span>Daftar Sekarang</span>
               <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            </motion.button>
           </div>
 
           {/* Mobile Menu Hamburger */}
@@ -251,98 +264,106 @@ export const Navbar: React.FC<NavbarProps> = ({
       </div>
 
       {/* Mobile Drawer (3D Sheet of Glass) */}
-      {mobileMenuOpen && (
-        <div className="sm:hidden px-4 pt-4 pb-6 mt-2 bg-white/95 backdrop-blur-2xl border-b border-white/90 shadow-2xl space-y-4 animate-fade-in">
-          <div className="grid grid-cols-2 gap-2.5 text-xs font-bold">
-            <button 
-              onClick={() => handleLinkClick('profil')}
-              className="flex items-center gap-2.5 p-3 rounded-xl bg-white/80 border border-slate-200/80 text-left text-slate-800 shadow-xs"
-            >
-              <BookOpen className="w-4 h-4 text-blue-600" />
-              Profil Lomba
-            </button>
-            <button 
-              onClick={() => handleLinkClick('kategori')}
-              className="flex items-center gap-2.5 p-3 rounded-xl bg-white/80 border border-slate-200/80 text-left text-slate-800 shadow-xs"
-            >
-              <Calendar className="w-4 h-4 text-purple-600" />
-              Kategori & Jadwal
-            </button>
-            <button 
-              onClick={() => handleLinkClick('pengumuman')}
-              className="flex items-center gap-2.5 p-3 rounded-xl bg-white/80 border border-slate-200/80 text-left text-slate-800 shadow-xs"
-            >
-              <Award className="w-4 h-4 text-pink-600" />
-              Pengumuman
-            </button>
-            <button 
-              onClick={() => handleLinkClick('arsip')}
-              className="flex items-center gap-2.5 p-3 rounded-xl bg-white/80 border border-slate-200/80 text-left text-slate-800 shadow-xs"
-            >
-              <FileText className="w-4 h-4 text-cyan-600" />
-              Arsip Soal
-            </button>
-            <button 
-              onClick={() => handleLinkClick('video')}
-              className="flex items-center gap-2.5 p-3 rounded-xl bg-white/80 border border-slate-200/80 text-left text-slate-800 shadow-xs"
-            >
-              <Video className="w-4 h-4 text-amber-600" />
-              Galeri Video
-            </button>
-            <button 
-              onClick={() => handleLinkClick('faq')}
-              className="flex items-center gap-2.5 p-3 rounded-xl bg-white/80 border border-slate-200/80 text-left text-slate-800 shadow-xs"
-            >
-              <HelpCircle className="w-4 h-4 text-emerald-600" />
-              FAQ & Kontak
-            </button>
-          </div>
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            className="sm:hidden overflow-hidden px-4 pt-4 pb-6 mt-2 bg-white/95 backdrop-blur-2xl border-b border-white/90 shadow-2xl space-y-4"
+          >
+            <div className="grid grid-cols-2 gap-2.5 text-xs font-bold">
+              <button 
+                onClick={() => handleLinkClick('profil')}
+                className="flex items-center gap-2.5 p-3 rounded-xl bg-white/80 border border-slate-200/80 text-left text-slate-800 shadow-xs"
+              >
+                <BookOpen className="w-4 h-4 text-blue-600" />
+                Profil Lomba
+              </button>
+              <button 
+                onClick={() => handleLinkClick('kategori')}
+                className="flex items-center gap-2.5 p-3 rounded-xl bg-white/80 border border-slate-200/80 text-left text-slate-800 shadow-xs"
+              >
+                <Calendar className="w-4 h-4 text-purple-600" />
+                Kategori & Jadwal
+              </button>
+              <button 
+                onClick={() => handleLinkClick('pengumuman')}
+                className="flex items-center gap-2.5 p-3 rounded-xl bg-white/80 border border-slate-200/80 text-left text-slate-800 shadow-xs"
+              >
+                <Award className="w-4 h-4 text-pink-600" />
+                Pengumuman
+              </button>
+              <button 
+                onClick={() => handleLinkClick('arsip')}
+                className="flex items-center gap-2.5 p-3 rounded-xl bg-white/80 border border-slate-200/80 text-left text-slate-800 shadow-xs"
+              >
+                <FileText className="w-4 h-4 text-cyan-600" />
+                Arsip Soal
+              </button>
+              <button 
+                onClick={() => handleLinkClick('video')}
+                className="flex items-center gap-2.5 p-3 rounded-xl bg-white/80 border border-slate-200/80 text-left text-slate-800 shadow-xs"
+              >
+                <Video className="w-4 h-4 text-amber-600" />
+                Galeri Video
+              </button>
+              <button 
+                onClick={() => handleLinkClick('faq')}
+                className="flex items-center gap-2.5 p-3 rounded-xl bg-white/80 border border-slate-200/80 text-left text-slate-800 shadow-xs"
+              >
+                <HelpCircle className="w-4 h-4 text-emerald-600" />
+                FAQ & Kontak
+              </button>
+            </div>
 
-          <div className="pt-2 border-t border-slate-200/80 flex flex-col gap-2.5">
-            <button 
-              onClick={() => { setMobileMenuOpen(false); onOpenGuru?.(); }}
-              className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold rounded-xl glass-3d-violet text-purple-900"
-            >
-              <School className="w-4 h-4 text-purple-700" />
-              Portal Guru & Sekolah
-            </button>
-            <button 
-              onClick={() => { setMobileMenuOpen(false); onOpenDashboard?.(); }}
-              className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold rounded-xl glass-3d-cyan text-sky-900"
-            >
-              <LayoutDashboard className="w-4 h-4 text-sky-700" />
-              Dashboard Panitia
-            </button>
-            <button 
-              onClick={() => { setMobileMenuOpen(false); onOpenPayment?.(); }}
-              className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold rounded-xl glass-3d-rose text-rose-900"
-            >
-              <CreditCard className="w-4 h-4 text-rose-700" />
-              Status Pembayaran Midtrans
-            </button>
-            <button 
-              onClick={() => { setMobileMenuOpen(false); onOpenVerifyModal?.(); }}
-              className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold rounded-xl glass-3d-emerald text-emerald-900"
-            >
-              <ShieldCheck className="w-4 h-4 text-emerald-700" />
-              Verifikasi Sertifikat
-            </button>
-            <button 
-              onClick={() => { setMobileMenuOpen(false); onOpenAuthModal?.(); }}
-              className="btn-3d-white w-full flex items-center justify-center gap-2 py-3 text-xs font-bold rounded-xl text-slate-900"
-            >
-              <LogIn className="w-4 h-4 text-indigo-600" />
-              Masuk Akun Peserta
-            </button>
-            <button 
-              onClick={() => handleLinkClick('kategori')}
-              className="btn-3d-primary w-full flex items-center justify-center gap-2 py-3 text-xs font-black rounded-xl text-white"
-            >
-              Daftar Peserta Sekarang
-            </button>
-          </div>
-        </div>
-      )}
+            <div className="pt-2 border-t border-slate-200/80 flex flex-col gap-2.5">
+              <button 
+                onClick={() => { setMobileMenuOpen(false); onOpenGuru?.(); }}
+                className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold rounded-xl glass-3d-violet text-purple-900"
+              >
+                <School className="w-4 h-4 text-purple-700" />
+                Portal Guru & Sekolah
+              </button>
+              <button 
+                onClick={() => { setMobileMenuOpen(false); onOpenDashboard?.(); }}
+                className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold rounded-xl glass-3d-cyan text-sky-900"
+              >
+                <LayoutDashboard className="w-4 h-4 text-sky-700" />
+                Dashboard Panitia
+              </button>
+              <button 
+                onClick={() => { setMobileMenuOpen(false); onOpenPayment?.(); }}
+                className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold rounded-xl glass-3d-rose text-rose-900"
+              >
+                <CreditCard className="w-4 h-4 text-rose-700" />
+                Status Pembayaran Midtrans
+              </button>
+              <button 
+                onClick={() => { setMobileMenuOpen(false); onOpenVerifyModal?.(); }}
+                className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold rounded-xl glass-3d-emerald text-emerald-900"
+              >
+                <ShieldCheck className="w-4 h-4 text-emerald-700" />
+                Verifikasi Sertifikat
+              </button>
+              <button 
+                onClick={() => { setMobileMenuOpen(false); onOpenAuthModal?.(); }}
+                className="btn-3d-white w-full flex items-center justify-center gap-2 py-3 text-xs font-bold rounded-xl text-slate-900"
+              >
+                <LogIn className="w-4 h-4 text-indigo-600" />
+                Masuk Akun Peserta
+              </button>
+              <button 
+                onClick={() => handleLinkClick('kategori')}
+                className="btn-3d-primary w-full flex items-center justify-center gap-2 py-3 text-xs font-black rounded-xl text-white"
+              >
+                Daftar Peserta Sekarang
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

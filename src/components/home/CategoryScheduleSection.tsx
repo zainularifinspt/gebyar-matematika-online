@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { 
   Calendar, 
   Check, 
@@ -15,6 +16,55 @@ interface CategoryScheduleSectionProps {
   schedules: JadwalEvent[];
   onSelectCategory?: (category: KategoriLomba) => void;
 }
+
+const headerVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
+const cardsContainerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const categoryCardVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
+const schedulesContainerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const scheduleCardVariants: Variants = {
+  hidden: { opacity: 0, y: 18 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+  },
+};
 
 export const CategoryScheduleSection: React.FC<CategoryScheduleSectionProps> = ({
   categories,
@@ -59,7 +109,13 @@ export const CategoryScheduleSection: React.FC<CategoryScheduleSectionProps> = (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Title */}
-        <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
+        <motion.div 
+          variants={headerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          className="text-center max-w-3xl mx-auto mb-14 space-y-3"
+        >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-3d-base text-blue-800 text-xs font-black uppercase tracking-wider shadow-sm border border-white/90">
             <Award className="w-3.5 h-3.5 text-blue-600" />
             Pilihan Jenjang & Kuota
@@ -70,23 +126,32 @@ export const CategoryScheduleSection: React.FC<CategoryScheduleSectionProps> = (
           <p className="text-slate-600 text-sm sm:text-base font-normal">
             Pilih jenjang pendidikan yang sesuai. Setiap kategori dirancang dengan silabus berstandar nasional dan jadwal pelaksanaan teratur.
           </p>
-        </div>
+        </motion.div>
 
         {/* Categories 3D Collectible Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+        <motion.div 
+          variants={cardsContainerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
+        >
           {categories.map((kat) => {
             const styles = getAccentStyles(kat.warnaAksen);
             const isSelected = activeCategoryTab === kat.id;
             const quotaPercentage = Math.round((kat.terdaftar / kat.kuota) * 100);
 
             return (
-              <div 
+              <motion.div 
                 key={kat.id}
+                variants={categoryCardVariants}
+                whileHover={{ y: -5, scale: 1.015 }}
+                whileTap={{ scale: 0.99 }}
                 onClick={() => setActiveCategoryTab(kat.id)}
                 className={`relative rounded-3xl p-7 transition-all duration-300 cursor-pointer border ${styles.cardClass} ${
                   isSelected 
                     ? 'ring-3 ring-indigo-500/80 shadow-2xl scale-[1.02]' 
-                    : 'hover:scale-[1.01] hover:shadow-xl'
+                    : 'hover:shadow-xl'
                 }`}
               >
                 {/* Specular Rim */}
@@ -119,9 +184,12 @@ export const CategoryScheduleSection: React.FC<CategoryScheduleSectionProps> = (
                 {/* Kuota Progress Bar */}
                 <div className="space-y-1.5 mb-5">
                   <div className="w-full h-2.5 rounded-full bg-white/70 overflow-hidden p-0.5 border border-white/60">
-                    <div 
-                      className={`h-full rounded-full transition-all duration-500 ${styles.progressColor}`}
-                      style={{ width: `${quotaPercentage}%` }}
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${quotaPercentage}%` }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+                      className={`h-full rounded-full ${styles.progressColor}`}
                     />
                   </div>
                   <div className="flex justify-between text-[11px] font-bold text-slate-700 tabular-nums">
@@ -135,125 +203,152 @@ export const CategoryScheduleSection: React.FC<CategoryScheduleSectionProps> = (
                 </p>
 
                 {/* 3D Tactile Action Button */}
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={(e) => {
                     e.stopPropagation();
                     onSelectCategory?.(kat);
                   }}
-                  className={`w-full py-3.5 px-4 rounded-xl text-xs font-black text-white transition-all shadow-md flex items-center justify-center gap-2 hover:opacity-95 cursor-pointer ${styles.btnBg}`}
+                  className={`w-full py-3.5 px-4 rounded-xl text-xs font-black text-white shadow-md flex items-center justify-center gap-2 cursor-pointer ${styles.btnBg}`}
                 >
                   <span>Pilih Kategori Ini</span>
                   <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
+                </motion.button>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
 
         {/* Selected Category Details 3D Glass Drawer */}
-        {selectedCategory && (
-          <div className="rounded-3xl glass-3d-elevated p-6 sm:p-9 border border-white/95 shadow-2xl mb-20 relative overflow-hidden">
-            {/* Top Specular Rim */}
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
+        <AnimatePresence mode="wait">
+          {selectedCategory && (
+            <motion.div 
+              key={selectedCategory.id}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="rounded-3xl glass-3d-elevated p-6 sm:p-9 border border-white/95 shadow-2xl mb-20 relative overflow-hidden"
+            >
+              {/* Top Specular Rim */}
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
 
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-200/70">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs font-black text-indigo-700 uppercase tracking-wider">
-                    Rincian Kategori Terpilih
-                  </span>
-                  <span className="text-slate-300">•</span>
-                  <span className="text-xs text-slate-700 font-bold">{selectedCategory.tingkat}</span>
-                </div>
-                <h3 className="text-2xl sm:text-3xl font-black text-slate-900 font-['Outfit']">
-                  {selectedCategory.nama}
-                </h3>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-3">
-                <button
-                  onClick={() => onSelectCategory?.(selectedCategory)}
-                  className="btn-3d-primary px-7 py-3.5 rounded-xl text-xs font-black flex items-center gap-2 cursor-pointer"
-                >
-                  <span>Daftar Kategori Ini</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Grid 3 Columns: Jadwal, Materi, Hadiah */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-6">
-              
-              {/* Col 1: Jadwal */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-slate-900 font-black text-sm">
-                  <Clock className="w-4 h-4 text-indigo-600" />
-                  <span>Jadwal Kompetisi</span>
-                </div>
-                <div className="p-5 rounded-2xl glass-3d-base border border-white/90 space-y-3.5 text-xs">
-                  <div>
-                    <span className="text-slate-500 font-bold block text-[11px] uppercase tracking-wider">Babak Penyisihan (CBT Online):</span>
-                    <strong className="text-slate-900 text-xs font-black block mt-0.5">{selectedCategory.jadwalPenyisihan}</strong>
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-200/70">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xs font-black text-indigo-700 uppercase tracking-wider">
+                      Rincian Kategori Terpilih
+                    </span>
+                    <span className="text-slate-300">•</span>
+                    <span className="text-xs text-slate-700 font-bold">{selectedCategory.tingkat}</span>
                   </div>
-                  <div className="pt-2.5 border-t border-slate-200/60">
-                    <span className="text-slate-500 font-bold block text-[11px] uppercase tracking-wider">Babak Final (Top 20 Nasional):</span>
-                    <strong className="text-slate-900 text-xs font-black block mt-0.5">{selectedCategory.jadwalFinal}</strong>
+                  <h3 className="text-2xl sm:text-3xl font-black text-slate-900 font-['Outfit']">
+                    {selectedCategory.nama}
+                  </h3>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3">
+                  <motion.button
+                    whileHover={{ scale: 1.03, y: -2 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => onSelectCategory?.(selectedCategory)}
+                    className="btn-3d-primary px-7 py-3.5 rounded-xl text-xs font-black flex items-center gap-2 cursor-pointer"
+                  >
+                    <span>Daftar Kategori Ini</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </motion.button>
+                </div>
+              </div>
+
+              {/* Grid 3 Columns: Jadwal, Materi, Hadiah */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-6">
+                
+                {/* Col 1: Jadwal */}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-slate-900 font-black text-sm">
+                    <Clock className="w-4 h-4 text-indigo-600" />
+                    <span>Jadwal Kompetisi</span>
+                  </div>
+                  <div className="p-5 rounded-2xl glass-3d-base border border-white/90 space-y-3.5 text-xs">
+                    <div>
+                      <span className="text-slate-500 font-bold block text-[11px] uppercase tracking-wider">Babak Penyisihan (CBT Online):</span>
+                      <strong className="text-slate-900 text-xs font-black block mt-0.5">{selectedCategory.jadwalPenyisihan}</strong>
+                    </div>
+                    <div className="pt-2.5 border-t border-slate-200/60">
+                      <span className="text-slate-500 font-bold block text-[11px] uppercase tracking-wider">Babak Final (Top 20 Nasional):</span>
+                      <strong className="text-slate-900 text-xs font-black block mt-0.5">{selectedCategory.jadwalFinal}</strong>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Col 2: Materi Pokok */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-slate-900 font-black text-sm">
-                  <BookOpen className="w-4 h-4 text-sky-600" />
-                  <span>Cakupan Materi Pokok</span>
+                {/* Col 2: Materi Pokok */}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-slate-900 font-black text-sm">
+                    <BookOpen className="w-4 h-4 text-sky-600" />
+                    <span>Cakupan Materi Pokok</span>
+                  </div>
+                  <ul className="p-5 rounded-2xl glass-3d-base border border-white/90 space-y-2.5 text-xs text-slate-800 font-semibold">
+                    {selectedCategory.materi.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5">
+                        <Check className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="p-5 rounded-2xl glass-3d-base border border-white/90 space-y-2.5 text-xs text-slate-800 font-semibold">
-                  {selectedCategory.materi.map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-2.5">
-                      <Check className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
 
-              {/* Col 3: Hadiah Juara */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-slate-900 font-black text-sm">
-                  <Trophy className="w-4 h-4 text-amber-600" />
-                  <span>Hadiah & Apresiasi</span>
+                {/* Col 3: Hadiah Juara */}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-slate-900 font-black text-sm">
+                    <Trophy className="w-4 h-4 text-amber-600" />
+                    <span>Hadiah & Apresiasi</span>
+                  </div>
+                  <ul className="p-5 rounded-2xl glass-3d-base border border-white/90 space-y-2.5 text-xs text-slate-800 font-semibold">
+                    {selectedCategory.hadiah.map((h, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5">
+                        <Award className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                        <span>{h}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="p-5 rounded-2xl glass-3d-base border border-white/90 space-y-2.5 text-xs text-slate-800 font-semibold">
-                  {selectedCategory.hadiah.map((h, idx) => (
-                    <li key={idx} className="flex items-start gap-2.5">
-                      <Award className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                      <span>{h}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
 
-            </div>
-          </div>
-        )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Timeline Jadwal Lengkap */}
         <div id="jadwal" className="pt-8">
-          <div className="text-center max-w-2xl mx-auto mb-10">
+          <motion.div 
+            variants={headerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            className="text-center max-w-2xl mx-auto mb-10"
+          >
             <h3 className="text-2xl sm:text-3xl font-black text-slate-900 font-['Outfit']">
               Timeline & Jadwal Kegiatan Penting
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 mt-1 font-normal">
               Catat tanggal penting berikut agar tidak melewatkan babak kualifikasi daring.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <motion.div 
+            variants={schedulesContainerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+          >
             {schedules.map((item, idx) => (
-              <div 
+              <motion.div 
                 key={item.id} 
-                className={`p-6 rounded-2xl transition-all duration-200 border ${
+                variants={scheduleCardVariants}
+                whileHover={{ y: -4, scale: 1.015 }}
+                className={`p-6 rounded-2xl transition-shadow duration-200 border cursor-default ${
                   item.status === 'berlangsung'
                     ? 'glass-3d-elevated ring-2 ring-indigo-500/70 shadow-lg'
                     : 'glass-3d-interactive shadow-xs'
@@ -287,9 +382,9 @@ export const CategoryScheduleSection: React.FC<CategoryScheduleSectionProps> = (
                 <p className="text-xs text-slate-600 leading-relaxed font-normal">
                   {item.keterangan}
                 </p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
 
       </div>

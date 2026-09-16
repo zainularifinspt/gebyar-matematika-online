@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion, type Variants } from 'framer-motion';
 import { 
   Building2, 
   CreditCard, 
@@ -11,13 +12,69 @@ import {
   Zap
 } from 'lucide-react';
 
+const sectionHeaderVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
+const gridContainerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
+const stepsContainerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.15,
+    },
+  },
+};
+
+const stepItemVariants: Variants = {
+  hidden: { opacity: 0, y: 20, scale: 0.97 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
 export const ProfileSection: React.FC = () => {
   return (
     <section id="profil" className="py-20 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+        <motion.div 
+          variants={sectionHeaderVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          className="text-center max-w-3xl mx-auto mb-16 space-y-3"
+        >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-3d-base text-indigo-800 text-xs font-black uppercase tracking-wider shadow-sm border border-white/90">
             <Target className="w-3.5 h-3.5 text-indigo-600" />
             Tentang Kompetisi
@@ -28,16 +85,31 @@ export const ProfileSection: React.FC = () => {
           <p className="text-slate-600 text-sm sm:text-base leading-relaxed font-normal">
             Transformasi penuh kompetisi matematika nasional menuju ekosistem daring terpadu yang efisien, transparan, dan inklusif bagi seluruh pelajar di 34 provinsi.
           </p>
-        </div>
+        </motion.div>
 
         {/* 3 Pillars Grid (3D Glass Pedestals with Jewel Tones) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        <motion.div 
+          variants={gridContainerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16"
+        >
           
           {/* Card 1: Visi & Akses Merata (Cyan Glass Accent) */}
-          <div className="rounded-3xl glass-3d-interactive p-8 border border-white/90 shadow-xl space-y-5">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-sky-400 to-blue-600 text-white flex items-center justify-center shadow-lg shadow-sky-500/25 border border-white/40">
+          <motion.div 
+            variants={cardVariants}
+            whileHover={{ y: -6, scale: 1.01 }}
+            transition={{ duration: 0.25 }}
+            className="rounded-3xl glass-3d-interactive p-8 border border-white/90 shadow-xl space-y-5 cursor-default"
+          >
+            <motion.div 
+              whileHover={{ rotate: 10, scale: 1.1 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+              className="w-14 h-14 rounded-2xl bg-gradient-to-br from-sky-400 to-blue-600 text-white flex items-center justify-center shadow-lg shadow-sky-500/25 border border-white/40 cursor-pointer"
+            >
               <Target className="w-7 h-7" />
-            </div>
+            </motion.div>
             <h3 className="text-2xl font-black text-slate-900 font-['Outfit']">
               Visi & Akses Merata
             </h3>
@@ -54,13 +126,22 @@ export const ProfileSection: React.FC = () => {
                 <span>Dapat diakses via laptop, PC, dan tablet</span>
               </li>
             </ul>
-          </div>
+          </motion.div>
 
           {/* Card 2: Penyelenggara & Kredibilitas (Violet Glass Accent) */}
-          <div className="rounded-3xl glass-3d-interactive p-8 border border-white/90 shadow-xl space-y-5">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-purple-500/25 border border-white/40">
+          <motion.div 
+            variants={cardVariants}
+            whileHover={{ y: -6, scale: 1.01 }}
+            transition={{ duration: 0.25 }}
+            className="rounded-3xl glass-3d-interactive p-8 border border-white/90 shadow-xl space-y-5 cursor-default"
+          >
+            <motion.div 
+              whileHover={{ rotate: 10, scale: 1.1 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+              className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-purple-500/25 border border-white/40 cursor-pointer"
+            >
               <Building2 className="w-7 h-7" />
-            </div>
+            </motion.div>
             <h3 className="text-2xl font-black text-slate-900 font-['Outfit']">
               Penyelenggara Terpercaya
             </h3>
@@ -77,13 +158,22 @@ export const ProfileSection: React.FC = () => {
                 <span>Dewan juri independen & penilaian transparan</span>
               </li>
             </ul>
-          </div>
+          </motion.div>
 
           {/* Card 3: Total Hadiah & Apresiasi (Solar Amber Glass Accent) */}
-          <div className="rounded-3xl glass-3d-interactive p-8 border border-white/90 shadow-xl space-y-5">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-white flex items-center justify-center shadow-lg shadow-amber-500/25 border border-white/40">
+          <motion.div 
+            variants={cardVariants}
+            whileHover={{ y: -6, scale: 1.01 }}
+            transition={{ duration: 0.25 }}
+            className="rounded-3xl glass-3d-interactive p-8 border border-white/90 shadow-xl space-y-5 cursor-default"
+          >
+            <motion.div 
+              whileHover={{ rotate: 10, scale: 1.1 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+              className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-white flex items-center justify-center shadow-lg shadow-amber-500/25 border border-white/40 cursor-pointer"
+            >
               <Trophy className="w-7 h-7" />
-            </div>
+            </motion.div>
             <h3 className="text-2xl font-black text-slate-900 font-['Outfit']">
               Apresiasi & Hadiah Juara
             </h3>
@@ -100,12 +190,18 @@ export const ProfileSection: React.FC = () => {
                 <span>Seluruh peserta mendapatkan e-sertifikat resmi</span>
               </li>
             </ul>
-          </div>
+          </motion.div>
 
-        </div>
+        </motion.div>
 
         {/* 4 Langkah Alur Kompetisi Modern (3D Glass Stage) */}
-        <div className="rounded-3xl glass-3d-elevated p-8 sm:p-12 border border-white/90 shadow-2xl relative overflow-hidden">
+        <motion.div 
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="rounded-3xl glass-3d-elevated p-8 sm:p-12 border border-white/90 shadow-2xl relative overflow-hidden"
+        >
           {/* Top Specular Rim */}
           <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
 
@@ -122,10 +218,20 @@ export const ProfileSection: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <motion.div 
+            variants={stepsContainerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          >
             
             {/* Step 1 */}
-            <div className="p-6 rounded-2xl glass-3d-base border border-white/90 space-y-3.5 hover:scale-[1.02] transition-transform">
+            <motion.div 
+              variants={stepItemVariants}
+              whileHover={{ y: -4, scale: 1.02 }}
+              className="p-6 rounded-2xl glass-3d-base border border-white/90 space-y-3.5 cursor-default transition-shadow"
+            >
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-indigo-100/90 text-indigo-800 text-[11px] font-black tracking-wider">
                 01. PENDAFTARAN
               </div>
@@ -136,10 +242,14 @@ export const ProfileSection: React.FC = () => {
               <p className="text-xs text-slate-600 leading-relaxed font-normal">
                 Pilih jenjang SD, SMP, atau SMA. Isi biodata peserta atau daftarkan delegasi siswa secara kolektif.
               </p>
-            </div>
+            </motion.div>
 
             {/* Step 2 */}
-            <div className="p-6 rounded-2xl glass-3d-base border border-white/90 space-y-3.5 hover:scale-[1.02] transition-transform">
+            <motion.div 
+              variants={stepItemVariants}
+              whileHover={{ y: -4, scale: 1.02 }}
+              className="p-6 rounded-2xl glass-3d-base border border-white/90 space-y-3.5 cursor-default transition-shadow"
+            >
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-purple-100/90 text-purple-800 text-[11px] font-black tracking-wider">
                 02. MIDTRANS AUTO
               </div>
@@ -150,10 +260,14 @@ export const ProfileSection: React.FC = () => {
               <p className="text-xs text-slate-600 leading-relaxed font-normal">
                 Bayar via e-wallet atau bank favorit. Webhook Midtrans langsung menandai invoice lunas seketika.
               </p>
-            </div>
+            </motion.div>
 
             {/* Step 3 */}
-            <div className="p-6 rounded-2xl glass-3d-base border border-white/90 space-y-3.5 hover:scale-[1.02] transition-transform">
+            <motion.div 
+              variants={stepItemVariants}
+              whileHover={{ y: -4, scale: 1.02 }}
+              className="p-6 rounded-2xl glass-3d-base border border-white/90 space-y-3.5 cursor-default transition-shadow"
+            >
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-sky-100/90 text-sky-800 text-[11px] font-black tracking-wider">
                 03. KARTU UJIAN
               </div>
@@ -164,10 +278,14 @@ export const ProfileSection: React.FC = () => {
               <p className="text-xs text-slate-600 leading-relaxed font-normal">
                 Kartu peserta resmi langsung dapat dicetak dengan QR code unik, jadwal sesi, dan link server CBT.
               </p>
-            </div>
+            </motion.div>
 
             {/* Step 4 */}
-            <div className="p-6 rounded-2xl glass-3d-base border border-white/90 space-y-3.5 hover:scale-[1.02] transition-transform">
+            <motion.div 
+              variants={stepItemVariants}
+              whileHover={{ y: -4, scale: 1.02 }}
+              className="p-6 rounded-2xl glass-3d-base border border-white/90 space-y-3.5 cursor-default transition-shadow"
+            >
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-emerald-100/90 text-emerald-800 text-[11px] font-black tracking-wider">
                 04. UJIAN & HASIL
               </div>
@@ -178,10 +296,10 @@ export const ProfileSection: React.FC = () => {
               <p className="text-xs text-slate-600 leading-relaxed font-normal">
                 Ikuti ujian dengan pengawasan integritas. Pengumuman nilai dan sertifikat ber-QR siap diunduh.
               </p>
-            </div>
+            </motion.div>
 
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
       </div>
     </section>

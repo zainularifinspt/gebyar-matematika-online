@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { 
   Play, 
   Video, 
@@ -11,6 +12,35 @@ interface VideoGallerySectionProps {
   videos: VideoKegiatan[];
 }
 
+const headerVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
+const cardsContainerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const videoCardVariants: Variants = {
+  hidden: { opacity: 0, y: 22 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
 export const VideoGallerySection: React.FC<VideoGallerySectionProps> = ({ videos }) => {
   const [activeVideo, setActiveVideo] = useState<VideoKegiatan | null>(null);
 
@@ -19,7 +49,13 @@ export const VideoGallerySection: React.FC<VideoGallerySectionProps> = ({ videos
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
+        <motion.div 
+          variants={headerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          className="text-center max-w-3xl mx-auto mb-14 space-y-3"
+        >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-3d-base text-amber-800 text-xs font-black uppercase tracking-wider shadow-sm border border-white/90">
             <Video className="w-3.5 h-3.5 text-amber-600" />
             Dokumentasi & Sorotan
@@ -30,13 +66,22 @@ export const VideoGallerySection: React.FC<VideoGallerySectionProps> = ({ videos
           <p className="text-slate-600 text-sm sm:text-base font-normal">
             Saksikan semarak antusiasme ribuan peserta, tips peraih medali emas, dan arahan dewan juri matematika nasional.
           </p>
-        </div>
+        </motion.div>
 
         {/* Video Cards Grid (3D Glass Tiles) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <motion.div 
+          variants={cardsContainerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+        >
           {videos.map((vid) => (
-            <div
+            <motion.div
               key={vid.id}
+              variants={videoCardVariants}
+              whileHover={{ y: -6, scale: 1.015 }}
+              whileTap={{ scale: 0.99 }}
               onClick={() => setActiveVideo(vid)}
               className="rounded-3xl glass-3d-interactive overflow-hidden border border-white/90 shadow-lg group cursor-pointer flex flex-col relative"
             >
@@ -56,9 +101,13 @@ export const VideoGallerySection: React.FC<VideoGallerySectionProps> = ({ videos
 
                 {/* 3D Glass Play Button */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-14 h-14 rounded-2xl bg-white/90 backdrop-blur-md text-indigo-600 flex items-center justify-center shadow-xl shadow-indigo-600/30 border border-white group-hover:scale-110 transition-all">
+                  <motion.div 
+                    whileHover={{ scale: 1.18 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 18 }}
+                    className="w-14 h-14 rounded-2xl bg-white/90 backdrop-blur-md text-indigo-600 flex items-center justify-center shadow-xl shadow-indigo-600/30 border border-white"
+                  >
                     <Play className="w-6 h-6 fill-indigo-600 ml-0.5" />
-                  </div>
+                  </motion.div>
                 </div>
 
                 {/* Duration Badge */}
@@ -89,58 +138,79 @@ export const VideoGallerySection: React.FC<VideoGallerySectionProps> = ({ videos
                   <span>Tonton Video Kegiatan</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        {/* 3D Glass Video Player Modal */}
-        {activeVideo && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xl animate-fade-in">
-            <div className="relative w-full max-w-4xl rounded-3xl glass-3d-elevated border border-white/95 overflow-hidden shadow-2xl">
-              
-              {/* Specular Rim */}
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
+        {/* 3D Glass Video Player Modal with AnimatePresence */}
+        <AnimatePresence>
+          {activeVideo && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+              {/* Backdrop */}
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setActiveVideo(null)}
+                className="fixed inset-0 bg-slate-950/60 backdrop-blur-xl"
+              />
 
-              <div className="flex items-center justify-between p-4 px-6 border-b border-slate-200/80 bg-white/70">
-                <div className="flex items-center gap-2.5">
-                  <span className="px-3 py-0.5 text-[11px] font-black rounded-full bg-indigo-100 text-indigo-900 border border-indigo-300">
-                    Tahun {activeVideo.tahun}
-                  </span>
-                  <h4 className="text-sm sm:text-base font-black text-slate-900 font-['Outfit'] line-clamp-1">
-                    {activeVideo.judul}
-                  </h4>
+              {/* Modal Container */}
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.94, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.94, y: 20 }}
+                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                className="relative w-full max-w-4xl rounded-3xl glass-3d-elevated border border-white/95 overflow-hidden shadow-2xl z-10"
+              >
+                {/* Specular Rim */}
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
+
+                <div className="flex items-center justify-between p-4 px-6 border-b border-slate-200/80 bg-white/70">
+                  <div className="flex items-center gap-2.5">
+                    <span className="px-3 py-0.5 text-[11px] font-black rounded-full bg-indigo-100 text-indigo-900 border border-indigo-300">
+                      Tahun {activeVideo.tahun}
+                    </span>
+                    <h4 className="text-sm sm:text-base font-black text-slate-900 font-['Outfit'] line-clamp-1">
+                      {activeVideo.judul}
+                    </h4>
+                  </div>
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setActiveVideo(null)}
+                    className="p-2 rounded-xl bg-white/80 hover:bg-white text-slate-600 hover:text-slate-900 border border-white/90 shadow-sm cursor-pointer transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </motion.button>
                 </div>
-                <button
-                  onClick={() => setActiveVideo(null)}
-                  className="p-2 rounded-xl bg-white/80 hover:bg-white text-slate-600 hover:text-slate-900 border border-white/90 shadow-sm cursor-pointer transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
 
-              <div className="relative aspect-video w-full bg-black">
-                <iframe
-                  src={activeVideo.embedUrl}
-                  title={activeVideo.judul}
-                  className="w-full h-full border-0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
+                <div className="relative aspect-video w-full bg-black">
+                  <iframe
+                    src={activeVideo.embedUrl}
+                    title={activeVideo.judul}
+                    className="w-full h-full border-0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
 
-              <div className="p-5 px-6 bg-white/80 text-xs text-slate-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 font-medium">
-                <p className="max-w-2xl leading-relaxed">{activeVideo.deskripsi}</p>
-                <button
-                  onClick={() => setActiveVideo(null)}
-                  className="btn-3d-white px-5 py-2.5 rounded-xl text-xs font-bold cursor-pointer shrink-0"
-                >
-                  Tutup Pemutar
-                </button>
-              </div>
+                <div className="p-5 px-6 bg-white/80 text-xs text-slate-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 font-medium">
+                  <p className="max-w-2xl leading-relaxed">{activeVideo.deskripsi}</p>
+                  <motion.button
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => setActiveVideo(null)}
+                    className="btn-3d-white px-5 py-2.5 rounded-xl text-xs font-bold cursor-pointer shrink-0"
+                  >
+                    Tutup Pemutar
+                  </motion.button>
+                </div>
 
+              </motion.div>
             </div>
-          </div>
-        )}
+          )}
+        </AnimatePresence>
 
       </div>
     </section>

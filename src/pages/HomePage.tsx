@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Navbar } from '../components/layout/Navbar';
 import { Footer } from '../components/layout/Footer';
 import { AnnouncementBanner } from '../components/home/AnnouncementBanner';
@@ -94,36 +95,51 @@ export const HomePage: React.FC<HomePageProps> = ({
     <div className="min-h-screen light-mesh-bg text-slate-800 relative overflow-x-hidden">
       
       {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-white/95 border border-slate-200 text-slate-900 text-xs font-semibold shadow-2xl animate-fade-in backdrop-blur-xl">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-          <span>{toastMessage}</span>
-        </div>
-      )}
+      <AnimatePresence>
+        {toastMessage && (
+          <motion.div 
+            initial={{ opacity: 0, y: 25, scale: 0.92 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.92 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-white/95 border border-slate-200 text-slate-900 text-xs font-semibold shadow-2xl backdrop-blur-xl"
+          >
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>{toastMessage}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* User Session Bar (if logged in) */}
-      {activeUser && (
-        <div className="fixed top-0 left-0 right-0 z-[60] bg-indigo-600 px-4 py-1 text-center text-xs font-medium text-white flex items-center justify-center gap-2">
-          <UserCheck className="w-3.5 h-3.5" />
-          <span>
-            Sesi Aktif:{' '}
-            <button 
-              onClick={onNavigateToRegistrationDetail}
-              className="underline font-bold hover:text-indigo-100 cursor-pointer"
-              title="Buka Halaman Detail Pendaftaran & Sertifikat"
-            >
-              {activeUser.name}
-            </button>{' '}
-            ({activeUser.role})
-          </span>
-          <button 
-            onClick={handleLogout}
-            className="underline ml-2 text-indigo-200 hover:text-white"
+      <AnimatePresence>
+        {activeUser && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-0 left-0 right-0 z-[60] bg-indigo-600 px-4 py-1 text-center text-xs font-medium text-white flex items-center justify-center gap-2"
           >
-            Keluar
-          </button>
-        </div>
-      )}
+            <UserCheck className="w-3.5 h-3.5" />
+            <span>
+              Sesi Aktif:{' '}
+              <button 
+                onClick={onNavigateToRegistrationDetail}
+                className="underline font-bold hover:text-indigo-100 cursor-pointer"
+                title="Buka Halaman Detail Pendaftaran & Sertifikat"
+              >
+                {activeUser.name}
+              </button>{' '}
+              ({activeUser.role})
+            </span>
+            <button 
+              onClick={handleLogout}
+              className="underline ml-2 text-indigo-200 hover:text-white cursor-pointer"
+            >
+              Keluar
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Navigation Bar */}
       <Navbar
