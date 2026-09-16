@@ -46,8 +46,6 @@
 }
 
 /* ============================================================
-   HARDWARE-ACCELERATED 3D GLASSMORPHISM (ULTRA LIGHTWEIGHT & 60-120FPS)
-/* ============================================================
    HARDWARE-ACCELERATED 3D LIQUID GLASSMORPHISM
    Organic, translucent, fluid depth with soft refraction and no harsh top lines
    ============================================================ */
@@ -231,7 +229,7 @@
     inset 0 0 24px rgba(255, 255, 255, 0.60);
 }
 
-/* Coral Ruby — Midtrans Payment, QRIS, Urgent */
+/* Coral Ruby — Instant Payment, QRIS, Urgent */
 .glass-3d-rose,
 .glass-rose {
   background: linear-gradient(135deg, rgba(255, 241, 242, 0.88) 0%, rgba(255, 228, 230, 0.72) 100%);

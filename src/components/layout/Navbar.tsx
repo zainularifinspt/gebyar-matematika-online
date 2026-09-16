@@ -169,7 +169,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         </div>
                         <div>
                           <p className="leading-tight">Status Pembayaran</p>
-                          <span className="text-[10px] text-slate-500 font-medium">Simulasi Midtrans QRIS & VA</span>
+                          <span className="text-[10px] text-slate-500 font-medium">Cek Tagihan & Bukti Lunas</span>
                         </div>
                       </button>
 
@@ -303,7 +303,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold rounded-xl glass-3d-rose text-rose-900"
               >
                 <CreditCard className="w-4 h-4 text-rose-700" />
-                Status Pembayaran Midtrans
+                Status Pembayaran Online
               </button>
               <button 
                 onClick={() => { setMobileMenuOpen(false); onOpenVerifyModal?.(); }}

@@ -250,14 +250,14 @@ export const ProfileSection: React.FC = () => {
               className="p-6 rounded-2xl glass-3d-base border border-white/90 space-y-3.5 cursor-default transition-shadow"
             >
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-purple-100/90 text-purple-800 text-[11px] font-black tracking-wider">
-                02. MIDTRANS AUTO
+                02. BAYAR INSTAN
               </div>
               <div className="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-600 flex items-center justify-center">
                 <CreditCard className="w-6 h-6" />
               </div>
               <h4 className="text-base font-black text-slate-900 font-['Outfit']">QRIS / Virtual Account</h4>
               <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                Bayar via e-wallet atau bank favorit. Webhook Midtrans langsung menandai invoice lunas seketika.
+                Bayar via e-wallet atau bank favorit. Sistem verifikasi otomatis langsung menandai invoice lunas seketika.
               </p>
             </motion.div>
 

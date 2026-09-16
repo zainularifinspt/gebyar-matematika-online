@@ -25,7 +25,7 @@ export const PaymentHistoryTable: React.FC<PaymentHistoryTableProps> = ({
             Riwayat Transaksi & Status Pendaftaran
           </h3>
           <p className="text-xs text-slate-500">
-            Daftar seluruh pendaftaran lomba dan status pembayaran via Midtrans.
+            Daftar seluruh pendaftaran lomba dan status verifikasi pembayaran otomatis.
           </p>
         </div>
 

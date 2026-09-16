@@ -47,7 +47,7 @@ export const DashboardOverviewView: React.FC<DashboardOverviewViewProps> = ({
         {/* Metric 2 */}
         <div className="p-6 rounded-3xl glass-panel border border-slate-200/80 bg-white/80 shadow-sm space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500">Pembayaran Lunas (Midtrans)</span>
+            <span className="text-xs font-bold text-slate-500">Pembayaran Lunas (Otomatis)</span>
             <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center">
               <CheckCircle2 className="w-4 h-4" />
             </div>
@@ -172,10 +172,10 @@ export const DashboardOverviewView: React.FC<DashboardOverviewViewProps> = ({
               <>
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-emerald-700">Webhook Midtrans Online</span>
+                    <span className="font-bold text-emerald-700">Sistem Pembayaran Online</span>
                     <span className="text-[10px] text-slate-400">Siap / Aktif</span>
                   </div>
-                  <p className="text-slate-600">Endpoint Webhook siap menerima verifikasi transaksi instan QRIS & Virtual Account.</p>
+                  <p className="text-slate-600">Sistem siap memverifikasi transaksi instan QRIS & Virtual Account secara real-time.</p>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">

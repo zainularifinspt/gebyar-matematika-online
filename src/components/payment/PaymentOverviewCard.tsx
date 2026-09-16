@@ -98,7 +98,7 @@ export const PaymentOverviewCard: React.FC<PaymentOverviewCardProps> = ({
           <span className="font-bold text-slate-800 tabular-nums">Rp {payment.jumlah.toLocaleString('id-ID')}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-slate-500 font-medium">Biaya Layanan Gerbang Pembayaran (Midtrans)</span>
+          <span className="text-slate-500 font-medium">Biaya Layanan Gerbang Pembayaran</span>
           <span className="font-bold text-slate-800 tabular-nums">Rp {payment.biayaLayanan.toLocaleString('id-ID')}</span>
         </div>
         <div className="flex justify-between pt-3 border-t border-slate-200 text-sm font-bold text-slate-900">
@@ -111,7 +111,7 @@ export const PaymentOverviewCard: React.FC<PaymentOverviewCardProps> = ({
 
       <div className="flex items-center gap-2.5 text-[11px] text-slate-600 glass-3d-base p-3.5 rounded-xl border border-white/90">
         <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-        <span>Diproses aman dengan enkripsi <strong>Midtrans Payment Gateway</strong> bersertifikasi PCI-DSS.</span>
+        <span>Diproses aman dengan enkripsi <strong>Gerbang Pembayaran Resmi</strong> bersertifikasi PCI-DSS.</span>
       </div>
 
     </div>

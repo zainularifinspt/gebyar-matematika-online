@@ -74,7 +74,7 @@ export const FaqContactSection: React.FC<FaqContactSectionProps> = ({ faqs }) =>
             Tanya Jawab & Kontak Panitia
           </h2>
           <p className="text-slate-600 text-sm sm:text-base font-normal">
-            Temukan jawaban cepat atas pertanyaan seputar pendaftaran, pembayaran Midtrans, atau hubungi langsung panitia pendamping.
+            Temukan jawaban cepat atas pertanyaan seputar pendaftaran, pembayaran online otomatis, atau hubungi langsung panitia pendamping.
           </p>
         </motion.div>
 

@@ -45,7 +45,7 @@ export const PaymentSuccessCard: React.FC<PaymentSuccessCardProps> = ({
               Pendaftaran Resmi Aktif & Terkonfirmasi!
             </h3>
             <p className="text-xs text-emerald-950/80 font-medium">
-              Transaksi dengan nomor <strong className="font-mono text-emerald-950">{payment.orderId}</strong> telah lunas via Midtrans. Kartu ujian Anda telah diterbitkan secara otomatis.
+              Transaksi dengan nomor <strong className="font-mono text-emerald-950">{payment.orderId}</strong> telah lunas terverifikasi secara otomatis. Kartu ujian Anda telah diterbitkan.
             </p>
           </div>
         </div>

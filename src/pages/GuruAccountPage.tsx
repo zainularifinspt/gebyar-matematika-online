@@ -86,7 +86,7 @@ export const GuruAccountPage: React.FC<GuruAccountPageProps> = ({
     setBatches(prev => [newBatch, ...prev]);
   };
 
-  // When an invoice is simulated as paid via Midtrans
+  // When an invoice is simulated as paid automatically
   const handleMarkInvoicePaid = (orderId: string) => {
     setTagihanList(prev => prev.map(inv => 
       inv.orderId === orderId ? { ...inv, status: 'lunas' } : inv

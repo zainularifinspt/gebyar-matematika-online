@@ -429,7 +429,7 @@ export const FormPendaftaranModal: React.FC<FormPendaftaranModalProps> = ({
               </p>
               <p className="text-[11px] text-emerald-700 font-bold flex items-center gap-1 mt-0.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                Konfirmasi otomatis via Midtrans Webhook
+                Konfirmasi otomatis real-time (QRIS & VA)
               </p>
             </div>
 

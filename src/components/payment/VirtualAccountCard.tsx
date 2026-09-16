@@ -54,7 +54,7 @@ export const VirtualAccountCard: React.FC<VirtualAccountCardProps> = ({
       <div className="space-y-4 pb-5 border-b border-slate-200/60 relative">
         <div>
           <span className="px-3 py-1 rounded-full text-[11px] font-black glass-3d-violet text-indigo-950 uppercase tracking-wider">
-            Virtual Account Midtrans
+            Virtual Account Resmi
           </span>
           <h3 className="text-2xl font-black text-slate-900 font-['Outfit'] tracking-tight mt-2">
             Pilih Bank Virtual Account

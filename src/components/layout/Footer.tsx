@@ -23,7 +23,7 @@ export const Footer: React.FC = () => {
             <MathLogo size="md" showSubtitle={false} />
             
             <p className="text-slate-600 text-sm leading-relaxed max-w-sm">
-              Platform resmi Gebyar Matematika 2027 persembahan Jurusan Pendidikan Matematika Universitas Lambung Mangkurat (ULM). Menyatukan pendaftaran terpadu tanpa approval manual, pembayaran otomatis Midtrans (QRIS & VA), ujian CBT andal, serta verifikasi e-sertifikat ber-QR resmi.
+              Platform resmi Gebyar Matematika 2027 persembahan Jurusan Pendidikan Matematika Universitas Lambung Mangkurat (ULM). Menyatukan pendaftaran terpadu tanpa approval manual, pembayaran otomatis (QRIS & Virtual Account), ujian CBT andal, serta verifikasi e-sertifikat ber-QR resmi.
             </p>
 
             <div className="pt-2 flex items-center gap-2">

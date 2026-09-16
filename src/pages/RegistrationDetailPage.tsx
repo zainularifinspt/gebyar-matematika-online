@@ -68,7 +68,7 @@ export const RegistrationDetailPage: React.FC<RegistrationDetailPageProps> = ({
   };
 
   const handleSimulatePayment = async () => {
-    showToast('Menghubungkan ke Gerbang Pembayaran Midtrans Snap...');
+    showToast('Menghubungkan ke Gerbang Pembayaran Online...');
     try {
       const res = await fetch('/api/midtrans-charge', {
         method: 'POST',
@@ -87,13 +87,13 @@ export const RegistrationDetailPage: React.FC<RegistrationDetailPageProps> = ({
         (window as any).snap.pay(data.token, {
           onSuccess: () => {
             setStatus('lunas');
-            showToast('✓ Pembayaran berhasil diverifikasi secara instan via Midtrans!');
+            showToast('✓ Pembayaran berhasil diverifikasi secara otomatis!');
           },
           onPending: () => {
             showToast('Transaksi sedang diproses. Silakan selesaikan pembayaran.');
           },
           onError: () => {
-            showToast('Pembayaran Midtrans gagal atau dibatalkan.');
+            showToast('Pembayaran dibatalkan atau belum selesai.');
           },
         });
         return;
@@ -103,7 +103,7 @@ export const RegistrationDetailPage: React.FC<RegistrationDetailPageProps> = ({
     }
 
     setStatus('lunas');
-    showToast('Pembayaran berhasil diverifikasi secara instan via Midtrans Webhook!');
+    showToast('✓ Pembayaran berhasil diverifikasi secara otomatis!');
   };
 
   const handleDownloadReceipt = () => {
@@ -445,7 +445,7 @@ export const RegistrationDetailPage: React.FC<RegistrationDetailPageProps> = ({
                     className="btn-3d-primary w-full py-3 rounded-xl text-xs font-black flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <CreditCard className="w-4 h-4" />
-                    <span>Bayar Sekarang via Midtrans</span>
+                    <span>Bayar Sekarang (Online)</span>
                   </button>
                 </div>
               )}
@@ -456,7 +456,7 @@ export const RegistrationDetailPage: React.FC<RegistrationDetailPageProps> = ({
                   <div className="p-4 rounded-xl glass-3d-emerald border border-emerald-300 space-y-1 text-xs">
                     <span className="font-black text-emerald-950 block">Waktu Pelunasan:</span>
                     <p className="text-emerald-900 font-semibold">{registration.waktuLunas}</p>
-                    <p className="text-[10px] text-emerald-800">Verifikasi Otomatis Webhook Midtrans</p>
+                    <p className="text-[10px] text-emerald-800">Verifikasi Otomatis Real-time</p>
                   </div>
 
                   <button
@@ -471,7 +471,7 @@ export const RegistrationDetailPage: React.FC<RegistrationDetailPageProps> = ({
 
               <div className="pt-2 border-t border-slate-200/70 text-[11px] text-slate-500 flex items-center gap-2 font-medium">
                 <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>Transaksi dijamin aman oleh Midtrans PCI-DSS.</span>
+                <span>Transaksi dijamin aman dengan enkripsi standar perbankan PCI-DSS.</span>
               </div>
             </div>
 

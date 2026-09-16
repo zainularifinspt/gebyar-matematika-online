@@ -608,7 +608,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 
           {/* Footer note */}
           <div className="pt-1 text-center text-[11px] text-slate-500 font-medium">
-            <span>Satu akun SSO untuk pendaftaran, Midtrans, dan Web Ujian CBT.</span>
+            <span>Satu akun SSO untuk pendaftaran, pembayaran otomatis, dan Web Ujian CBT.</span>
           </div>
 
         </div>

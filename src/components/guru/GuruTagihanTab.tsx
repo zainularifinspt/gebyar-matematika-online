@@ -63,7 +63,7 @@ export const GuruTagihanTab: React.FC<GuruTagihanTabProps> = ({
 
         <div className="flex items-center gap-2">
           <span className="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-600 shadow-sm">
-            Integrasi Midtrans Payment Gateway
+            Gerbang Pembayaran Otomatis
           </span>
         </div>
       </div>
@@ -240,7 +240,7 @@ export const GuruTagihanTab: React.FC<GuruTagihanTabProps> = ({
                 className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-2"
               >
                 <CheckCircle2 className="w-4 h-4" />
-                <span>Simulasikan Pembayaran Berhasil (Midtrans Webhook)</span>
+                <span>Simulasikan Pembayaran Berhasil (Verifikasi Otomatis)</span>
               </button>
 
               <button

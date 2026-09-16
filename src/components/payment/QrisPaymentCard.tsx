@@ -38,7 +38,7 @@ export const QrisPaymentCard: React.FC<QrisPaymentCardProps> = ({
             <span className="text-xs text-slate-500 font-bold">Konfirmasi Otomatis Real-Time</span>
           </div>
           <h3 className="text-2xl font-black text-slate-900 font-['Outfit'] mt-1">
-            Pindai Kode QRIS Midtrans
+            Pindai Kode QRIS Resmi
           </h3>
         </div>
 
@@ -67,8 +67,8 @@ export const QrisPaymentCard: React.FC<QrisPaymentCardProps> = ({
 
           {/* Dynamic Generated QR Visual */}
           <img
-            src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=MIDTRANS-QRIS-${payment.orderId}-TOTAL-${payment.total}`}
-            alt="QRIS Midtrans"
+            src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=QRIS-${payment.orderId}-TOTAL-${payment.total}`}
+            alt="QRIS Resmi"
             className="w-full aspect-square object-contain mx-auto rounded-xl shadow-xs"
           />
 

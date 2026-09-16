@@ -38,10 +38,10 @@ export const PaymentPage: React.FC<PaymentPageProps> = ({ onBackToHome }) => {
     setTimeout(() => setToastMessage(null), 4000);
   };
 
-  // Real Midtrans Snap Payment with graceful offline simulation fallback
-  const handlePayWithMidtrans = async () => {
+  // Real Online Payment with graceful offline simulation fallback
+  const handlePayOnline = async () => {
     setIsProcessing(true);
-    showToast('Menghubungkan ke Gerbang Pembayaran Midtrans Snap...');
+    showToast('Menghubungkan ke Gerbang Pembayaran Online...');
 
     try {
       const res = await fetch('/api/midtrans-charge', {
@@ -70,13 +70,13 @@ export const PaymentPage: React.FC<PaymentPageProps> = ({ onBackToHome }) => {
             };
             setCurrentPayment(updatedPayment);
             setPaymentHistory(prev => [updatedPayment, ...prev]);
-            showToast('✓ Pembayaran Berhasil Dikonfirmasi Otomatis oleh Midtrans!');
+            showToast('✓ Pembayaran Berhasil Dikonfirmasi Otomatis!');
           },
           onPending: () => {
             showToast('Transaksi dibuat. Silakan selesaikan pembayaran di aplikasi m-Banking/e-Wallet Anda.');
           },
           onError: () => {
-            showToast('Pembayaran Midtrans dibatalkan atau gagal.');
+            showToast('Pembayaran dibatalkan atau belum selesai.');
           },
           onClose: () => {
             showToast('Jendela pembayaran ditutup.');
@@ -98,7 +98,7 @@ export const PaymentPage: React.FC<PaymentPageProps> = ({ onBackToHome }) => {
       };
       setCurrentPayment(updatedPayment);
       setPaymentHistory(prev => [updatedPayment, ...prev.filter(p => p.id !== currentPayment.id)]);
-      showToast('✓ Pembayaran Berhasil Dikonfirmasi Otomatis oleh Midtrans!');
+      showToast('✓ Pembayaran Berhasil Dikonfirmasi Otomatis!');
     }, 1200);
   };
 
@@ -144,7 +144,7 @@ export const PaymentPage: React.FC<PaymentPageProps> = ({ onBackToHome }) => {
 
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full glass-3d-emerald text-xs text-emerald-950 font-bold border border-emerald-300 shadow-xs">
             <ShieldCheck className="w-4 h-4 text-emerald-700" />
-            <span className="hidden sm:inline">Midtrans Encrypted</span>
+            <span className="hidden sm:inline">Terenkripsi 256-Bit SSL</span>
           </div>
 
         </div>
@@ -255,13 +255,13 @@ export const PaymentPage: React.FC<PaymentPageProps> = ({ onBackToHome }) => {
                   {selectedMethod === 'QRIS' ? (
                     <QrisPaymentCard
                       payment={currentPayment}
-                      onSimulatePay={handlePayWithMidtrans}
+                      onSimulatePay={handlePayOnline}
                       isProcessing={isProcessing}
                     />
                   ) : (
                     <VirtualAccountCard
                       payment={currentPayment}
-                      onSimulatePay={handlePayWithMidtrans}
+                      onSimulatePay={handlePayOnline}
                       isProcessing={isProcessing}
                     />
                   )}

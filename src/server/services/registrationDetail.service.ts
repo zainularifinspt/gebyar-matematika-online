@@ -1,8 +1,8 @@
 /**
  * Registration Detail & Certificate Service
- * Mengelola data detail pendaftaran siswa mandiri, transaksi pembayaran Midtrans/VA/QRIS,
+ * Mengelola data detail pendaftaran siswa mandiri, transaksi pembayaran online (VA/QRIS),
  * serta penerbitan dan verifikasi E-Sertifikat digital resmi ber-QR Code.
- * Gebyar Matematika Online 2026
+ * Gebyar Matematika 2027 ULM
  */
 
 import type {

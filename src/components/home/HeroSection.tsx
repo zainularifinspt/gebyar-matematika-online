@@ -128,7 +128,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 variants={itemVariants}
                 className="text-slate-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0 font-normal"
               >
-                Kompetisi bergengsi persembahan <strong className="text-slate-900 font-bold">Jurusan Pendidikan Matematika Universitas Lambung Mangkurat (ULM)</strong>: pendaftaran instan tanpa approval manual, pembayaran otomatis via <strong className="text-slate-900 font-bold">Midtrans (QRIS & Virtual Account)</strong>, simulasi CBT modern, dan e-sertifikat ber-QR resmi.
+                Kompetisi bergengsi persembahan <strong className="text-slate-900 font-bold">Jurusan Pendidikan Matematika Universitas Lambung Mangkurat (ULM)</strong>: pendaftaran instan tanpa approval manual, pembayaran otomatis via <strong className="text-slate-900 font-bold">QRIS & Virtual Account</strong>, simulasi CBT modern, dan e-sertifikat ber-QR resmi.
               </motion.p>
 
               {/* Dual Action Buttons: Vibrant Purple Pill + Frosted Glass Outline */}

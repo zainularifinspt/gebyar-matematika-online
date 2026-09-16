@@ -96,7 +96,7 @@ export const MOCK_PENGUMUMAN: Pengumuman[] = [
     id: 'ann-1',
     judul: 'Pendaftaran Gelombang 1 Gebyar Matematika 2027 Resmi Dibuka!',
     ringkasan: 'Dapatkan diskon biaya early-bird untuk 100 pendaftar pertama dari seluruh Indonesia.',
-    isi: 'Panitia Gebyar Matematika 2027 Jurusan Pendidikan Matematika ULM mengumumkan bahwa pendaftaran resmi dibuka mulai hari ini. Peserta mandiri dan sekolah dapat langsung mendaftarkan peserta dengan konfirmasi instan via Midtrans (QRIS & Virtual Account).',
+    isi: 'Panitia Gebyar Matematika 2027 Jurusan Pendidikan Matematika ULM mengumumkan bahwa pendaftaran resmi dibuka mulai hari ini. Peserta mandiri dan sekolah dapat langsung mendaftarkan peserta dengan konfirmasi instan (QRIS & Virtual Account).',
     tanggal: '15 September 2027',
     kategori: 'Penting',
     isPenting: true,
@@ -276,7 +276,7 @@ export const MOCK_FAQ: FaqItem[] = [
     id: 'faq-2',
     kategori: 'Pembayaran',
     pertanyaan: 'Bagaimana metode pembayaran dan apakah verifikasi berjalan otomatis?',
-    jawaban: 'Pembayaran didukung melalui Midtrans dengan opsi QRIS (GoPay, OVO, Dana, ShopeePay, BCA Mobile, dll) serta Virtual Account (BCA, Mandiri, BNI, BRI, Permata). Verifikasi terjadi secara real-time dan otomatis; pendaftaran langsung aktif dan kartu peserta langsung terbit tanpa harus menunggu konfirmasi panitia.',
+    jawaban: 'Pembayaran didukung dengan opsi QRIS (GoPay, OVO, Dana, ShopeePay, BCA Mobile, dll) serta Virtual Account (BCA, Mandiri, BNI, BRI, Permata). Verifikasi terjadi secara real-time dan otomatis; pendaftaran langsung aktif dan kartu peserta langsung terbit tanpa harus menunggu konfirmasi panitia.',
   },
   {
     id: 'faq-3',
