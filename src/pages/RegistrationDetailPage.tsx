@@ -217,8 +217,7 @@ export const RegistrationDetailPage: React.FC<RegistrationDetailPageProps> = ({
 
         {/* Hero Summary Card: 3D Acrylic Glass Badge */}
         <div className="rounded-3xl p-7 sm:p-9 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-2xl relative overflow-hidden border border-white/30">
-          {/* Specular Rim */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/80 to-transparent pointer-events-none" />
+
 
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
             <div className="space-y-3 max-w-2xl">

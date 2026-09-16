@@ -82,9 +82,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="relative rounded-[32px] sm:rounded-[44px] glass-3d-master-frame p-6 sm:p-10 lg:p-14 border border-white/90 shadow-2xl shadow-indigo-500/10"
         >
-          
-          {/* Specular Top Rim Shine */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none rounded-t-[32px] sm:rounded-t-[44px]" />
 
           {/* Decorative 3D Cloud Breakout Element */}
           <div className="absolute -top-6 right-12 w-28 h-14 hidden lg:block pointer-events-none opacity-80 animate-float-slow z-0">
@@ -218,9 +215,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
                 {/* 3D Illustration Container with Claymorphism Rocket & Math Elements */}
                 <div className="relative rounded-3xl overflow-hidden glass-3d-elevated border border-white/95 shadow-2xl p-4 sm:p-6 space-y-5">
-                  
-                  {/* Specular rim shine */}
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
 
                   {/* Top Trophy & Fund Card */}
                   <div className="flex items-center justify-between pb-4 border-b border-slate-200/60">

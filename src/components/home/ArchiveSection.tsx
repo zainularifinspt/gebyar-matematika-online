@@ -147,8 +147,7 @@ export const ArchiveSection: React.FC<ArchiveSectionProps> = ({ archives }) => {
                 whileHover={{ y: -5, scale: 1.015 }}
                 className="rounded-3xl glass-3d-interactive p-7 border border-white/90 shadow-lg flex flex-col justify-between relative overflow-hidden"
               >
-                {/* Top Specular Rim */}
-                <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
+
 
                 <div className="space-y-3.5">
                   <div className="flex items-center justify-between">
@@ -241,8 +240,7 @@ export const ArchiveSection: React.FC<ArchiveSectionProps> = ({ archives }) => {
                 transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
                 className="relative w-full max-w-2xl rounded-3xl glass-3d-elevated border border-white/95 p-6 sm:p-9 shadow-2xl space-y-6 overflow-hidden z-10"
               >
-                {/* Specular Rim */}
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
+
 
                 <div className="flex items-start justify-between gap-4">
                   <div className="space-y-1">

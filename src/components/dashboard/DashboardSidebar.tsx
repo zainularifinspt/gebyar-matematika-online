@@ -48,8 +48,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
 
   return (
     <aside className="w-full lg:w-72 shrink-0 bg-white/90 backdrop-blur-xl border border-slate-200/80 shadow-sm p-5 flex flex-col justify-between lg:sticky lg:top-8 lg:h-[calc(100vh-4rem)] rounded-3xl z-20 overflow-hidden relative">
-      {/* Subtle Specular Rim */}
-      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
+
 
       {/* Brand & Navigation */}
       <div className="flex-1 overflow-y-auto pr-1 space-y-5">

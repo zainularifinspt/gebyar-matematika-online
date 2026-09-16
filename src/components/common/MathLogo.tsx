@@ -16,11 +16,7 @@ export const MathLogo: React.FC<MathLogoProps> = ({
     <div className="flex items-center gap-3 select-none">
       {/* 3D Glass Emblem with Specular Highlight and Polyhedral Depth */}
       <div className={`relative ${iconSizeClass} rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 text-white flex items-center justify-center font-serif font-black shadow-lg shadow-indigo-600/30 border border-white/40 shrink-0 transform transition-transform hover:scale-105`}>
-        {/* Specular glass reflection layer */}
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-transparent via-white/10 to-white/40 pointer-events-none" />
         <span className="leading-none mt-[-2px] relative z-10 drop-shadow">∑</span>
-        {/* Prismatic corner highlight */}
-        <div className="absolute top-1 left-1 w-2 h-2 rounded-full bg-white/60 blur-[0.5px] pointer-events-none" />
       </div>
 
       <div>

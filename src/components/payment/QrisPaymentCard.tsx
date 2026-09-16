@@ -26,8 +26,7 @@ export const QrisPaymentCard: React.FC<QrisPaymentCardProps> = ({
 
   return (
     <div className="rounded-3xl glass-3d-elevated p-6 sm:p-8 border border-white/95 shadow-xl space-y-6 relative overflow-hidden">
-      {/* Specular Rim */}
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
+
 
       {/* Title & E-Wallet Badges */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-200/70">

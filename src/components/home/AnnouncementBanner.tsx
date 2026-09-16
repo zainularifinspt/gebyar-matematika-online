@@ -30,8 +30,7 @@ export const AnnouncementBanner: React.FC<AnnouncementBannerProps> = ({
           onClick={() => onSelectAnnouncement ? onSelectAnnouncement(announcement) : onViewAll?.()}
           className="group relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3 sm:px-5 sm:py-2.5 rounded-2xl glass-3d-base hover:glass-3d-elevated cursor-pointer transition-shadow duration-200 overflow-hidden shadow-md shadow-indigo-500/5 hover:shadow-lg hover:shadow-indigo-500/10 border border-white/90"
         >
-          {/* Specular top rim shine */}
-          <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-white/90 to-transparent pointer-events-none" />
+
 
           {/* Glowing colorful left accent pill */}
           <div className="absolute top-2 bottom-2 left-1.5 w-1 rounded-full bg-gradient-to-b from-blue-500 via-indigo-600 to-purple-600 shadow-sm shadow-indigo-500/50" />

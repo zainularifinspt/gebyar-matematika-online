@@ -85,8 +85,7 @@ export const VideoGallerySection: React.FC<VideoGallerySectionProps> = ({ videos
               onClick={() => setActiveVideo(vid)}
               className="rounded-3xl glass-3d-interactive overflow-hidden border border-white/90 shadow-lg group cursor-pointer flex flex-col relative"
             >
-              {/* Specular Rim */}
-              <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-10" />
+
 
               {/* Thumbnail Container */}
               <div className="relative aspect-video w-full overflow-hidden bg-slate-900">
@@ -163,8 +162,7 @@ export const VideoGallerySection: React.FC<VideoGallerySectionProps> = ({ videos
                 transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
                 className="relative w-full max-w-4xl rounded-3xl glass-3d-elevated border border-white/95 overflow-hidden shadow-2xl z-10"
               >
-                {/* Specular Rim */}
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
+
 
                 <div className="flex items-center justify-between p-4 px-6 border-b border-slate-200/80 bg-white/70">
                   <div className="flex items-center gap-2.5">

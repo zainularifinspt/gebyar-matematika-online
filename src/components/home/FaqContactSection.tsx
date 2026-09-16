@@ -167,8 +167,7 @@ export const FaqContactSection: React.FC<FaqContactSectionProps> = ({ faqs }) =>
               whileHover={{ y: -4, scale: 1.01 }}
               className="p-7 rounded-3xl glass-3d-emerald border border-emerald-300/90 shadow-xl space-y-4 relative overflow-hidden cursor-default"
             >
-              {/* Specular Rim */}
-              <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
+
 
               <div className="flex items-center gap-3.5">
                 <motion.div 
@@ -211,8 +210,7 @@ export const FaqContactSection: React.FC<FaqContactSectionProps> = ({ faqs }) =>
               transition={{ duration: 0.55, delay: 0.1 }}
               className="p-7 rounded-3xl glass-3d-elevated border border-white/95 shadow-2xl space-y-4 relative overflow-hidden"
             >
-              {/* Specular Rim */}
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
+
 
               <h4 className="text-lg font-black text-slate-900 font-['Outfit']">
                 Kirim Pesan ke Panitia

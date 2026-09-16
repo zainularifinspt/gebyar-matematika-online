@@ -23,8 +23,7 @@ export const GuruHeader: React.FC<GuruHeaderProps> = ({
 }) => {
   return (
     <header className="border-b border-white/80 bg-white/85 backdrop-blur-2xl sticky top-0 z-40 shadow-sm relative">
-      {/* Specular Rim */}
-      <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-white/90 to-transparent pointer-events-none" />
+
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

@@ -154,8 +154,7 @@ export const CategoryScheduleSection: React.FC<CategoryScheduleSectionProps> = (
                     : 'hover:shadow-xl'
                 }`}
               >
-                {/* Specular Rim */}
-                <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-white/90 to-transparent pointer-events-none rounded-t-3xl" />
+
 
                 {/* Badge Tingkat */}
                 <div className="flex items-center justify-between mb-4">
@@ -231,8 +230,7 @@ export const CategoryScheduleSection: React.FC<CategoryScheduleSectionProps> = (
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               className="rounded-3xl glass-3d-elevated p-6 sm:p-9 border border-white/95 shadow-2xl mb-20 relative overflow-hidden"
             >
-              {/* Top Specular Rim */}
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
+
 
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-200/70">
                 <div>

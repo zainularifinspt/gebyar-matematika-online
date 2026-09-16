@@ -202,8 +202,7 @@ export const ProfileSection: React.FC = () => {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="rounded-3xl glass-3d-elevated p-8 sm:p-12 border border-white/90 shadow-2xl relative overflow-hidden"
         >
-          {/* Top Specular Rim */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
+
 
           <div className="text-center max-w-2xl mx-auto mb-12">
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold mb-2">

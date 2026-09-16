@@ -224,8 +224,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
       <main className="max-w-md w-full mx-auto my-6 relative z-10">
         <div className="rounded-3xl glass-3d-elevated p-7 sm:p-9 border border-white/95 shadow-2xl space-y-6 relative overflow-hidden">
           
-          {/* Specular Rim */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
+
 
           {/* Header Title */}
           <div className="text-center space-y-2">

@@ -13,8 +13,7 @@ import { MathLogo } from '../common/MathLogo';
 export const Footer: React.FC = () => {
   return (
     <footer className="relative mt-24 border-t border-white/80 bg-white/75 backdrop-blur-2xl overflow-hidden shadow-lg shadow-slate-900/5">
-      {/* Top Specular Rim */}
-      <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-white/90 to-transparent pointer-events-none" />
+
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">

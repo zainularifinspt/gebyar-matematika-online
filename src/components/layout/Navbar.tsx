@@ -92,9 +92,6 @@ export const Navbar: React.FC<NavbarProps> = ({
           : 'py-4 bg-white/70 backdrop-blur-xl border-b border-white/60'
       }`}
     >
-      {/* Specular top rim shine */}
-      <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-white/90 to-transparent pointer-events-none" />
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-4">
           

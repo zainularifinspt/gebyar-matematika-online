@@ -25,51 +25,45 @@ export const FloatingMath3D: React.FC<FloatingMath3DProps> = ({ className = '' }
         </div>
       </div>
 
-      {/* 3D Glass Prism Symbol: Pi (Top Left) */}
-      <div className="absolute top-[8%] left-[5%] opacity-70 hidden md:block animate-float-slow">
-        <div className="relative w-14 h-14 rounded-2xl bg-white/80 border border-white/90 shadow-sm shadow-indigo-500/10 flex items-center justify-center transform transition-transform hover:scale-110">
-          <span className="text-xl font-bold text-indigo-600/80 font-mono select-none drop-shadow-xs">π</span>
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-transparent via-white/20 to-white/60 pointer-events-none" />
+      {/* 3D Liquid Glass Prism Symbol: Pi (Top Left) */}
+      <div className="absolute top-[8%] left-[5%] opacity-80 hidden md:block animate-float-slow">
+        <div className="relative w-14 h-14 rounded-2xl glass-3d-violet border border-white/80 flex items-center justify-center transform transition-transform hover:scale-110 shadow-lg">
+          <span className="text-xl font-black text-indigo-700 font-mono select-none drop-shadow-xs">π</span>
         </div>
       </div>
 
-      {/* 3D Glass Prism Symbol: Sigma / Summation (Top Right) */}
-      <div className="absolute top-[12%] right-[6%] opacity-70 hidden md:block animate-float-reverse">
-        <div className="relative w-15 h-15 rounded-2xl bg-white/80 border border-white/90 shadow-sm shadow-sky-500/10 flex items-center justify-center transform transition-transform hover:scale-110">
-          <span className="text-xl font-bold text-sky-600/80 font-mono select-none drop-shadow-xs">∑</span>
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-transparent via-white/20 to-white/60 pointer-events-none" />
+      {/* 3D Liquid Glass Prism Symbol: Sigma / Summation (Top Right) */}
+      <div className="absolute top-[12%] right-[6%] opacity-80 hidden md:block animate-float-reverse">
+        <div className="relative w-15 h-15 rounded-2xl glass-3d-cyan border border-white/80 flex items-center justify-center transform transition-transform hover:scale-110 shadow-lg">
+          <span className="text-xl font-black text-sky-700 font-mono select-none drop-shadow-xs">∑</span>
         </div>
       </div>
 
-      {/* 3D Glass Polyhedron: Delta (Mid Left) */}
-      <div className="absolute top-[45%] left-[2%] opacity-60 hidden lg:block animate-float-slow">
-        <div className="relative w-12 h-12 rounded-2xl bg-white/80 border border-white/90 shadow-sm shadow-emerald-500/10 flex items-center justify-center transform transition-transform hover:scale-110">
-          <span className="text-lg font-bold text-emerald-600/80 select-none">Δ</span>
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-transparent via-white/30 to-white/70 pointer-events-none" />
+      {/* 3D Liquid Glass Polyhedron: Delta (Mid Left) */}
+      <div className="absolute top-[45%] left-[2%] opacity-75 hidden lg:block animate-float-slow">
+        <div className="relative w-12 h-12 rounded-2xl glass-3d-emerald border border-white/80 flex items-center justify-center transform transition-transform hover:scale-110 shadow-lg">
+          <span className="text-lg font-black text-emerald-700 select-none">Δ</span>
         </div>
       </div>
 
-      {/* 3D Glass Symbol: Infinity (Mid-Bottom Right) */}
-      <div className="absolute top-[55%] right-[3%] opacity-65 hidden lg:block animate-float-reverse">
-        <div className="relative w-14 h-14 rounded-2xl bg-white/80 border border-white/90 shadow-sm shadow-amber-500/10 flex items-center justify-center transform transition-transform hover:scale-110">
-          <span className="text-xl font-bold text-amber-600/80 select-none">∞</span>
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-transparent via-white/30 to-white/70 pointer-events-none" />
+      {/* 3D Liquid Glass Symbol: Infinity (Mid-Bottom Right) */}
+      <div className="absolute top-[55%] right-[3%] opacity-75 hidden lg:block animate-float-reverse">
+        <div className="relative w-14 h-14 rounded-2xl glass-3d-amber border border-white/80 flex items-center justify-center transform transition-transform hover:scale-110 shadow-lg">
+          <span className="text-xl font-black text-amber-700 select-none">∞</span>
         </div>
       </div>
 
-      {/* 3D Glass Symbol: Square Root of X (Bottom Left) */}
-      <div className="absolute top-[82%] left-[4%] opacity-60 hidden md:block animate-float-slow">
-        <div className="relative w-12 h-12 rounded-2xl bg-white/80 border border-white/90 shadow-sm shadow-purple-500/10 flex items-center justify-center transform transition-transform hover:scale-110">
-          <span className="text-base font-bold text-purple-600/80 font-mono select-none">√x</span>
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-transparent via-white/20 to-white/60 pointer-events-none" />
+      {/* 3D Liquid Glass Symbol: Square Root of X (Bottom Left) */}
+      <div className="absolute top-[82%] left-[4%] opacity-75 hidden md:block animate-float-slow">
+        <div className="relative w-12 h-12 rounded-2xl glass-3d-violet border border-white/80 flex items-center justify-center transform transition-transform hover:scale-110 shadow-lg">
+          <span className="text-base font-black text-purple-700 font-mono select-none">√x</span>
         </div>
       </div>
 
-      {/* 3D Glass Polyhedron: Integral (Bottom Right) */}
-      <div className="absolute top-[88%] right-[5%] opacity-65 hidden md:block animate-float-reverse">
-        <div className="relative w-13 h-13 rounded-2xl bg-white/80 border border-white/90 shadow-sm shadow-rose-500/10 flex items-center justify-center transform transition-transform hover:scale-110">
-          <span className="text-xl font-bold text-rose-600/80 font-mono select-none">∫</span>
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-transparent via-white/20 to-white/60 pointer-events-none" />
+      {/* 3D Liquid Glass Polyhedron: Integral (Bottom Right) */}
+      <div className="absolute top-[88%] right-[5%] opacity-75 hidden md:block animate-float-reverse">
+        <div className="relative w-13 h-13 rounded-2xl glass-3d-rose border border-white/80 flex items-center justify-center transform transition-transform hover:scale-110 shadow-lg">
+          <span className="text-xl font-black text-rose-700 font-mono select-none">∫</span>
         </div>
       </div>
     </div>

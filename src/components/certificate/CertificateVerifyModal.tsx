@@ -40,8 +40,7 @@ export const CertificateVerifyModal: React.FC<CertificateVerifyModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/50 backdrop-blur-xl animate-fade-in">
       <div className="relative w-full max-w-lg rounded-3xl glass-3d-elevated border border-white/95 p-6 sm:p-8 shadow-2xl space-y-6 text-slate-900 overflow-hidden">
-        {/* Specular Rim */}
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
+
 
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
