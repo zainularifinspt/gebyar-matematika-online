@@ -24,7 +24,7 @@ export const Footer: React.FC = () => {
             <MathLogo size="md" showSubtitle={false} />
             
             <p className="text-slate-600 text-sm leading-relaxed max-w-sm">
-              Platform terpadu kompetisi matematika daring nasional. Menyatukan pendaftaran instan tanpa approval manual, pembayaran otomatis Midtrans (QRIS & VA), ujian CBT andal, serta verifikasi e-sertifikat ber-QR resmi.
+              Platform resmi Gebyar Matematika 2027 persembahan Jurusan Pendidikan Matematika Universitas Lambung Mangkurat (ULM). Menyatukan pendaftaran terpadu tanpa approval manual, pembayaran otomatis Midtrans (QRIS & VA), ujian CBT andal, serta verifikasi e-sertifikat ber-QR resmi.
             </p>
 
             <div className="pt-2 flex items-center gap-2">
@@ -103,18 +103,18 @@ export const Footer: React.FC = () => {
             <ul className="space-y-3 text-sm text-slate-600">
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
-                <span className="text-xs">Gedung Pusat Gebyar Matematika, Kampus FMIPA, Indonesia</span>
+                <span className="text-xs">Gedung Jurusan Pendidikan Matematika FKIP, Universitas Lambung Mangkurat, Jl. Brigjen H. Hasan Basry, Banjarmasin, Kalimantan Selatan</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-purple-600 shrink-0" />
-                <a href="mailto:panitia@gebyarmatematika.id" className="text-xs hover:text-indigo-600 transition-colors font-semibold">
-                  panitia@gebyarmatematika.id
+                <a href="mailto:pendidikan.matematika@ulm.ac.id" className="text-xs hover:text-indigo-600 transition-colors font-semibold">
+                  pendidikan.matematika@ulm.ac.id
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-emerald-600 shrink-0" />
                 <a href="https://wa.me/6281234567890" target="_blank" rel="noreferrer" className="text-xs hover:text-indigo-600 transition-colors inline-flex items-center gap-1 font-semibold">
-                  +62 812-3456-7890 (WA Helpdesk)
+                  +62 812-3456-7890 (WA Helpdesk Panitia ULM)
                   <ExternalLink className="w-3 h-3 text-slate-400" />
                 </a>
               </li>
@@ -125,7 +125,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom Bar */}
         <div className="mt-12 pt-6 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} Panitia Gebyar Matematika Online. Hak Cipta Dilindungi.</p>
+          <p>© 2027 Jurusan Pendidikan Matematika Universitas Lambung Mangkurat. Hak Cipta Dilindungi.</p>
           <div className="flex items-center gap-1.5 font-semibold text-slate-600">
             <span>Didesain dengan</span>
             <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 inline" />

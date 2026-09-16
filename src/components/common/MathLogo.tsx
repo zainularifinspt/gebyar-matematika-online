@@ -29,12 +29,12 @@ export const MathLogo: React.FC<MathLogoProps> = ({
             Gebyar<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">Matematika</span>
           </span>
           <span className="px-2 py-0.5 text-[10px] font-extrabold tracking-wider uppercase rounded-full bg-indigo-50/90 text-indigo-700 border border-indigo-200/90 shadow-xs backdrop-blur-xs">
-            2026
+            2027
           </span>
         </div>
         {showSubtitle && (
           <p className="text-[11px] font-semibold text-slate-500 -mt-0.5 hidden sm:block tracking-normal">
-            Kompetisi Matematika Daring Nasional
+            Pendidikan Matematika ULM
           </p>
         )}
       </div>

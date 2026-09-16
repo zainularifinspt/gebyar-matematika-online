@@ -64,7 +64,7 @@ export const GuruPendaftaranKolektifTab: React.FC<GuruPendaftaranKolektifTabProp
       return;
     }
 
-    const orderId = `GM26-KOL-${Math.floor(10000 + Math.random() * 90000)}`;
+    const orderId = `GM27-KOL-${Math.floor(10000 + Math.random() * 90000)}`;
 
     const newStudents: SiswaBimbinganItem[] = rows.map((r, idx) => ({
       id: `sb-${Date.now()}-${idx}`,

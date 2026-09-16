@@ -101,8 +101,8 @@ export function createBatchPendaftaran(
 
   const batchIndex = existingCount + 1;
   const batchId = `batch-${Date.now()}`;
-  const batchCode = `GM26-BATCH-${String(batchIndex).padStart(2, '0')}`;
-  const orderId = `GM26-KOL-${Math.floor(10000 + Math.random() * 90000)}`;
+  const batchCode = `GM27-BATCH-${String(batchIndex).padStart(2, '0')}`;
+  const orderId = `GM27-KOL-${Math.floor(10000 + Math.random() * 90000)}`;
 
   const subtotal = payload.peserta.reduce((sum, p) => sum + p.biaya, 0);
   

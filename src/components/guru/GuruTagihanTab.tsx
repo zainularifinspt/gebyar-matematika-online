@@ -30,7 +30,7 @@ export const GuruTagihanTab: React.FC<GuruTagihanTabProps> = ({
   };
 
   const handleDownloadReceipt = (orderId: string) => {
-    setDownloadMsg(`Kuitansi lunas resmi untuk ${orderId} berhasil diunduh (Format PDF resmi GM 2026).`);
+    setDownloadMsg(`Kuitansi lunas resmi untuk ${orderId} berhasil diunduh (Format PDF resmi GM 2027).`);
     setTimeout(() => setDownloadMsg(null), 4000);
   };
 
@@ -206,7 +206,7 @@ export const GuruTagihanTab: React.FC<GuruTagihanTabProps> = ({
                 <div className="space-y-3 pt-2">
                   <div className="w-44 h-44 bg-white p-2.5 rounded-2xl mx-auto flex items-center justify-center border border-slate-200 shadow-sm">
                     <img 
-                      src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=00020101021226590014ID.LINKAJA.WWW01189360091100223344550215GM26KOL889100303UMI51440014ID.CO.QRIS.WWW0215ID10200234567895204541153033605802ID5920GEBYAR%20MATEMATIKA6013KOTA%20BANDUNG61054011562070703A016304C92A" 
+                      src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=00020101021226590014ID.LINKAJA.WWW01189360091100223344550215GM27KOL889100303UMI51440014ID.CO.QRIS.WWW0215ID10200234567895204541153033605802ID5920GEBYAR%20MATEMATIKA6013KOTA%20BANJARMASIN61054011562070703A016304C92A" 
                       alt="QRIS Code" 
                       className="w-full h-full object-contain"
                     />

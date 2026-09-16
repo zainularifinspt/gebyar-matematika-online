@@ -80,10 +80,10 @@ export const ProfileSection: React.FC = () => {
             Tentang Kompetisi
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight font-['Outfit']">
-            Sorotan Profil Gebyar Matematika Online
+            Sorotan Profil Gebyar Matematika 2027
           </h2>
           <p className="text-slate-600 text-sm sm:text-base leading-relaxed font-normal">
-            Transformasi penuh kompetisi matematika nasional menuju ekosistem daring terpadu yang efisien, transparan, dan inklusif bagi seluruh pelajar di 34 provinsi.
+            Kompetisi bergengsi tahunan persembahan Jurusan Pendidikan Matematika Universitas Lambung Mangkurat (ULM) menuju ekosistem olimpiade daring yang objektif, andal, dan inklusif.
           </p>
         </motion.div>
 
@@ -146,16 +146,16 @@ export const ProfileSection: React.FC = () => {
               Penyelenggara Terpercaya
             </h3>
             <p className="text-slate-600 text-sm leading-relaxed font-normal">
-              Diselenggarakan oleh Panitia Gebyar Matematika Nasional berkolaborasi dengan Dewan Pakar Matematika, Akademisi FMIPA, dan Asosiasi Pendidik Matematika.
+              Diselenggarakan secara resmi oleh Jurusan Pendidikan Matematika Universitas Lambung Mangkurat (ULM) bersama Himpunan Mahasiswa dan Dewan Dosen Pakar Pendidikan Matematika.
             </p>
             <ul className="space-y-2.5 text-xs text-slate-800 pt-4 border-t border-slate-200/60 font-bold">
               <li className="flex items-center gap-2.5">
                 <CheckCircle className="w-4 h-4 text-purple-600 shrink-0" />
-                <span>Bank soal berstandar olimpiade & HOTS</span>
+                <span>Jurusan Pendidikan Matematika Universitas Lambung Mangkurat</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <CheckCircle className="w-4 h-4 text-purple-600 shrink-0" />
-                <span>Dewan juri independen & penilaian transparan</span>
+                <span>Bank soal berstandar olimpiade & dewan juri akademisi ULM</span>
               </li>
             </ul>
           </motion.div>

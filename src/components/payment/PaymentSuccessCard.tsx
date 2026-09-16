@@ -92,10 +92,10 @@ export const PaymentSuccessCard: React.FC<PaymentSuccessCardProps> = ({
                 </div>
                 <div>
                   <h5 className="text-base font-black text-slate-900 font-['Outfit'] tracking-tight">
-                    KARTU TANDA PESERTA GEBYAR MATEMATIKA 2026
+                    KARTU TANDA PESERTA GEBYAR MATEMATIKA 2027
                   </h5>
                   <p className="text-[11px] text-slate-500">
-                    Kementerian Pendidikan / Dewan Olimpiade Matematika Indonesia
+                    Jurusan Pendidikan Matematika Universitas Lambung Mangkurat
                   </p>
                 </div>
               </div>

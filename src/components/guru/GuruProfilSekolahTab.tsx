@@ -326,10 +326,10 @@ export const GuruProfilSekolahTab: React.FC<GuruProfilSekolahTabProps> = ({
             <div className="space-y-1">
               <p className="text-xs font-bold text-slate-900 flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>Dokumen Surat Tugas Aktif: surat-tugas-pembimbing-2026.pdf</span>
+                <span>Dokumen Surat Tugas Aktif: surat-tugas-pembimbing-2027.pdf</span>
               </p>
               <p className="text-[11px] text-slate-500">
-                Diunggah pada 10 Sep 2026 • Status: Terverifikasi oleh Panitia
+                Diunggah pada 10 Sep 2027 • Status: Terverifikasi oleh Panitia
               </p>
             </div>
 

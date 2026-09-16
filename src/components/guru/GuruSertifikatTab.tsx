@@ -72,7 +72,7 @@ export const GuruSertifikatTab: React.FC<GuruSertifikatTabProps> = ({
                 Piagam Penghargaan Pembimbing
               </span>
               <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-mono border border-slate-200">
-                No: GM26/CERT-GURU/0842
+                No: GM27/CERT-GURU/0842
               </span>
             </div>
 
@@ -88,7 +88,7 @@ export const GuruSertifikatTab: React.FC<GuruSertifikatTabProps> = ({
 
             <p className="text-xs text-slate-600 leading-relaxed">
               Atas dedikasi dan kontribusi aktif sebagai <strong>Guru Pembimbing Peserta</strong> pada ajang 
-              Gebyar Matematika Nasional 2026. Sertifikat ini berlaku untuk keperluan portofolio angka kredit guru dan akreditasi sekolah.
+              Gebyar Matematika Nasional 2027. Sertifikat ini berlaku untuk keperluan portofolio angka kredit guru dan akreditasi sekolah.
             </p>
 
             <div className="flex items-center gap-4 text-xs text-slate-500 pt-1">
@@ -97,7 +97,7 @@ export const GuruSertifikatTab: React.FC<GuruSertifikatTabProps> = ({
                 <span>Terverifikasi Panitia Pusat</span>
               </div>
               <span>•</span>
-              <span>Diterbitkan: 15 Sep 2026</span>
+              <span>Diterbitkan: 15 Sep 2027</span>
             </div>
           </div>
 
@@ -105,7 +105,7 @@ export const GuruSertifikatTab: React.FC<GuruSertifikatTabProps> = ({
           <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col items-center justify-center gap-4 shrink-0 text-center">
             <div className="w-28 h-28 bg-white p-2 rounded-xl flex items-center justify-center border border-slate-200 shadow-sm">
               <img 
-                src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://gebyar-matematika.id/verify/GM26-CERT-GURU-0842" 
+                src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://gebyar-matematika.id/verify/GM27-CERT-GURU-0842" 
                 alt="QR Code Sertifikat"
                 className="w-full h-full object-contain"
               />

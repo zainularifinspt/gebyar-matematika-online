@@ -34,9 +34,9 @@ export const RegistrationDetailPage: React.FC<RegistrationDetailPageProps> = ({
 
   // Student registration state
   const [registration] = useState({
-    registrationNumber: 'GM26-REG-2026-0914',
-    orderId: 'GM26-ORD-88192',
-    tanggalDaftar: '14 September 2026, 16:30 WIB',
+    registrationNumber: 'GM27-REG-2027-0914',
+    orderId: 'GM27-ORD-88192',
+    tanggalDaftar: '14 September 2027, 16:30 WIB',
     namaSiswa: currentUser?.name || 'Peserta Terdaftar',
     email: currentUser?.email || 'peserta@gmail.com',
     noHp: '0812-0000-0000',
@@ -45,15 +45,15 @@ export const RegistrationDetailPage: React.FC<RegistrationDetailPageProps> = ({
     kelas: '11 IPA',
     kategoriId: 'kat-sma',
     kategoriNama: 'Olimpiade Matematika SMA / MA / SMK',
-    jadwalPenyisihan: 'Minggu, 25 Oktober 2026, 09:00 - 11:30 WIB',
-    nomorPeserta: 'GM26-SMA-0142',
+    jadwalPenyisihan: 'Minggu, 24 Oktober 2027, 09:00 - 11:30 WIB',
+    nomorPeserta: 'GM27-SMA-0142',
     sesiUjian: 'Sesi 1 (09:00 - 11:30 WIB)',
     biayaLomba: 75000,
     biayaAdmin: 0,
     totalBiaya: 75000,
-    waktuLunas: '14 September 2026, 16:45 WIB',
+    waktuLunas: '14 September 2027, 16:45 WIB',
     kodeVa: '8808 2345 8819 2001',
-    nomorSertifikat: 'GM26/CERT-PESERTA/SMA/0142',
+    nomorSertifikat: 'GM27/CERT-PESERTA/SMA/0142',
   });
 
   const showToast = (msg: string) => {
@@ -356,7 +356,7 @@ export const RegistrationDetailPage: React.FC<RegistrationDetailPageProps> = ({
               <div className="flex items-center justify-between border-b border-amber-200/80 pb-3.5">
                 <h3 className="text-sm font-black text-amber-950 font-['Outfit'] flex items-center gap-2">
                   <Award className="w-4 h-4 text-amber-600" />
-                  <span>E-Sertifikat Peserta Gebyar Matematika 2026</span>
+                  <span>E-Sertifikat Peserta Gebyar Matematika 2027</span>
                 </h3>
                 <span className="text-[10px] font-mono text-amber-800 font-bold">
                   SK: {registration.nomorSertifikat}

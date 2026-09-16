@@ -63,7 +63,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
           </div>
           <div className="min-w-0">
             <span className="font-black text-base tracking-tight text-slate-900 font-['Outfit'] block truncate">
-              {isSuperAdmin ? 'Super Admin GM' : 'Panitia GM 2026'}
+              {isSuperAdmin ? 'Super Admin GM' : 'Panitia GM 2027'}
             </span>
             <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border inline-flex items-center gap-1 ${
               isSuperAdmin 

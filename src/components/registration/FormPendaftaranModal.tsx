@@ -99,7 +99,7 @@ export const FormPendaftaranModal: React.FC<FormPendaftaranModalProps> = ({
     }
 
     const orderData = {
-      orderId: `GM26-ORD-${Math.floor(10000 + Math.random() * 90000)}`,
+      orderId: `GM27-ORD-${Math.floor(10000 + Math.random() * 90000)}`,
       namaSiswa: studentName,
       nisn: nisn,
       kelas: kelas,
@@ -127,7 +127,7 @@ export const FormPendaftaranModal: React.FC<FormPendaftaranModalProps> = ({
           <div className="space-y-1">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-3d-cyan text-cyan-900 text-[11px] font-bold">
               <FileText className="w-3.5 h-3.5 text-cyan-600" />
-              Pendaftaran Online GM 2026
+              Pendaftaran Online GM 2027
             </div>
             <h2 className="text-2xl font-black text-slate-900 font-['Outfit'] tracking-tight">
               Formulir Pendaftaran Peserta

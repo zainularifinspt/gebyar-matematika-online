@@ -129,7 +129,7 @@ export function generateCertificate(
 
   const certId = `cert-${Date.now()}`;
   const cleanNum = pendaftaran.nomor_peserta || `SMA-${Math.floor(1000 + Math.random() * 9000)}`;
-  const nomorSertifikat = `GM26/CERT-${jenis.toUpperCase()}/${cleanNum}`;
+  const nomorSertifikat = `GM27/CERT-${jenis.toUpperCase()}/${cleanNum}`;
   const now = new Date().toISOString();
 
   const newCert: SertifikatDigitalEntity = {
@@ -173,7 +173,7 @@ export function verifyCertificate(nomorSertifikat: string): {
       return {
         valid: true,
         sertifikat: cert,
-        message: 'Sertifikat digital sah dan terdaftar resmi di database panitia Gebyar Matematika 2026.',
+        message: 'Sertifikat digital sah dan terdaftar resmi di database panitia Gebyar Matematika 2027.',
       };
     }
   }

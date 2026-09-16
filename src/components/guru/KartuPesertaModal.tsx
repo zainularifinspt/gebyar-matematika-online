@@ -58,7 +58,7 @@ export const KartuPesertaModal: React.FC<KartuPesertaModalProps> = ({
           <div className="flex items-center justify-between border-b border-slate-200/60 pb-4 relative">
             <div>
               <p className="text-[10px] font-black uppercase tracking-widest text-indigo-600">
-                GEBYAR MATEMATIKA ONLINE 2026
+                GEBYAR MATEMATIKA ONLINE 2027
               </p>
               <h4 className="text-base font-black text-slate-900 font-['Outfit'] tracking-tight">
                 KARTU TANDA PESERTA UJIAN
@@ -115,7 +115,7 @@ export const KartuPesertaModal: React.FC<KartuPesertaModalProps> = ({
             <div className="col-span-1 flex flex-col items-center justify-center text-center p-3 rounded-2xl glass-3d-elevated border border-slate-200/70">
               <div className="w-24 h-24 bg-white p-2 rounded-xl flex items-center justify-center border border-slate-200/80 shadow-xs mb-1.5">
                 <img 
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=GM26-PESERTA-${siswa.nomorPeserta}`}
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=GM27-PESERTA-${siswa.nomorPeserta}`}
                   alt="QR Code Peserta"
                   className="w-full h-full object-contain"
                 />

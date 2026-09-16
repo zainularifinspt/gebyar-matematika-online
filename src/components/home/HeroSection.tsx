@@ -106,9 +106,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <motion.div variants={itemVariants} className="inline-block">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/85 backdrop-blur-md text-indigo-950 text-xs font-black shadow-xs border border-white/95 hover:shadow-md transition-shadow">
                   <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-ping" />
-                  <span>Gelombang 1 Dibuka</span>
+                  <span>Gebyar Matematika 2027</span>
                   <span className="text-slate-300">•</span>
-                  <span className="text-slate-600 font-semibold">Pendaftaran Daring SD, SMP, SMA</span>
+                  <span className="text-indigo-700 font-bold">Jurusan Pendidikan Matematika ULM</span>
                 </div>
               </motion.div>
 
@@ -119,7 +119,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               >
                 Asah Nalar Juara di{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600">
-                  Gebyar Matematika
+                  Gebyar Matematika 2027
                 </span>{' '}
                 Daring Nasional
               </motion.h1>
@@ -129,7 +129,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 variants={itemVariants}
                 className="text-slate-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0 font-normal"
               >
-                Satu pintu kompetisi matematika bergengsi: pendaftaran instan tanpa approval manual, pembayaran otomatis via <strong className="text-slate-900 font-bold">Midtrans (QRIS & Virtual Account)</strong>, simulasi CBT modern, dan e-sertifikat ber-QR verifikasi.
+                Kompetisi bergengsi persembahan <strong className="text-slate-900 font-bold">Jurusan Pendidikan Matematika Universitas Lambung Mangkurat (ULM)</strong>: pendaftaran instan tanpa approval manual, pembayaran otomatis via <strong className="text-slate-900 font-bold">Midtrans (QRIS & Virtual Account)</strong>, simulasi CBT modern, dan e-sertifikat ber-QR resmi.
               </motion.p>
 
               {/* Dual Action Buttons: Vibrant Purple Pill + Frosted Glass Outline */}
@@ -243,7 +243,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     </div>
 
                     <span className="px-3 py-1 text-[11px] font-black rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-200 shadow-xs">
-                      Tahun 2026
+                      Tahun 2027
                     </span>
                   </div>
 
@@ -262,7 +262,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-[11px] font-bold bg-slate-950/40 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/20">
                       <span className="flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                        Platform Terintegrasi CBT 2026
+                        Platform Terintegrasi CBT 2027
                       </span>
                       <span className="text-indigo-200">SD • SMP • SMA</span>
                     </div>
@@ -310,7 +310,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                       <Calendar className="w-4 h-4 text-indigo-600" />
                       Babak Penyisihan:
                     </span>
-                    <span className="font-black text-slate-900">24 - 25 Oktober 2026</span>
+                    <span className="font-black text-slate-900">24 - 25 Oktober 2027</span>
                   </div>
 
                 </div>

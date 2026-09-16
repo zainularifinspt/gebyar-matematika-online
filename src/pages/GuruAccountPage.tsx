@@ -45,7 +45,7 @@ export const GuruAccountPage: React.FC<GuruAccountPageProps> = ({
     setSiswaList(prev => [...prev, ...newStudents]);
 
     // Generate matching collective invoice
-    const orderId = newStudents[0]?.orderId || `GM26-KOL-${Math.floor(10000 + Math.random() * 90000)}`;
+    const orderId = newStudents[0]?.orderId || `GM27-KOL-${Math.floor(10000 + Math.random() * 90000)}`;
     const totalBiaya = newStudents.length * 65000 - (newStudents.length >= 3 ? newStudents.length * 5000 : 0);
 
     const newInvoice: TagihanKolektifItem = {
@@ -64,7 +64,7 @@ export const GuruAccountPage: React.FC<GuruAccountPageProps> = ({
     // Also create registration batch record
     const newBatch: BatchPendaftaranItem = {
       id: `batch-${Date.now()}`,
-      batchCode: `GM26-BATCH-0${batches.length + 1}`,
+      batchCode: `GM27-BATCH-0${batches.length + 1}`,
       orderId: orderId,
       gelombang: 'Gelombang 1 (Early Bird)',
       tanggalDaftar: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) + ', 10:00 WIB',
@@ -103,7 +103,7 @@ export const GuruAccountPage: React.FC<GuruAccountPageProps> = ({
         return {
           ...siswa,
           statusPembayaran: 'lunas',
-          nomorPeserta: `GM26-SMP-0${100 + idx}`,
+          nomorPeserta: `GM27-SMP-0${100 + idx}`,
           sesiUjian: 'Sesi 2 (13:00 - 15:00 WIB)',
           kartuTersedia: true,
           sertifikatTersedia: true,

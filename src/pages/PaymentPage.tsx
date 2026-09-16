@@ -48,7 +48,7 @@ export const PaymentPage: React.FC<PaymentPageProps> = ({ onBackToHome }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          orderId: currentPayment.orderId || `GM26-ORD-${Date.now()}`,
+          orderId: currentPayment.orderId || `GM27-ORD-${Date.now()}`,
           grossAmount: currentPayment.total || 75000,
           customerName: currentPayment.peserta?.namaSiswa || 'Peserta Mandiri',
           customerEmail: currentPayment.peserta?.emailPendaftar || 'peserta@gebyarmatematika.id',

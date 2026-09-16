@@ -179,7 +179,7 @@ export const GuruOverviewTab: React.FC<GuruOverviewTabProps> = ({
                   Technical Meeting & Simulasi Ujian Siswa via Zoom
                 </p>
                 <p className="text-[11px] text-slate-500">
-                  Sabtu, 17 Oktober 2026 • 09:00 - 11:00 WIB • Tautan Zoom akan dikirim ke email pembimbing.
+                  Sabtu, 17 Oktober 2027 • 09:00 - 11:00 WIB • Tautan Zoom akan dikirim ke email pembimbing.
                 </p>
               </div>
               <span className="shrink-0 px-3 py-1 rounded-xl bg-white text-[11px] font-semibold text-slate-600 border border-slate-200 shadow-sm text-center">
@@ -199,7 +199,7 @@ export const GuruOverviewTab: React.FC<GuruOverviewTabProps> = ({
               </div>
               <a
                 href="#whatsapp-group"
-                onClick={(e) => { e.preventDefault(); alert('Membuka tautan undangan grup WhatsApp resmi pembimbing GM 2026'); }}
+                onClick={(e) => { e.preventDefault(); alert('Membuka tautan undangan grup WhatsApp resmi pembimbing GM 2027'); }}
                 className="shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition-colors"
               >
                 <span>Gabung Grup WA</span>

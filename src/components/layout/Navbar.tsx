@@ -106,45 +106,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             <MathLogo size="md" showSubtitle={true} />
           </div>
 
-          {/* Desktop Navigation Links (Center 3D Glass Capsule) */}
-          <nav className="hidden lg:flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-white/90 shadow-sm shadow-slate-200/50">
-            <button 
-              onClick={() => handleLinkClick('profil')} 
-              className="px-3.5 py-1.5 text-xs font-bold text-slate-700 hover:text-indigo-600 hover:bg-white/90 rounded-full transition-all cursor-pointer"
-            >
-              Profil Lomba
-            </button>
-            <button 
-              onClick={() => handleLinkClick('kategori')} 
-              className="px-3.5 py-1.5 text-xs font-bold text-slate-700 hover:text-indigo-600 hover:bg-white/90 rounded-full transition-all cursor-pointer"
-            >
-              Kategori & Jadwal
-            </button>
-            <button 
-              onClick={() => handleLinkClick('pengumuman')} 
-              className="px-3.5 py-1.5 text-xs font-bold text-slate-700 hover:text-indigo-600 hover:bg-white/90 rounded-full transition-all cursor-pointer"
-            >
-              Pengumuman
-            </button>
-            <button 
-              onClick={() => handleLinkClick('arsip')} 
-              className="px-3.5 py-1.5 text-xs font-bold text-slate-700 hover:text-indigo-600 hover:bg-white/90 rounded-full transition-all cursor-pointer"
-            >
-              Arsip Soal
-            </button>
-            <button 
-              onClick={() => handleLinkClick('video')} 
-              className="px-3.5 py-1.5 text-xs font-bold text-slate-700 hover:text-indigo-600 hover:bg-white/90 rounded-full transition-all cursor-pointer"
-            >
-              Galeri Video
-            </button>
-            <button 
-              onClick={() => handleLinkClick('faq')} 
-              className="px-3.5 py-1.5 text-xs font-bold text-slate-700 hover:text-indigo-600 hover:bg-white/90 rounded-full transition-all cursor-pointer"
-            >
-              FAQ
-            </button>
-          </nav>
 
           {/* Action Buttons (Right Group - Consolidated, 3D Tactile) */}
           <div className="hidden sm:flex items-center gap-2.5 shrink-0">

@@ -64,7 +64,7 @@ export const ArchiveSection: React.FC<ArchiveSectionProps> = ({ archives }) => {
             Arsip Soal Lomba Tahun Sebelumnya
           </h2>
           <p className="text-slate-600 text-sm sm:text-base font-normal">
-            Pelajari ragam soal dan tingkat kesulitan olimpiade tahun lalu secara terbuka untuk mematangkan persiapan menjelang kompetisi tahun 2026.
+            Pelajari ragam soal dan tingkat kesulitan olimpiade tahun lalu secara terbuka untuk mematangkan persiapan menjelang kompetisi tahun 2027.
           </p>
         </motion.div>
 

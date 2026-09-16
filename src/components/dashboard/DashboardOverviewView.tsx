@@ -189,7 +189,7 @@ export const DashboardOverviewView: React.FC<DashboardOverviewViewProps> = ({
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-indigo-700">Penerbitan Otomatis Aktif</span>
-                    <span className="text-[10px] text-slate-400">Standar 2026</span>
+                    <span className="text-[10px] text-slate-400">Standar 2027</span>
                   </div>
                   <p className="text-slate-600">Generator QR code kartu peserta dan e-sertifikat terverifikasi aktif otomatis.</p>
                 </div>

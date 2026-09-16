@@ -865,7 +865,7 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
                     required
                     value={editingPengumuman.tanggal}
                     onChange={(e) => setEditingPengumuman({ ...editingPengumuman, tanggal: e.target.value })}
-                    placeholder="15 September 2026"
+                    placeholder="15 September 2027"
                     className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-indigo-500 focus:bg-white"
                   />
                 </div>

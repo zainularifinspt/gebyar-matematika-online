@@ -348,7 +348,7 @@ export const GuruRiwayatPendaftaranTab: React.FC<GuruRiwayatPendaftaranTabProps>
               <div className="flex items-center justify-between border-b border-slate-200 pb-3">
                 <div>
                   <h4 className="font-extrabold text-slate-900 text-sm font-['Outfit']">
-                    GEBYAR MATEMATIKA NASIONAL 2026
+                    GEBYAR MATEMATIKA NASIONAL 2027
                   </h4>
                   <p className="text-[10px] text-slate-500">Bukti Registrasi Peserta Kolektif Sekolah</p>
                 </div>

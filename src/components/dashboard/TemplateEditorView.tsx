@@ -35,7 +35,7 @@ const SAMPLE_STUDENTS: SampleStudent[] = [
     id: 's1',
     nama: 'Contoh Nama Siswa (SMA)',
     sekolah: 'SMA Negeri 1 Prestasi Bangsa',
-    nomor: 'GM26-SMA-0001',
+    nomor: 'GM27-SMA-0001',
     predikat: 'JUARA 1 TINGKAT NASIONAL',
     kategori: 'Olimpiade Matematika SMA/MA/SMK',
   },
@@ -43,7 +43,7 @@ const SAMPLE_STUDENTS: SampleStudent[] = [
     id: 's2',
     nama: 'Contoh Nama Siswa (SMP)',
     sekolah: 'SMP Negeri 1 Unggulan Nasional',
-    nomor: 'GM26-SMP-0001',
+    nomor: 'GM27-SMP-0001',
     predikat: 'JUARA 2 TINGKAT NASIONAL',
     kategori: 'Matematika Terapan SMP/MTs',
   },
@@ -51,7 +51,7 @@ const SAMPLE_STUDENTS: SampleStudent[] = [
     id: 's3',
     nama: 'Contoh Nama Siswa (SD)',
     sekolah: 'SD Negeri 1 Teladan Prima',
-    nomor: 'GM26-SD-0001',
+    nomor: 'GM27-SD-0001',
     predikat: 'JUARA 3 TINGKAT NASIONAL',
     kategori: 'Matematika Dasar SD/MI',
   },
@@ -75,7 +75,7 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
   });
 
   const [uploadedFileName, setUploadedFileName] = useState<Record<string, string>>({
-    'tpl-001': 'Template-Sertifikat-Juara-Panitia-2026.png',
+    'tpl-001': 'Template-Sertifikat-Juara-Panitia-2027.png',
     'tpl-002': 'Template-Kartu-Ujian-A4-Resmi.jpg',
   });
 

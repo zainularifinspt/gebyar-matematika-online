@@ -215,7 +215,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             <span className="leading-none mt-[-2px]">∑</span>
           </div>
           <span className="text-sm font-black text-slate-900 font-['Outfit'] hidden sm:inline">
-            Gebyar Matematika 2026
+            Gebyar Matematika 2027
           </span>
         </div>
       </header>
