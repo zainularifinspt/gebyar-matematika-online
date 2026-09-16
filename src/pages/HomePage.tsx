@@ -182,21 +182,29 @@ export const HomePage: React.FC<HomePageProps> = ({
         />
 
         {/* Pengumuman List Section */}
-        <AnnouncementListSection
-          announcements={MOCK_PENGUMUMAN}
-          selectedAnnouncement={selectedAnnouncement}
-          onCloseModal={() => setSelectedAnnouncement(null)}
-          onOpenModal={(ann) => setSelectedAnnouncement(ann)}
-        />
+        <div className="section-deferred">
+          <AnnouncementListSection
+            announcements={MOCK_PENGUMUMAN}
+            selectedAnnouncement={selectedAnnouncement}
+            onCloseModal={() => setSelectedAnnouncement(null)}
+            onOpenModal={(ann) => setSelectedAnnouncement(ann)}
+          />
+        </div>
 
         {/* Arsip Soal Lomba Section */}
-        <ArchiveSection archives={MOCK_ARSIP_SOAL} />
+        <div className="section-deferred">
+          <ArchiveSection archives={MOCK_ARSIP_SOAL} />
+        </div>
 
         {/* Galeri Video Kegiatan Section */}
-        <VideoGallerySection videos={MOCK_VIDEOS} />
+        <div className="section-deferred">
+          <VideoGallerySection videos={MOCK_VIDEOS} />
+        </div>
 
         {/* Tanya Jawab & Kontak Panitia Section */}
-        <FaqContactSection faqs={MOCK_FAQ} />
+        <div className="section-deferred">
+          <FaqContactSection faqs={MOCK_FAQ} />
+        </div>
       </main>
 
       {/* Global Footer */}
