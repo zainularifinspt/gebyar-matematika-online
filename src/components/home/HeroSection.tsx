@@ -106,22 +106,24 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <motion.div variants={itemVariants} className="inline-block">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/85 backdrop-blur-md text-indigo-950 text-xs font-black shadow-xs border border-white/95 hover:shadow-md transition-shadow">
                   <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-ping" />
-                  <span>Gebyar Matematika 2027</span>
+                  <span>Olimpiade Daring Nasional</span>
                   <span className="text-slate-300">•</span>
-                  <span className="text-indigo-700 font-bold">Jurusan Pendidikan Matematika ULM</span>
+                  <span className="text-indigo-700 font-bold">Pendidikan Matematika ULM</span>
                 </div>
               </motion.div>
 
-              {/* Bold Elegant Headline in Royal Indigo */}
+              {/* Bold Hero Headline: Gebyar Matematika 2027 */}
               <motion.h1 
                 variants={itemVariants}
-                className="text-4xl sm:text-5xl lg:text-[3.4rem] font-black text-[#1e1458] tracking-tight leading-[1.12] font-['Outfit']"
+                className="text-4xl sm:text-6xl lg:text-[4.2rem] font-black text-slate-900 tracking-[-0.03em] leading-[1.08] font-['Outfit']"
               >
-                Asah Nalar Juara di{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600">
-                  Gebyar Matematika 2027
+                Gebyar{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
+                  Matematika
                 </span>{' '}
-                Daring Nasional
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
+                  2027
+                </span>
               </motion.h1>
 
               {/* Subheading */}
