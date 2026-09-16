@@ -93,16 +93,22 @@ export const LoginPage: React.FC<LoginPageProps> = ({
       const idLower = emailInput.toLowerCase();
       const displayName = extractDisplayName(emailInput);
 
-      // 1. Super Admin
+      // 1. Super Administrator (Akun Khusus Root)
       if (
+        idLower === 'mzainul.arifin@ulm.ac.id' ||
         idLower === 'admin' || 
         idLower === 'superadmin' || 
         idLower.includes('superadmin') || 
         idLower.includes('admin@')
       ) {
+        if (loginPassword !== 'ARIfin8167') {
+          setErrorMessage('Kata sandi untuk akun Super Administrator tidak cocok. Silakan coba lagi.');
+          return;
+        }
+
         onLoginSuccess({
-          name: 'Super Administrator',
-          email: emailInput.includes('@') ? emailInput : 'admin@gebyar.id',
+          name: 'M. Zainul Arifin',
+          email: 'mzainul.arifin@ulm.ac.id',
           role: 'Super Admin',
         });
         return;

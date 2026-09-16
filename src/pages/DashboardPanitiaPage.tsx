@@ -27,8 +27,8 @@ export const DashboardPanitiaPage: React.FC<DashboardPanitiaPageProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<DashboardTab>('overview');
   const userProfile = {
-    name: initialUser?.name || 'Super Administrator',
-    email: initialUser?.email || 'admin@gebyar.id',
+    name: initialUser?.name || 'M. Zainul Arifin',
+    email: initialUser?.email || 'mzainul.arifin@ulm.ac.id',
     role: initialUser?.role || 'Super Admin',
   };
   const [pesertaList, setPesertaList] = useState<PesertaAdminItem[]>(MOCK_PESERTA_ADMIN);

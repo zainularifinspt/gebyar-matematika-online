@@ -6,7 +6,8 @@ import {
   ShieldCheck, 
   ArrowRight, 
   Eye, 
-  EyeOff 
+  EyeOff,
+  AlertCircle
 } from 'lucide-react';
 
 interface AuthModalProps {
@@ -24,6 +25,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
@@ -39,6 +41,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   const handleGoogleLogin = () => {
     setLoading(true);
+    setErrorMessage(null);
     setTimeout(() => {
       setLoading(false);
       onLoginSuccess?.({
@@ -52,6 +55,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   const handlePasswordLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage(null);
     if (!username.trim() || !password.trim()) return;
 
     setLoading(true);
@@ -60,13 +64,26 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       const idLower = username.toLowerCase().trim();
       const displayName = extractDisplayName(username);
 
-      // Super Admin Detection
-      if (idLower === 'admin' || idLower === 'superadmin' || idLower.includes('superadmin') || idLower.includes('admin@')) {
+      // Super Administrator Detection
+      if (
+        idLower === 'mzainul.arifin@ulm.ac.id' ||
+        idLower === 'admin' || 
+        idLower === 'superadmin' || 
+        idLower.includes('superadmin') || 
+        idLower.includes('admin@')
+      ) {
+        if (password !== 'ARIfin8167') {
+          setErrorMessage('Kata sandi untuk Super Administrator salah.');
+          return;
+        }
+
         onLoginSuccess?.({
-          name: 'Super Administrator',
-          email: username.includes('@') ? username : 'superadmin@gebyar.id',
+          name: 'M. Zainul Arifin',
+          email: 'mzainul.arifin@ulm.ac.id',
           role: 'Super Admin',
         });
+        onClose();
+        return;
       } else if (idLower === 'panitia' || idLower.includes('panitia') || idLower.includes('@panitia')) {
         // Panitia Staf Detection
         onLoginSuccess?.({
@@ -157,6 +174,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             atau gunakan username / email
           </span>
         </div>
+
+        {/* Error Message */}
+        {errorMessage && (
+          <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold flex items-center gap-2 animate-shake">
+            <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+            <span>{errorMessage}</span>
+          </div>
+        )}
 
         {/* Password Form */}
         <form onSubmit={handlePasswordLogin} className="space-y-3.5 pt-1">

@@ -149,6 +149,28 @@ CREATE TABLE IF NOT EXISTS public.sertifikat_digital (
 
 CREATE INDEX IF NOT EXISTS idx_sertifikat_nomor ON public.sertifikat_digital(nomor_sertifikat);
 
+-- 6. TABEL ADMIN & PANITIA (Hak Akses Tim & Super Administrator)
+CREATE TABLE IF NOT EXISTS public.admin_panitia (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(150) NOT NULL UNIQUE,
+    nama_lengkap VARCHAR(255) NOT NULL,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    role VARCHAR(50) NOT NULL DEFAULT 'Super Admin' CHECK (role IN ('Super Admin', 'Koordinator Divisi', 'Staf Panitia')),
+    divisi VARCHAR(100) DEFAULT 'Root Administrator',
+    is_active BOOLEAN DEFAULT TRUE,
+    last_login_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_admin_email ON public.admin_panitia(email);
+CREATE INDEX IF NOT EXISTS idx_admin_username ON public.admin_panitia(username);
+
+-- Seed Akun Super Administrator Root
+INSERT INTO public.admin_panitia (email, nama_lengkap, username, role, divisi)
+VALUES ('mzainul.arifin@ulm.ac.id', 'M. Zainul Arifin', 'mzainul.arifin', 'Super Admin', 'Root Administrator')
+ON CONFLICT (email) DO NOTHING;
+
 -- Row Level Security (RLS) policies
 ALTER TABLE public.sekolah ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.guru ENABLE ROW LEVEL SECURITY;
@@ -156,6 +178,7 @@ ALTER TABLE public.pendaftaran_batch ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.pendaftaran_batch_peserta ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.pendaftaran_peserta ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.sertifikat_digital ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.admin_panitia ENABLE ROW LEVEL SECURITY;
 
 -- Allow public read for sekolah (referensi) and sertifikat (verifikasi QR publik)
 CREATE POLICY "Allow public read on sekolah" ON public.sekolah FOR SELECT USING (true);
@@ -167,3 +190,4 @@ CREATE POLICY "Service role full access guru" ON public.guru USING (auth.jwt() -
 CREATE POLICY "Service role full access batch" ON public.pendaftaran_batch USING (auth.jwt() ->> 'role' = 'service_role');
 CREATE POLICY "Service role full access peserta" ON public.pendaftaran_peserta USING (auth.jwt() ->> 'role' = 'service_role');
 CREATE POLICY "Service role full access sertifikat" ON public.sertifikat_digital USING (auth.jwt() ->> 'role' = 'service_role');
+CREATE POLICY "Service role full access admin" ON public.admin_panitia USING (auth.jwt() ->> 'role' = 'service_role');
