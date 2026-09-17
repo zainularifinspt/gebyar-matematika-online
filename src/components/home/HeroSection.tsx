@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, type Variants } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   ArrowRight, 
   Calendar, 
@@ -17,52 +17,6 @@ interface HeroSectionProps {
   onVerifyCertificateClick: () => void;
 }
 
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.05,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 22 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
-};
-
-const statsContainerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.15,
-    },
-  },
-};
-
-const statCardVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
-};
-
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onRegisterClick,
   onExploreCategoriesClick,
@@ -75,11 +29,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Master 3D Frosted Glass Container */}
-        <motion.div 
-          initial={{ opacity: 0, y: 24, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        {/* Master 3D Frosted Glass Container - Immediately Rendered (Zero Delay) */}
+        <div 
           className="relative rounded-[32px] sm:rounded-[44px] glass-3d-master-frame p-6 sm:p-10 lg:p-14 border border-white/90 shadow-2xl shadow-indigo-500/10"
         >
 
@@ -91,28 +42,24 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center relative z-10">
             
-            {/* Left Hero Content Column */}
-            <motion.div 
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
+            {/* Left Hero Content Column - Instant Render for FCP & LCP */}
+            <div 
               className="lg:col-span-6 space-y-6 text-center lg:text-left"
             >
               
               {/* 3D Glass Status Pill */}
-              <motion.div variants={itemVariants} className="inline-block">
+              <div className="inline-block">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/85 backdrop-blur-md text-indigo-950 text-xs font-black shadow-xs border border-white/95 hover:shadow-md transition-shadow">
                   <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-ping" />
                   <span>Olimpiade Daring Nasional</span>
                   <span className="text-slate-300">•</span>
                   <span className="text-indigo-700 font-bold">Pendidikan Matematika ULM</span>
                 </div>
-              </motion.div>
+              </div>
 
               {/* Bold Hero Headline: Gebyar Matematika 2027 */}
-              <motion.h1 
-                variants={itemVariants}
-                className="text-4xl sm:text-6xl lg:text-[4.2rem] font-black text-slate-900 tracking-[-0.03em] leading-[1.08] font-['Outfit']"
+              <h1 
+                className="text-4xl sm:text-6xl lg:text-[4.2rem] font-black text-slate-900 tracking-[-0.03em] leading-[1.08] font-heading"
               >
                 Gebyar{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
@@ -121,19 +68,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
                   2027
                 </span>
-              </motion.h1>
+              </h1>
 
-              {/* Subheading */}
-              <motion.p 
-                variants={itemVariants}
+              {/* Subheading - LCP Target Element rendered at 0ms */}
+              <p 
                 className="text-slate-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0 font-normal"
               >
                 Kompetisi bergengsi persembahan <strong className="text-slate-900 font-bold">Jurusan Pendidikan Matematika Universitas Lambung Mangkurat (ULM)</strong>: pendaftaran instan tanpa approval manual, pembayaran otomatis via <strong className="text-slate-900 font-bold">QRIS & Virtual Account</strong>, simulasi CBT modern, dan e-sertifikat ber-QR resmi.
-              </motion.p>
+              </p>
 
               {/* Dual Action Buttons: Vibrant Purple Pill + Frosted Glass Outline */}
-              <motion.div 
-                variants={itemVariants}
+              <div 
                 className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2"
               >
                 <motion.button
@@ -154,39 +99,34 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 >
                   <span>Pelajari Kategori & Jadwal</span>
                 </motion.button>
-              </motion.div>
+              </div>
 
               {/* Key Value Badges (3D Glass Pills) */}
-              <motion.div 
-                variants={itemVariants}
+              <div 
                 className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 pt-2 text-xs font-bold text-slate-800"
               >
-                <motion.div 
-                  whileHover={{ scale: 1.04, y: -2 }}
-                  className="flex items-center gap-2 bg-white/75 backdrop-blur-md px-3.5 py-2 rounded-xl shadow-xs border border-white/90 cursor-default"
+                <div 
+                  className="flex items-center gap-2 bg-white/75 backdrop-blur-md px-3.5 py-2 rounded-xl shadow-xs border border-white/90 cursor-default hover:scale-105 transition-transform"
                 >
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                   <span>Konfirmasi Bayar Otomatis</span>
-                </motion.div>
-                <motion.div 
-                  whileHover={{ scale: 1.04, y: -2 }}
-                  className="flex items-center gap-2 bg-white/75 backdrop-blur-md px-3.5 py-2 rounded-xl shadow-xs border border-white/90 cursor-default"
+                </div>
+                <div 
+                  className="flex items-center gap-2 bg-white/75 backdrop-blur-md px-3.5 py-2 rounded-xl shadow-xs border border-white/90 cursor-default hover:scale-105 transition-transform"
                 >
                   <Zap className="w-4 h-4 text-amber-500" />
                   <span>Kartu Ujian Auto-Generate</span>
-                </motion.div>
-                <motion.div 
-                  whileHover={{ scale: 1.04, y: -2 }}
-                  className="flex items-center gap-2 bg-white/75 backdrop-blur-md px-3.5 py-2 rounded-xl shadow-xs border border-white/90 cursor-default"
+                </div>
+                <div 
+                  className="flex items-center gap-2 bg-white/75 backdrop-blur-md px-3.5 py-2 rounded-xl shadow-xs border border-white/90 cursor-default hover:scale-105 transition-transform"
                 >
                   <Globe2 className="w-4 h-4 text-blue-600" />
                   <span>100% Online Se-Indonesia</span>
-                </motion.div>
-              </motion.div>
+                </div>
+              </div>
 
               {/* Verification Link */}
-              <motion.div 
-                variants={itemVariants}
+              <div 
                 className="pt-2 text-xs text-slate-500 flex items-center justify-center lg:justify-start gap-2 font-medium"
               >
                 <ShieldCheck className="w-4 h-4 text-indigo-600" />
@@ -197,15 +137,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 >
                   Cek Keaslian Sertifikat
                 </button>
-              </motion.div>
+              </div>
 
-            </motion.div>
+            </div>
 
             {/* Right Hero Stage: 3D Visual Centerpiece with Clay Rocket & Acrylic Glass */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.94, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.75, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            <div 
               className="lg:col-span-6"
             >
               <div className="relative">
@@ -232,7 +169,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                         <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 block">
                           Total Dana Pembinaan
                         </span>
-                        <p className="text-xl sm:text-2xl font-black text-slate-900 font-['Outfit'] tabular-nums">
+                        <p className="text-xl sm:text-2xl font-black text-slate-900 font-heading tabular-nums">
                           Rp 45.000.000+
                         </p>
                       </div>
@@ -243,16 +180,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     </span>
                   </div>
 
-                  {/* 3D Visual Centerpiece: 3D Rocket Student Image */}
+                  {/* 3D Visual Centerpiece: High-Performance WebP Picture Tag */}
                   <div className="relative rounded-2xl overflow-hidden shadow-inner group">
-                    <motion.img 
-                      whileHover={{ scale: 1.04 }}
-                      transition={{ duration: 0.4 }}
-                      src="/images/hero_3d_rocket_student.jpg" 
-                      alt="3D Claymorphism Student on Rocket - Gebyar Matematika" 
-                      className="w-full h-56 sm:h-64 object-cover rounded-2xl"
-                      loading="eager"
-                    />
+                    <picture>
+                      <source type="image/webp" srcSet="/images/hero_3d_rocket_student.webp" />
+                      <img 
+                        src="/images/hero_3d_rocket_student.jpg" 
+                        alt="3D Claymorphism Student on Rocket - Gebyar Matematika" 
+                        width="600"
+                        height="448"
+                        fetchPriority="high"
+                        decoding="async"
+                        className="w-full h-56 sm:h-64 object-cover rounded-2xl group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </picture>
                     {/* Soft gradient glass vignette overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 via-transparent to-transparent pointer-events-none rounded-2xl" />
                     <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-[11px] font-bold bg-slate-950/40 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/20">
@@ -311,56 +252,44 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
                 </div>
               </div>
-            </motion.div>
+            </div>
 
           </div>
 
-        </motion.div>
+        </div>
 
-        {/* Highlight Stats Strip (3D Glass Interactive Cards) */}
-        <motion.div 
-          variants={statsContainerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
+        {/* Highlight Stats Strip (3D Glass Interactive Cards) - Directly rendered without opacity fade */}
+        <div 
           className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4"
         >
-          <motion.div 
-            variants={statCardVariants}
-            whileHover={{ y: -4, scale: 1.02 }}
-            className="p-5 sm:p-6 rounded-2xl glass-3d-interactive text-center cursor-default"
+          <div 
+            className="p-5 sm:p-6 rounded-2xl glass-3d-interactive text-center cursor-default hover:-translate-y-1 transition-transform"
           >
-            <p className="text-3xl sm:text-4xl font-black text-[#1e1458] font-['Outfit'] tabular-nums">5.000+</p>
+            <p className="text-3xl sm:text-4xl font-black text-[#1e1458] font-heading tabular-nums">5.000+</p>
             <p className="text-xs text-slate-600 mt-1 font-bold">Alumni & Peserta Nasional</p>
-          </motion.div>
+          </div>
 
-          <motion.div 
-            variants={statCardVariants}
-            whileHover={{ y: -4, scale: 1.02 }}
-            className="p-5 sm:p-6 rounded-2xl glass-3d-interactive text-center cursor-default"
+          <div 
+            className="p-5 sm:p-6 rounded-2xl glass-3d-interactive text-center cursor-default hover:-translate-y-1 transition-transform"
           >
-            <p className="text-3xl sm:text-4xl font-black text-blue-600 font-['Outfit'] tabular-nums">34</p>
+            <p className="text-3xl sm:text-4xl font-black text-blue-600 font-heading tabular-nums">34</p>
             <p className="text-xs text-slate-600 mt-1 font-bold">Provinsi Se-Indonesia</p>
-          </motion.div>
+          </div>
 
-          <motion.div 
-            variants={statCardVariants}
-            whileHover={{ y: -4, scale: 1.02 }}
-            className="p-5 sm:p-6 rounded-2xl glass-3d-interactive text-center cursor-default"
+          <div 
+            className="p-5 sm:p-6 rounded-2xl glass-3d-interactive text-center cursor-default hover:-translate-y-1 transition-transform"
           >
-            <p className="text-3xl sm:text-4xl font-black text-emerald-600 font-['Outfit'] tabular-nums">100%</p>
+            <p className="text-3xl sm:text-4xl font-black text-emerald-600 font-heading tabular-nums">100%</p>
             <p className="text-xs text-slate-600 mt-1 font-bold">Otomasi Konfirmasi Bayar</p>
-          </motion.div>
+          </div>
 
-          <motion.div 
-            variants={statCardVariants}
-            whileHover={{ y: -4, scale: 1.02 }}
-            className="p-5 sm:p-6 rounded-2xl glass-3d-interactive text-center cursor-default"
+          <div 
+            className="p-5 sm:p-6 rounded-2xl glass-3d-interactive text-center cursor-default hover:-translate-y-1 transition-transform"
           >
-            <p className="text-3xl sm:text-4xl font-black text-purple-600 font-['Outfit']">Resmi</p>
+            <p className="text-3xl sm:text-4xl font-black text-purple-600 font-heading">Resmi</p>
             <p className="text-xs text-slate-600 mt-1 font-bold">Sertifikat Ber-QR Code</p>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
 
       </div>
     </section>

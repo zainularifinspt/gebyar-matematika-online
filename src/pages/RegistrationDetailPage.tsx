@@ -16,6 +16,7 @@ import {
   ShieldCheck
 } from 'lucide-react';
 import { KartuPesertaModal } from '../components/guru/KartuPesertaModal';
+import { loadMidtransSnap } from '../utils/midtrans';
 import type { SiswaBimbinganItem, GuruProfileData, StatusPembayaran } from '../types';
 
 interface RegistrationDetailPageProps {
@@ -83,20 +84,28 @@ export const RegistrationDetailPage: React.FC<RegistrationDetailPageProps> = ({
         }),
       });
       const data = await res.json();
-      if (res.ok && data.token && (window as any).snap) {
-        (window as any).snap.pay(data.token, {
-          onSuccess: () => {
-            setStatus('lunas');
-            showToast('✓ Pembayaran berhasil diverifikasi secara otomatis!');
-          },
-          onPending: () => {
-            showToast('Transaksi sedang diproses. Silakan selesaikan pembayaran.');
-          },
-          onError: () => {
-            showToast('Pembayaran dibatalkan atau belum selesai.');
-          },
-        });
-        return;
+      if (res.ok && data.token) {
+        try {
+          await loadMidtransSnap();
+        } catch {
+          // Fallback if network blocks SDK
+        }
+
+        if (window.snap) {
+          window.snap.pay(data.token, {
+            onSuccess: () => {
+              setStatus('lunas');
+              showToast('✓ Pembayaran berhasil diverifikasi secara otomatis!');
+            },
+            onPending: () => {
+              showToast('Transaksi sedang diproses. Silakan selesaikan pembayaran.');
+            },
+            onError: () => {
+              showToast('Pembayaran dibatalkan atau belum selesai.');
+            },
+          });
+          return;
+        }
       }
     } catch {
       // Fallback

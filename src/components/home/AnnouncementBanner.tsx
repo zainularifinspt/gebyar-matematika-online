@@ -17,10 +17,7 @@ export const AnnouncementBanner: React.FC<AnnouncementBannerProps> = ({
   if (!announcement) return null;
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: -16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+    <div 
       className="relative z-30 pt-24 sm:pt-28 pb-3 px-4 sm:px-6 lg:px-8"
     >
       <div className="max-w-5xl mx-auto">
@@ -60,6 +57,6 @@ export const AnnouncementBanner: React.FC<AnnouncementBannerProps> = ({
           </div>
         </motion.div>
       </div>
-    </motion.div>
+    </div>
   );
 };

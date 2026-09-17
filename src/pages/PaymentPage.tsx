@@ -14,6 +14,7 @@ import { VirtualAccountCard } from '../components/payment/VirtualAccountCard';
 import { ProofUploadFallback } from '../components/payment/ProofUploadFallback';
 import { PaymentSuccessCard } from '../components/payment/PaymentSuccessCard';
 import { PaymentHistoryTable } from '../components/payment/PaymentHistoryTable';
+import { loadMidtransSnap } from '../utils/midtrans';
 import { 
   MOCK_PEMBAYARAN_AKTIF, 
   MOCK_RIWAYAT_PEMBAYARAN, 
@@ -59,30 +60,38 @@ export const PaymentPage: React.FC<PaymentPageProps> = ({ onBackToHome }) => {
 
       const data = await res.json();
 
-      if (res.ok && data.token && (window as any).snap) {
-        setIsProcessing(false);
-        (window as any).snap.pay(data.token, {
-          onSuccess: () => {
-            const updatedPayment: Pembayaran = {
-              ...currentPayment,
-              status: 'lunas',
-              waktuLunas: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB',
-            };
-            setCurrentPayment(updatedPayment);
-            setPaymentHistory(prev => [updatedPayment, ...prev]);
-            showToast('✓ Pembayaran Berhasil Dikonfirmasi Otomatis!');
-          },
-          onPending: () => {
-            showToast('Transaksi dibuat. Silakan selesaikan pembayaran di aplikasi m-Banking/e-Wallet Anda.');
-          },
-          onError: () => {
-            showToast('Pembayaran dibatalkan atau belum selesai.');
-          },
-          onClose: () => {
-            showToast('Jendela pembayaran ditutup.');
-          },
-        });
-        return;
+      if (res.ok && data.token) {
+        try {
+          await loadMidtransSnap();
+        } catch {
+          // If network blocks snap SDK, fall through to simulation
+        }
+
+        if (window.snap) {
+          setIsProcessing(false);
+          window.snap.pay(data.token, {
+            onSuccess: () => {
+              const updatedPayment: Pembayaran = {
+                ...currentPayment,
+                status: 'lunas',
+                waktuLunas: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB',
+              };
+              setCurrentPayment(updatedPayment);
+              setPaymentHistory(prev => [updatedPayment, ...prev]);
+              showToast('✓ Pembayaran Berhasil Dikonfirmasi Otomatis!');
+            },
+            onPending: () => {
+              showToast('Transaksi dibuat. Silakan selesaikan pembayaran di aplikasi m-Banking/e-Wallet Anda.');
+            },
+            onError: () => {
+              showToast('Pembayaran dibatalkan atau belum selesai.');
+            },
+            onClose: () => {
+              showToast('Jendela pembayaran ditutup.');
+            },
+          });
+          return;
+        }
       }
     } catch {
       // Backend not running (e.g. static dev preview) -> fallback to simulation

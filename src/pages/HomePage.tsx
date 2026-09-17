@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Navbar } from '../components/layout/Navbar';
 import { Footer } from '../components/layout/Footer';
@@ -10,9 +10,10 @@ import { AnnouncementListSection } from '../components/home/AnnouncementListSect
 import { VideoGallerySection } from '../components/home/VideoGallerySection';
 import { ArchiveSection } from '../components/home/ArchiveSection';
 import { FaqContactSection } from '../components/home/FaqContactSection';
-import { CertificateVerifyModal } from '../components/certificate/CertificateVerifyModal';
-import { AuthModal } from '../components/auth/AuthModal';
-import { FormPendaftaranModal } from '../components/registration/FormPendaftaranModal';
+
+const CertificateVerifyModal = lazy(() => import('../components/certificate/CertificateVerifyModal').then(m => ({ default: m.CertificateVerifyModal })));
+const AuthModal = lazy(() => import('../components/auth/AuthModal').then(m => ({ default: m.AuthModal })));
+const FormPendaftaranModal = lazy(() => import('../components/registration/FormPendaftaranModal').then(m => ({ default: m.FormPendaftaranModal })));
 
 import { 
   MOCK_KATEGORI, 
@@ -210,32 +211,40 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* Global Footer */}
       <Footer />
 
-      {/* Modals */}
-      <CertificateVerifyModal
-        isOpen={isVerifyModalOpen}
-        onClose={() => setIsVerifyModalOpen(false)}
-      />
+      {/* Modals - Rendered strictly on demand */}
+      <Suspense fallback={null}>
+        {isVerifyModalOpen && (
+          <CertificateVerifyModal
+            isOpen={isVerifyModalOpen}
+            onClose={() => setIsVerifyModalOpen(false)}
+          />
+        )}
 
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        onLoginSuccess={handleLoginSuccess}
-      />
+        {isAuthModalOpen && (
+          <AuthModal
+            isOpen={isAuthModalOpen}
+            onClose={() => setIsAuthModalOpen(false)}
+            onLoginSuccess={handleLoginSuccess}
+          />
+        )}
 
-      <FormPendaftaranModal
-        isOpen={isFormPendaftaranOpen}
-        onClose={() => setIsFormPendaftaranOpen(false)}
-        defaultKategori={selectedKategoriForRegister}
-        currentUser={activeUser}
-        onSuccessRegister={(orderData) => {
-          showToast(`Pendaftaran ${orderData.namaSiswa} dari ${orderData.sekolah} berhasil dibuat!`);
-          if (onNavigateToRegistrationDetail) {
-            onNavigateToRegistrationDetail();
-          } else if (onNavigateToPayment) {
-            onNavigateToPayment();
-          }
-        }}
-      />
+        {isFormPendaftaranOpen && (
+          <FormPendaftaranModal
+            isOpen={isFormPendaftaranOpen}
+            onClose={() => setIsFormPendaftaranOpen(false)}
+            defaultKategori={selectedKategoriForRegister}
+            currentUser={activeUser}
+            onSuccessRegister={(orderData) => {
+              showToast(`Pendaftaran ${orderData.namaSiswa} dari ${orderData.sekolah} berhasil dibuat!`);
+              if (onNavigateToRegistrationDetail) {
+                onNavigateToRegistrationDetail();
+              } else if (onNavigateToPayment) {
+                onNavigateToPayment();
+              }
+            }}
+          />
+        )}
+      </Suspense>
 
     </div>
   );
