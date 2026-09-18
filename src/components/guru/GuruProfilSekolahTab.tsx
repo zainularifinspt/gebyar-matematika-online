@@ -8,7 +8,19 @@ import {
   Save, 
   Upload
 } from 'lucide-react';
+import { GlassDropdown } from '../common/GlassDropdown';
 import type { GuruProfileData } from '../../types';
+
+const JENJANG_OPTIONS = [
+  { value: 'SD/MI', label: 'SD / MI Sederajat' },
+  { value: 'SMP/MTs', label: 'SMP / MTs Sederajat' },
+  { value: 'SMA/MA/SMK', label: 'SMA / MA / SMK Sederajat' },
+];
+
+const STATUS_SEKOLAH_OPTIONS = [
+  { value: 'Negeri', label: 'Negeri' },
+  { value: 'Swasta', label: 'Swasta' },
+];
 
 interface GuruProfilSekolahTabProps {
   profile: GuruProfileData;
@@ -210,29 +222,24 @@ export const GuruProfilSekolahTab: React.FC<GuruProfilSekolahTabProps> = ({
               <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Jenjang Pendidikan *
               </label>
-              <select
+              <GlassDropdown
+                options={JENJANG_OPTIONS}
                 value={formData.jenjang || 'SMP/MTs'}
-                onChange={(e) => setFormData({ ...formData, jenjang: e.target.value as any })}
-                className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-white border border-slate-200 text-slate-800 focus:outline-none focus:border-indigo-500 shadow-sm"
-              >
-                <option value="SD/MI">SD / MI Sederajat</option>
-                <option value="SMP/MTs">SMP / MTs Sederajat</option>
-                <option value="SMA/MA/SMK">SMA / MA / SMK Sederajat</option>
-              </select>
+                onChange={(val) => setFormData({ ...formData, jenjang: val as any })}
+                placeholder="Pilih Jenjang Sekolah"
+              />
             </div>
 
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Status Sekolah *
               </label>
-              <select
+              <GlassDropdown
+                options={STATUS_SEKOLAH_OPTIONS}
                 value={formData.statusSekolah || 'Swasta'}
-                onChange={(e) => setFormData({ ...formData, statusSekolah: e.target.value as any })}
-                className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-white border border-slate-200 text-slate-800 focus:outline-none focus:border-indigo-500 shadow-sm"
-              >
-                <option value="Negeri">Negeri</option>
-                <option value="Swasta">Swasta</option>
-              </select>
+                onChange={(val) => setFormData({ ...formData, statusSekolah: val as any })}
+                placeholder="Pilih Status Sekolah"
+              />
             </div>
 
             <div>
@@ -341,8 +348,12 @@ export const GuruProfilSekolahTab: React.FC<GuruProfilSekolahTabProps> = ({
                   type="file" 
                   className="hidden" 
                   accept=".pdf,.jpg,.jpeg,.png"
-                  onChange={() => {
-                    alert('Berkas surat tugas baru berhasil dipilih!');
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setSuccessToast(`✓ Berkas surat tugas "${file.name}" berhasil dipilih dan siap disimpan!`);
+                      setTimeout(() => setSuccessToast(null), 4000);
+                    }
                   }}
                 />
               </label>

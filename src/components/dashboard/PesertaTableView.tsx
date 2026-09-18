@@ -6,6 +6,7 @@ import {
   Clock
 } from 'lucide-react';
 import type { PesertaAdminItem } from '../../types';
+import { GlassDropdown } from '../common/GlassDropdown';
 
 interface PesertaTableViewProps {
   pesertaList: PesertaAdminItem[];
@@ -55,26 +56,28 @@ export const PesertaTableView: React.FC<PesertaTableViewProps> = ({
 
         {/* Filter Dropdowns & Export */}
         <div className="flex flex-wrap items-center gap-2.5">
-          <select
+          <GlassDropdown
             value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-            className="glass-3d-input px-3.5 py-2.5 text-xs rounded-2xl text-slate-800 font-bold cursor-pointer"
-          >
-            <option value="all">Semua Jenjang</option>
-            <option value="kat-sd">SD / MI</option>
-            <option value="kat-smp">SMP / MTs</option>
-            <option value="kat-sma">SMA / MA / SMK</option>
-          </select>
+            onChange={(val) => setCategoryFilter(val)}
+            className="w-44"
+            options={[
+              { value: 'all', label: 'Semua Jenjang' },
+              { value: 'kat-sd', label: 'SD / MI', badge: 'Dasar', badgeColor: 'bg-emerald-100 text-emerald-900 border border-emerald-300' },
+              { value: 'kat-smp', label: 'SMP / MTs', badge: 'Terapan', badgeColor: 'bg-cyan-100 text-cyan-900 border border-cyan-300' },
+              { value: 'kat-sma', label: 'SMA / MA / SMK', badge: 'Olimpiade', badgeColor: 'bg-purple-100 text-purple-900 border border-purple-300' },
+            ]}
+          />
 
-          <select
+          <GlassDropdown
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="glass-3d-input px-3.5 py-2.5 text-xs rounded-2xl text-slate-800 font-bold cursor-pointer"
-          >
-            <option value="all">Semua Status Bayar</option>
-            <option value="lunas">Lunas</option>
-            <option value="menunggu_pembayaran">Menunggu Bayar</option>
-          </select>
+            onChange={(val) => setStatusFilter(val)}
+            className="w-44"
+            options={[
+              { value: 'all', label: 'Semua Status Bayar' },
+              { value: 'lunas', label: 'Lunas', badge: 'Lunas', badgeColor: 'bg-emerald-100 text-emerald-900 border border-emerald-300' },
+              { value: 'menunggu_pembayaran', label: 'Menunggu Bayar', badge: 'Pending', badgeColor: 'bg-amber-100 text-amber-900 border border-amber-300' },
+            ]}
+          />
 
           <button
             onClick={onExportCsv}

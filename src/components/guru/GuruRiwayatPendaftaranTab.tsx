@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { 
   Search, 
-  Filter, 
   Calendar, 
   CheckCircle2, 
   Clock, 
@@ -15,7 +14,14 @@ import {
   X,
   History
 } from 'lucide-react';
+import { GlassDropdown } from '../common/GlassDropdown';
 import type { BatchPendaftaranItem, GuruProfileData } from '../../types';
+
+const STATUS_FILTER_OPTIONS = [
+  { value: 'semua', label: 'Semua Status' },
+  { value: 'lunas', label: 'Lunas Terverifikasi' },
+  { value: 'menunggu_pembayaran', label: 'Menunggu Pembayaran' },
+];
 
 interface GuruRiwayatPendaftaranTabProps {
   batches: BatchPendaftaranItem[];
@@ -144,17 +150,14 @@ export const GuruRiwayatPendaftaranTab: React.FC<GuruRiwayatPendaftaranTabProps>
           />
         </div>
 
-        <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-slate-400 shrink-0" />
-          <select
+        <div className="flex items-center gap-2 min-w-[200px]">
+          <GlassDropdown
+            options={STATUS_FILTER_OPTIONS}
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as any)}
-            className="px-3 py-2 text-xs rounded-xl bg-white border border-slate-200 text-slate-800 focus:outline-none focus:border-indigo-500 shadow-sm"
-          >
-            <option value="semua">Semua Status</option>
-            <option value="lunas">Lunas Terverifikasi</option>
-            <option value="menunggu_pembayaran">Menunggu Pembayaran</option>
-          </select>
+            onChange={(val) => setStatusFilter(val as any)}
+            placeholder="Pilih Status"
+            className="w-full"
+          />
 
           <button
             onClick={handleExportExcel}

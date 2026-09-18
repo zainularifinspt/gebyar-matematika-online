@@ -9,6 +9,7 @@ import { GuruSertifikatTab } from '../components/guru/GuruSertifikatTab';
 import { GuruProfilSekolahTab } from '../components/guru/GuruProfilSekolahTab';
 import { GuruRiwayatPendaftaranTab } from '../components/guru/GuruRiwayatPendaftaranTab';
 import { KartuPesertaModal } from '../components/guru/KartuPesertaModal';
+import { GlassToast } from '../components/common/GlassToast';
 
 import { 
   MOCK_GURU_PROFILE, 
@@ -39,6 +40,12 @@ export const GuruAccountPage: React.FC<GuruAccountPageProps> = ({
   const [batches, setBatches] = useState<BatchPendaftaranItem[]>(MOCK_BATCH_PENDAFTARAN);
   const [activeTab, setActiveTab] = useState<GuruTabType>('ringkasan');
   const [selectedSiswaForCard, setSelectedSiswaForCard] = useState<SiswaBimbinganItem | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 4000);
+  };
 
   // When teacher registers students in bulk
   const handleSuccessRegister = (newStudents: SiswaBimbinganItem[]) => {
@@ -142,6 +149,7 @@ export const GuruAccountPage: React.FC<GuruAccountPageProps> = ({
             tagihanList={tagihanList}
             onNavigateTab={setActiveTab}
             onOpenCardModal={setSelectedSiswaForCard}
+            onShowToast={showToast}
           />
         )}
 
@@ -203,6 +211,9 @@ export const GuruAccountPage: React.FC<GuruAccountPageProps> = ({
           <p>© {new Date().getFullYear()} Panitia Gebyar Matematika Nasional. Sistem Terintegrasi Pembimbing Sekolah.</p>
         </div>
       </footer>
+
+      {/* Toast Notification */}
+      <GlassToast message={toastMessage} onClose={() => setToastMessage(null)} />
 
     </div>
   );

@@ -5,14 +5,22 @@ import {
   ShieldCheck, 
   ArrowRight, 
   CreditCard,
-  CheckCircle2
+  CheckCircle2,
+  AlertCircle
 } from 'lucide-react';
+import { GlassDropdown } from '../common/GlassDropdown';
 import type { SiswaBimbinganItem } from '../../types';
 
 interface GuruPendaftaranKolektifTabProps {
   onSuccessRegister: (newStudents: SiswaBimbinganItem[]) => void;
   onNavigateTab: (tab: 'tagihan') => void;
 }
+
+const KATEGORI_OPTIONS = [
+  { value: 'kat-smp', label: 'Matematika Terapan SMP/MTs (Rp 65.000)' },
+  { value: 'kat-sd', label: 'Matematika Dasar SD/MI (Rp 50.000)' },
+  { value: 'kat-sma', label: 'Olimpiade SMA/MA/SMK (Rp 75.000)' },
+];
 
 interface StudentFormRow {
   id: string;
@@ -31,6 +39,7 @@ export const GuruPendaftaranKolektifTab: React.FC<GuruPendaftaranKolektifTabProp
   ]);
 
   const [submittedMessage, setSubmittedMessage] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const handleAddRow = () => {
     setRows(prev => [
@@ -60,9 +69,10 @@ export const GuruPendaftaranKolektifTab: React.FC<GuruPendaftaranKolektifTabProp
     // Validate that all names are filled
     const hasEmpty = rows.some(r => !r.nama.trim() || !r.nisn.trim());
     if (hasEmpty) {
-      alert('Mohon lengkapi nama siswa dan NISN untuk seluruh baris pendaftaran.');
+      setFormError('Mohon lengkapi nama siswa dan NISN untuk seluruh baris pendaftaran.');
       return;
     }
+    setFormError(null);
 
     const orderId = `GM27-KOL-${Math.floor(10000 + Math.random() * 90000)}`;
 
@@ -204,15 +214,12 @@ export const GuruPendaftaranKolektifTab: React.FC<GuruPendaftaranKolektifTabProp
                     <label className="block text-[11px] font-semibold text-slate-700 mb-1">
                       Kategori Lomba *
                     </label>
-                    <select
+                    <GlassDropdown
+                      options={KATEGORI_OPTIONS}
                       value={row.kategoriId}
-                      onChange={(e) => handleFieldChange(row.id, 'kategoriId', e.target.value)}
-                      className="w-full px-3 py-2 text-xs rounded-xl bg-white border border-slate-200 text-slate-800 focus:outline-none focus:border-indigo-500 shadow-sm"
-                    >
-                      <option value="kat-smp">Matematika Terapan SMP/MTs (Rp 65.000)</option>
-                      <option value="kat-sd">Matematika Dasar SD/MI (Rp 50.000)</option>
-                      <option value="kat-sma">Olimpiade SMA/MA/SMK (Rp 75.000)</option>
-                    </select>
+                      onChange={(val) => handleFieldChange(row.id, 'kategoriId', val)}
+                      placeholder="Pilih Kategori Lomba"
+                    />
                   </div>
                 </div>
               </div>
@@ -227,6 +234,13 @@ export const GuruPendaftaranKolektifTab: React.FC<GuruPendaftaranKolektifTabProp
               <span>Tambah Siswa Bimbingan Lainnya</span>
             </button>
           </div>
+
+          {formError && (
+            <div className="p-4 rounded-2xl glass-3d-rose border border-rose-200/80 text-rose-950 text-xs font-bold flex items-center gap-3 shadow-md animate-fade-in">
+              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+              <span>{formError}</span>
+            </div>
+          )}
 
           {/* Pricing & Checkout Summary Box */}
           <div className="rounded-3xl glass-panel p-6 border border-slate-200/80 shadow-sm bg-white/80 flex flex-col md:flex-row md:items-center justify-between gap-6">

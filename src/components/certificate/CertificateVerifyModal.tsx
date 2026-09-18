@@ -19,6 +19,7 @@ export const CertificateVerifyModal: React.FC<CertificateVerifyModalProps> = ({
 }) => {
   const [code, setCode] = useState('');
   const [searchState, setSearchState] = useState<'idle' | 'searching' | 'found' | 'not_found'>('idle');
+  const [downloadNotice, setDownloadNotice] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
@@ -124,16 +125,26 @@ export const CertificateVerifyModal: React.FC<CertificateVerifyModalProps> = ({
               </div>
             </div>
 
-            <div className="pt-3 border-t border-emerald-300/80 flex items-center justify-between text-xs">
+            <div className="pt-3 border-t border-emerald-300/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
               <span className="text-emerald-800 font-mono text-[11px] font-bold">Status: Dokumen Asli Terenkripsi</span>
               <button 
-                onClick={() => alert('Simulasi: Mengunduh salinan sertifikat resmi terverifikasi.')}
+                onClick={() => {
+                  setDownloadNotice('✓ Salinan sertifikat resmi terverifikasi (PDF) berhasil diunduh.');
+                  setTimeout(() => setDownloadNotice(null), 4000);
+                }}
                 className="text-emerald-900 hover:text-emerald-950 font-black flex items-center gap-1 cursor-pointer underline"
               >
                 <Download className="w-3.5 h-3.5" />
                 Unduh Salinan
               </button>
             </div>
+
+            {downloadNotice && (
+              <div className="p-3 rounded-xl glass-3d-emerald border border-emerald-200/80 text-emerald-950 text-xs font-bold flex items-center gap-2 animate-fade-in">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>{downloadNotice}</span>
+              </div>
+            )}
           </div>
         )}
 

@@ -22,6 +22,7 @@ interface GuruOverviewTabProps {
   tagihanList: TagihanKolektifItem[];
   onNavigateTab: (tab: 'siswa' | 'daftar' | 'tagihan' | 'sertifikat') => void;
   onOpenCardModal: (siswa: SiswaBimbinganItem) => void;
+  onShowToast?: (msg: string) => void;
 }
 
 export const GuruOverviewTab: React.FC<GuruOverviewTabProps> = ({
@@ -30,6 +31,7 @@ export const GuruOverviewTab: React.FC<GuruOverviewTabProps> = ({
   tagihanList,
   onNavigateTab,
   onOpenCardModal,
+  onShowToast,
 }) => {
   const lunasCount = siswaList.filter(s => s.statusPembayaran === 'lunas').length;
   const pendingCount = siswaList.filter(s => s.statusPembayaran === 'menunggu_pembayaran').length;
@@ -199,7 +201,12 @@ export const GuruOverviewTab: React.FC<GuruOverviewTabProps> = ({
               </div>
               <a
                 href="#whatsapp-group"
-                onClick={(e) => { e.preventDefault(); alert('Membuka tautan undangan grup WhatsApp resmi pembimbing GM 2027'); }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (onShowToast) {
+                    onShowToast('✓ Menghubungkan ke Ruang Koordinasi WhatsApp Pembimbing GM 2027...');
+                  }
+                }}
                 className="shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition-colors"
               >
                 <span>Gabung Grup WA</span>

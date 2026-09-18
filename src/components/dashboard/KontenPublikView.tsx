@@ -20,6 +20,7 @@ import {
   useStoredVideos, 
   useStoredArsipSoal 
 } from '../../utils/storage';
+import { GlassDropdown } from '../common/GlassDropdown';
 
 interface KontenPublikViewProps {
   onShowToast?: (message: string) => void;
@@ -759,23 +760,22 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <label className="font-black text-slate-800 font-['Outfit']">Jenjang Tingkat *</label>
-                  <select
+                  <GlassDropdown
                     value={editingArsip.tingkat}
-                    onChange={(e) => {
-                      const tingkat = e.target.value;
+                    onChange={(tingkat) => {
                       const kategoriNama = 
                         tingkat === 'SD' ? 'Matematika Dasar SD/MI' :
                         tingkat === 'SMP' ? 'Matematika Terapan SMP/MTs' :
                         tingkat === 'SMA' ? 'Olimpiade SMA/MA/SMK' : 'Kompilasi Lengkap Semua Jenjang';
                       setEditingArsip({ ...editingArsip, tingkat, kategoriNama });
                     }}
-                    className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-bold"
-                  >
-                    <option value="SD">SD / MI</option>
-                    <option value="SMP">SMP / MTs</option>
-                    <option value="SMA">SMA / MA / SMK</option>
-                    <option value="Semua Tingkat">Semua Tingkat</option>
-                  </select>
+                    options={[
+                      { value: 'SD', label: 'SD / MI', badge: 'Dasar', badgeColor: 'bg-emerald-100 text-emerald-900 border border-emerald-300' },
+                      { value: 'SMP', label: 'SMP / MTs', badge: 'Terapan', badgeColor: 'bg-cyan-100 text-cyan-900 border border-cyan-300' },
+                      { value: 'SMA', label: 'SMA / MA / SMK', badge: 'Olimpiade', badgeColor: 'bg-purple-100 text-purple-900 border border-purple-300' },
+                      { value: 'Semua Tingkat', label: 'Semua Tingkat', badge: 'Semua', badgeColor: 'bg-slate-100 text-slate-800 border border-slate-300' },
+                    ]}
+                  />
                 </div>
 
                 <div className="space-y-1">
@@ -883,16 +883,16 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <label className="font-black text-slate-800 font-['Outfit']">Kategori *</label>
-                  <select
+                  <GlassDropdown
                     value={editingPengumuman.kategori}
-                    onChange={(e) => setEditingPengumuman({ ...editingPengumuman, kategori: e.target.value as any })}
-                    className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-bold"
-                  >
-                    <option value="Penting">Penting (Badge Merah)</option>
-                    <option value="Jadwal">Jadwal & Agenda</option>
-                    <option value="Hasil">Hasil & Juara</option>
-                    <option value="Informasi">Informasi Umum</option>
-                  </select>
+                    onChange={(val) => setEditingPengumuman({ ...editingPengumuman, kategori: val as any, isPenting: val === 'Penting' })}
+                    options={[
+                      { value: 'Penting', label: 'Penting', badge: 'Prioritas', badgeColor: 'bg-rose-100 text-rose-950 border border-rose-300' },
+                      { value: 'Jadwal', label: 'Jadwal & Agenda', badge: 'Jadwal', badgeColor: 'bg-amber-100 text-amber-950 border border-amber-300' },
+                      { value: 'Hasil', label: 'Hasil & Juara', badge: 'Hasil', badgeColor: 'bg-emerald-100 text-emerald-950 border border-emerald-300' },
+                      { value: 'Informasi', label: 'Informasi Umum', badge: 'Info', badgeColor: 'bg-indigo-100 text-indigo-950 border border-indigo-200' },
+                    ]}
+                  />
                 </div>
 
                 <div className="space-y-1">

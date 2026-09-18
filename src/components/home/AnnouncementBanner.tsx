@@ -51,10 +51,21 @@ export const AnnouncementBanner: React.FC<AnnouncementBannerProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 text-xs font-black text-indigo-600 group-hover:text-indigo-700 transition-colors self-end sm:self-center pl-3 sm:pl-0">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (onSelectAnnouncement) {
+                onSelectAnnouncement(announcement);
+              } else if (onViewAll) {
+                onViewAll();
+              }
+            }}
+            className="btn-3d-white inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-black text-indigo-700 hover:text-indigo-950 transition-colors self-end sm:self-center cursor-pointer border border-indigo-200/90 shadow-2xs group-hover:bg-white"
+          >
             <span>Baca Selengkapnya</span>
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform" />
-          </div>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-indigo-600" />
+          </button>
         </motion.div>
       </div>
     </div>

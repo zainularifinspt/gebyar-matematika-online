@@ -15,6 +15,7 @@ import {
   HelpCircle
 } from 'lucide-react';
 import type { TemplateDokumenItem } from '../../types';
+import { GlassDropdown } from '../common/GlassDropdown';
 
 interface TemplateEditorViewProps {
   templates: TemplateDokumenItem[];
@@ -95,6 +96,12 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
   // Text Styling Options for printed text over the uploaded template
   const [textColor, setTextColor] = useState<'navy' | 'dark' | 'gold' | 'white'>('navy');
   const [nameFontSize, setNameFontSize] = useState<'normal' | 'large' | 'xlarge'>('large');
+
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3500);
+  };
 
   // Handle Photo Template Upload from Panitia
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -214,7 +221,7 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
       };
       img.onerror = () => {
         setIsDownloading(false);
-        alert('Gagal memuat template gambar untuk render download. Pastikan gambar valid.');
+        showToast('Gagal memuat template gambar untuk render download. Pastikan gambar valid.');
       };
     } catch {
       setIsDownloading(false);
@@ -233,8 +240,12 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
 
   return (
     <div className="space-y-6 animate-fade-in text-slate-800">
-      
-      {/* Top Banner & Explanation */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-2xl glass-3d-elevated border border-slate-200 text-slate-900 text-xs font-bold shadow-xl animate-fade-in">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
       <div className="rounded-3xl glass-3d-dashboard-shell p-6 sm:p-7 space-y-4 shadow-xl shadow-indigo-950/5">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
@@ -346,17 +357,15 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
             {/* Sample Student Selector & Mode */}
             <div className="flex items-center gap-2">
               {previewMode === 'real_data' && (
-                <select
-                  value={selectedStudentIndex}
-                  onChange={(e) => setSelectedStudentIndex(Number(e.target.value))}
-                  className="glass-3d-input px-2.5 py-1.5 rounded-xl text-xs font-bold text-slate-800"
-                >
-                  {SAMPLE_STUDENTS.map((st, idx) => (
-                    <option key={st.id} value={idx}>
-                      Contoh: {st.nama} ({st.nomor.split('-')[1]})
-                    </option>
-                  ))}
-                </select>
+                <GlassDropdown
+                  value={String(selectedStudentIndex)}
+                  onChange={(val) => setSelectedStudentIndex(Number(val))}
+                  className="w-52"
+                  options={SAMPLE_STUDENTS.map((st, idx) => ({
+                    value: String(idx),
+                    label: `${st.nama} (${st.nomor.split('-')[1]})`,
+                  }))}
+                />
               )}
 
               <div className="flex items-center gap-1 bg-slate-200/70 p-1 rounded-xl text-[11px] font-bold border border-white/80 shadow-inner">

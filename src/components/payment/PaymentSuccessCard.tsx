@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   CheckCircle2, 
   Download, 
@@ -21,8 +21,20 @@ export const PaymentSuccessCard: React.FC<PaymentSuccessCardProps> = ({
   card,
   onGoToExamPortal,
 }) => {
+  const [downloading, setDownloading] = useState(false);
+  const [examNotice, setExamNotice] = useState<string | null>(null);
+
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleExamPortal = () => {
+    if (onGoToExamPortal) {
+      onGoToExamPortal();
+    } else {
+      setExamNotice('✓ Menghubungkan ke Portal Web Ujian Daring (SSO Terverifikasi)...');
+      setTimeout(() => setExamNotice(null), 3500);
+    }
   };
 
   return (
@@ -150,11 +162,18 @@ export const PaymentSuccessCard: React.FC<PaymentSuccessCardProps> = ({
               </div>
 
               <button
-                onClick={() => alert('Mengunduh Kartu Peserta resmi berformat PDF (A4)...')}
-                className="btn-3d-primary w-full py-2.5 px-4 rounded-xl text-white font-black text-xs shadow-md flex items-center justify-center gap-2"
+                onClick={() => {
+                  setDownloading(true);
+                  setTimeout(() => setDownloading(false), 3000);
+                }}
+                className={`w-full py-2.5 px-4 rounded-xl font-black text-xs shadow-md flex items-center justify-center gap-2 transition-all ${
+                  downloading 
+                    ? 'glass-3d-emerald text-emerald-950 border border-emerald-300' 
+                    : 'btn-3d-primary text-white'
+                }`}
               >
                 <Download className="w-4 h-4" />
-                <span>Unduh Kartu (PDF)</span>
+                <span>{downloading ? '✓ Mengunduh PDF...' : 'Unduh Kartu (PDF)'}</span>
               </button>
             </div>
 
@@ -185,13 +204,20 @@ export const PaymentSuccessCard: React.FC<PaymentSuccessCardProps> = ({
         </div>
 
         <button
-          onClick={onGoToExamPortal || (() => alert('Membuka portal Web Ujian Daring...'))}
+          onClick={handleExamPortal}
           className="btn-3d-primary px-6 py-3.5 rounded-2xl text-xs font-black text-white shadow-md flex items-center gap-2 shrink-0 group"
         >
           <span>Masuk ke Web Ujian</span>
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </button>
       </div>
+
+      {examNotice && (
+        <div className="p-4 rounded-2xl glass-3d-indigo border border-indigo-200/80 text-indigo-950 text-xs font-bold flex items-center gap-3 animate-fade-in shadow-lg">
+          <div className="w-2.5 h-2.5 rounded-full bg-indigo-600 animate-ping" />
+          <span>{examNotice}</span>
+        </div>
+      )}
 
     </div>
   );

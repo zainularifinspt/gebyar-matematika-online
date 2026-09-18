@@ -4,7 +4,8 @@ import {
   Search, 
   School, 
   CheckCircle2, 
-  FileText, 
+  FileText,
+  AlertCircle,
   ArrowRight
 } from 'lucide-react';
 import { MOCK_DATABASE_SEKOLAH, type ReferensiSekolah } from '../../data/mockSekolah';
@@ -53,6 +54,7 @@ export const FormPendaftaranModal: React.FC<FormPendaftaranModalProps> = ({
   );
 
   const [metodePembayaran, setMetodePembayaran] = useState<'QRIS' | 'VA'>('QRIS');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (defaultKategori) {
@@ -93,8 +95,9 @@ export const FormPendaftaranModal: React.FC<FormPendaftaranModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage(null);
     if (!studentName || !selectedSchool.nama) {
-      alert('Mohon lengkapi nama siswa dan data sekolah.');
+      setErrorMessage('Mohon lengkapi nama lengkap peserta dan data satuan pendidikan asal.');
       return;
     }
 
@@ -142,6 +145,13 @@ export const FormPendaftaranModal: React.FC<FormPendaftaranModalProps> = ({
             <X className="w-5 h-5" />
           </button>
         </div>
+
+        {errorMessage && (
+          <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-bold flex items-center gap-2.5 animate-shake shadow-xs">
+            <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+            <span>{errorMessage}</span>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="relative space-y-6">
           

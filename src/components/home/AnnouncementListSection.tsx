@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence, type Variants } from 'framer-motion';
+import React from 'react';
+import { motion, type Variants } from 'framer-motion';
 import { 
   Calendar, 
   ChevronRight, 
-  X,
   Megaphone
 } from 'lucide-react';
 import type { Pengumuman } from '../../types';
@@ -46,29 +45,11 @@ const cardVariants: Variants = {
 
 export const AnnouncementListSection: React.FC<AnnouncementListSectionProps> = ({
   announcements,
-  selectedAnnouncement,
-  onCloseModal,
   onOpenModal,
 }) => {
-  const [activeModalAnn, setActiveModalAnn] = useState<Pengumuman | null>(selectedAnnouncement || null);
-
-  React.useEffect(() => {
-    if (selectedAnnouncement) {
-      setActiveModalAnn(selectedAnnouncement);
-    }
-  }, [selectedAnnouncement]);
-
   const handleOpen = (ann: Pengumuman) => {
-    setActiveModalAnn(ann);
     onOpenModal?.(ann);
   };
-
-  const handleClose = () => {
-    setActiveModalAnn(null);
-    onCloseModal?.();
-  };
-
-  const activeAnn = activeModalAnn || selectedAnnouncement;
 
   return (
     <section id="pengumuman" className="py-20 relative">
@@ -146,73 +127,6 @@ export const AnnouncementListSection: React.FC<AnnouncementListSectionProps> = (
             </motion.div>
           ))}
         </motion.div>
-
-        {/* 3D Glass Detail Modal with AnimatePresence */}
-        <AnimatePresence>
-          {activeAnn && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-              {/* Backdrop */}
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={handleClose}
-                className="fixed inset-0 bg-slate-950/50 backdrop-blur-xl"
-              />
-
-              {/* Modal Card */}
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.94, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.94, y: 20 }}
-                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                className="relative w-full max-w-2xl rounded-3xl glass-3d-elevated border border-white/95 p-6 sm:p-9 shadow-2xl space-y-6 overflow-hidden z-10"
-              >
-
-
-                <div className="flex items-start justify-between gap-4">
-                  <div className="space-y-2">
-                    <span className="px-3 py-1 rounded-full text-xs font-black bg-rose-100 text-rose-900 border border-rose-300 shadow-xs">
-                      {activeAnn.kategori}
-                    </span>
-                    <h3 className="text-2xl sm:text-3xl font-black text-slate-900 font-['Outfit'] leading-tight">
-                      {activeAnn.judul}
-                    </h3>
-                    <p className="text-xs text-slate-600 flex items-center gap-2 font-semibold">
-                      <Calendar className="w-4 h-4 text-indigo-600" />
-                      Diterbitkan pada {activeAnn.tanggal} oleh Panitia Gebyar Matematika
-                    </p>
-                  </div>
-
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={handleClose}
-                    className="p-2.5 rounded-2xl bg-white/80 hover:bg-white text-slate-600 hover:text-slate-900 border border-white/90 shadow-sm cursor-pointer transition-colors"
-                  >
-                    <X className="w-5 h-5" />
-                  </motion.button>
-                </div>
-
-                <div className="p-5 rounded-2xl bg-white/70 border border-white/80 text-sm text-slate-800 leading-relaxed whitespace-pre-line space-y-3 font-normal shadow-inner">
-                  <p>{activeAnn.isi}</p>
-                </div>
-
-                <div className="flex justify-end pt-2">
-                  <motion.button
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={handleClose}
-                    className="btn-3d-white px-6 py-2.5 rounded-xl text-xs font-bold cursor-pointer"
-                  >
-                    Tutup Pengumuman
-                  </motion.button>
-                </div>
-
-              </motion.div>
-            </div>
-          )}
-        </AnimatePresence>
 
       </div>
     </section>

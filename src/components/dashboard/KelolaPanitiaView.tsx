@@ -17,6 +17,8 @@ import {
 import * as XLSX from 'xlsx';
 import type { PanitiaMember } from '../../data/mockData';
 import { useStoredPanitia } from '../../utils/storage';
+import { GlassDropdown } from '../common/GlassDropdown';
+import { ConfirmDialogModal } from '../common/ConfirmDialogModal';
 
 interface ParsedPanitiaItem {
   nama: string;
@@ -35,6 +37,9 @@ export const KelolaPanitiaView: React.FC = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<PanitiaMember | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Custom Delete Confirmation Modal State
+  const [deleteTarget, setDeleteTarget] = useState<PanitiaMember | null>(null);
 
   // Excel Import State
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
@@ -345,11 +350,15 @@ export const KelolaPanitiaView: React.FC = () => {
     setMembers(updated);
   };
 
-  const handleDelete = (id: string, nama: string) => {
-    if (confirm(`Apakah Anda yakin ingin menghapus akun panitia "${nama}"?`)) {
-      setMembers(members.filter(m => m.id !== id));
-      showToast(`Akun panitia "${nama}" telah dihapus dari sistem.`);
-    }
+  const handleDelete = (member: PanitiaMember) => {
+    setDeleteTarget(member);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!deleteTarget) return;
+    setMembers(members.filter(m => m.id !== deleteTarget.id));
+    showToast(`✓ Akun panitia "${deleteTarget.nama}" telah dihapus.`);
+    setDeleteTarget(null);
   };
 
   const filteredMembers = members.filter(m => 
@@ -580,7 +589,7 @@ export const KelolaPanitiaView: React.FC = () => {
                         <Edit3 className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => handleDelete(m.id, m.nama)}
+                        onClick={() => handleDelete(m)}
                         title="Hapus Akun Panitia"
                         className="p-1.5 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-all cursor-pointer"
                       >
@@ -804,32 +813,32 @@ export const KelolaPanitiaView: React.FC = () => {
                   <label className="block text-xs font-black text-slate-800 mb-1 font-['Outfit']">
                     Divisi Penugasan
                   </label>
-                  <select
+                  <GlassDropdown
                     value={formData.divisi}
-                    onChange={(e) => setFormData({ ...formData, divisi: e.target.value as PanitiaMember['divisi'] })}
-                    className="glass-3d-input w-full px-3 py-2.5 rounded-xl text-xs text-slate-900 font-bold"
-                  >
-                    <option value="Penjurian & CBT">Penjurian & CBT</option>
-                    <option value="Kesekretariatan & Verifikasi">Kesekretariatan & Verifikasi</option>
-                    <option value="IT & Infrastruktur">IT & Infrastruktur</option>
-                    <option value="Bendahara & Keuangan">Bendahara & Keuangan</option>
-                    <option value="Logistik & Sertifikat">Logistik & Sertifikat</option>
-                  </select>
+                    onChange={(val) => setFormData({ ...formData, divisi: val as PanitiaMember['divisi'] })}
+                    options={[
+                      { value: 'Penjurian & CBT', label: 'Penjurian & CBT', badge: 'CBT', badgeColor: 'bg-indigo-100 text-indigo-900 border border-indigo-200' },
+                      { value: 'Kesekretariatan & Verifikasi', label: 'Kesekretariatan & Verifikasi', badge: 'Admin', badgeColor: 'bg-emerald-100 text-emerald-900 border border-emerald-300' },
+                      { value: 'IT & Infrastruktur', label: 'IT & Infrastruktur', badge: 'Sistem', badgeColor: 'bg-cyan-100 text-cyan-900 border border-cyan-300' },
+                      { value: 'Bendahara & Keuangan', label: 'Bendahara & Keuangan', badge: 'Finansial', badgeColor: 'bg-amber-100 text-amber-900 border border-amber-300' },
+                      { value: 'Logistik & Sertifikat', label: 'Logistik & Sertifikat', badge: 'Sertifikat', badgeColor: 'bg-purple-100 text-purple-900 border border-purple-300' },
+                    ]}
+                  />
                 </div>
 
                 <div>
                   <label className="block text-xs font-black text-slate-800 mb-1 font-['Outfit']">
                     Tingkat Peran
                   </label>
-                  <select
+                  <GlassDropdown
                     value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value as PanitiaMember['role'] })}
-                    className="glass-3d-input w-full px-3 py-2.5 rounded-xl text-xs text-slate-900 font-bold"
-                  >
-                    <option value="Staf Panitia">Staf Panitia</option>
-                    <option value="Koordinator Divisi">Koordinator Divisi</option>
-                    <option value="Super Admin">Super Admin</option>
-                  </select>
+                    onChange={(val) => setFormData({ ...formData, role: val as PanitiaMember['role'] })}
+                    options={[
+                      { value: 'Staf Panitia', label: 'Staf Panitia', badge: 'Staf', badgeColor: 'bg-cyan-100 text-cyan-900 border border-cyan-300' },
+                      { value: 'Koordinator Divisi', label: 'Koordinator Divisi', badge: 'Koordinator', badgeColor: 'bg-indigo-100 text-indigo-900 border border-indigo-300' },
+                      { value: 'Super Admin', label: 'Super Admin', badge: 'Root', badgeColor: 'bg-amber-100 text-amber-950 border border-amber-300' },
+                    ]}
+                  />
                 </div>
               </div>
 
@@ -853,6 +862,24 @@ export const KelolaPanitiaView: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* MODAL 3: KONFIRMASI HAPUS PANITIA (3D GLASS) */}
+      <ConfirmDialogModal
+        isOpen={Boolean(deleteTarget)}
+        title="Hapus Akun Panitia"
+        message={
+          deleteTarget ? (
+            <span>
+              Apakah Anda yakin ingin menghapus akun panitia <strong>"{deleteTarget.nama}"</strong> (@{deleteTarget.username}) dari sistem Gebyar Matematika? Tindakan ini tidak dapat dibatalkan.
+            </span>
+          ) : ''
+        }
+        confirmLabel="Ya, Hapus Akun"
+        cancelLabel="Batal"
+        variant="danger"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
 
     </div>
   );

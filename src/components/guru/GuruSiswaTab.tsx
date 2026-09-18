@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { 
   Search, 
-  Filter, 
   Download, 
   FileSpreadsheet, 
   CheckCircle2, 
@@ -9,7 +8,14 @@ import {
   Printer, 
   X
 } from 'lucide-react';
+import { GlassDropdown } from '../common/GlassDropdown';
 import type { SiswaBimbinganItem } from '../../types';
+
+const STATUS_FILTER_OPTIONS = [
+  { value: 'semua', label: 'Semua Status Bayar' },
+  { value: 'lunas', label: 'Hanya yang Lunas' },
+  { value: 'menunggu_pembayaran', label: 'Menunggu Pembayaran' },
+];
 
 interface GuruSiswaTabProps {
   siswaList: SiswaBimbinganItem[];
@@ -116,17 +122,14 @@ export const GuruSiswaTab: React.FC<GuruSiswaTabProps> = ({
         </div>
 
         {/* Status Filter */}
-        <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-slate-400 shrink-0" />
-          <select
+        <div className="flex items-center gap-2 min-w-[200px]">
+          <GlassDropdown
+            options={STATUS_FILTER_OPTIONS}
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as any)}
-            className="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-800 focus:outline-none focus:border-indigo-500 shadow-sm"
-          >
-            <option value="semua">Semua Status Bayar</option>
-            <option value="lunas">Hanya yang Lunas</option>
-            <option value="menunggu_pembayaran">Menunggu Pembayaran</option>
-          </select>
+            onChange={(val) => setStatusFilter(val as any)}
+            placeholder="Pilih Status"
+            className="w-full"
+          />
         </div>
 
       </div>

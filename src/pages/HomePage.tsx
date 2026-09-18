@@ -14,6 +14,7 @@ import { FaqContactSection } from '../components/home/FaqContactSection';
 const CertificateVerifyModal = lazy(() => import('../components/certificate/CertificateVerifyModal').then(m => ({ default: m.CertificateVerifyModal })));
 const AuthModal = lazy(() => import('../components/auth/AuthModal').then(m => ({ default: m.AuthModal })));
 const FormPendaftaranModal = lazy(() => import('../components/registration/FormPendaftaranModal').then(m => ({ default: m.FormPendaftaranModal })));
+const AnnouncementDetailModal = lazy(() => import('../components/home/AnnouncementDetailModal').then(m => ({ default: m.AnnouncementDetailModal })));
 
 import { 
   MOCK_KATEGORI, 
@@ -206,8 +207,6 @@ export const HomePage: React.FC<HomePageProps> = ({
         <div className="section-deferred">
           <AnnouncementListSection
             announcements={storedPengumuman}
-            selectedAnnouncement={selectedAnnouncement}
-            onCloseModal={() => setSelectedAnnouncement(null)}
             onOpenModal={(ann) => setSelectedAnnouncement(ann)}
           />
         </div>
@@ -262,6 +261,13 @@ export const HomePage: React.FC<HomePageProps> = ({
                 onNavigateToPayment();
               }
             }}
+          />
+        )}
+
+        {selectedAnnouncement && (
+          <AnnouncementDetailModal
+            announcement={selectedAnnouncement}
+            onClose={() => setSelectedAnnouncement(null)}
           />
         )}
       </Suspense>
