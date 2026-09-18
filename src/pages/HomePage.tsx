@@ -17,12 +17,14 @@ const FormPendaftaranModal = lazy(() => import('../components/registration/FormP
 
 import { 
   MOCK_KATEGORI, 
-  MOCK_PENGUMUMAN, 
   MOCK_JADWAL, 
-  MOCK_ARSIP_SOAL, 
-  MOCK_VIDEOS, 
   MOCK_FAQ 
 } from '../data/mockData';
+import { 
+  useStoredPengumuman, 
+  useStoredVideos, 
+  useStoredArsipSoal 
+} from '../utils/storage';
 import type { KategoriLomba, Pengumuman } from '../types';
 import { CheckCircle2, UserCheck } from 'lucide-react';
 
@@ -53,6 +55,13 @@ export const HomePage: React.FC<HomePageProps> = ({
   const [internalUser, setInternalUser] = useState<{ name: string; email: string; role: string } | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  // Reactive persistent content from admin
+  const [storedPengumuman] = useStoredPengumuman();
+  const [storedVideos] = useStoredVideos();
+  const [storedArsipSoal] = useStoredArsipSoal();
+
+  const breakingAnnouncement = storedPengumuman.find(p => p.isPenting) || storedPengumuman[0];
+
   const activeUser = externalActiveUser || internalUser;
 
   const showToast = (msg: string) => {
@@ -77,9 +86,20 @@ export const HomePage: React.FC<HomePageProps> = ({
   const handleLoginSuccess = (user: { name: string; email: string; role: string }) => {
     setInternalUser(user);
     showToast(`Selamat datang, ${user.name}! Akun ${user.role} siap digunakan.`);
-    if (user.role === 'Guru Pendamping') {
+    const roleLower = (user.role || '').toLowerCase();
+    const isPanitiaOrAdmin = 
+      roleLower.includes('admin') || 
+      roleLower.includes('panitia') || 
+      roleLower.includes('koordinator') || 
+      roleLower.includes('staf') ||
+      user.role === 'Super Admin' ||
+      user.role === 'Panitia Pelaksana' ||
+      user.role === 'Koordinator Divisi' ||
+      user.role === 'Staf Panitia';
+
+    if (roleLower.includes('guru')) {
       if (onNavigateToGuru) onNavigateToGuru();
-    } else if (user.role === 'Panitia Pelaksana' || user.role === 'Super Admin' || user.role.includes('Admin') || user.role.includes('Panitia')) {
+    } else if (isPanitiaOrAdmin) {
       if (onNavigateToDashboard) onNavigateToDashboard();
     } else {
       if (onNavigateToRegistrationDetail) onNavigateToRegistrationDetail();
@@ -157,7 +177,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       <main>
         {/* Top Breaking Announcement Banner */}
         <AnnouncementBanner
-          announcement={MOCK_PENGUMUMAN[0]}
+          announcement={breakingAnnouncement}
           onViewAll={() => scrollToSection('pengumuman')}
           onSelectAnnouncement={(ann) => setSelectedAnnouncement(ann)}
         />
@@ -185,7 +205,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         {/* Pengumuman List Section */}
         <div className="section-deferred">
           <AnnouncementListSection
-            announcements={MOCK_PENGUMUMAN}
+            announcements={storedPengumuman}
             selectedAnnouncement={selectedAnnouncement}
             onCloseModal={() => setSelectedAnnouncement(null)}
             onOpenModal={(ann) => setSelectedAnnouncement(ann)}
@@ -194,12 +214,12 @@ export const HomePage: React.FC<HomePageProps> = ({
 
         {/* Arsip Soal Lomba Section */}
         <div className="section-deferred">
-          <ArchiveSection archives={MOCK_ARSIP_SOAL} />
+          <ArchiveSection archives={storedArsipSoal} />
         </div>
 
         {/* Galeri Video Kegiatan Section */}
         <div className="section-deferred">
-          <VideoGallerySection videos={MOCK_VIDEOS} />
+          <VideoGallerySection videos={storedVideos} />
         </div>
 
         {/* Tanya Jawab & Kontak Panitia Section */}

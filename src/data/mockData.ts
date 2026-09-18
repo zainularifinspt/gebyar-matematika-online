@@ -334,9 +334,67 @@ export const MOCK_KARTU_PESERTA: KartuPeserta = {
   fileUrl: '#',
 };
 
+export interface PanitiaMember {
+  id: string;
+  nama: string;
+  email: string;
+  username: string;
+  password?: string;
+  divisi: 'Penjurian & CBT' | 'Kesekretariatan & Verifikasi' | 'IT & Infrastruktur' | 'Bendahara & Keuangan' | 'Logistik & Sertifikat';
+  role: 'Staf Panitia' | 'Koordinator Divisi' | 'Super Admin';
+  status: 'aktif' | 'nonaktif';
+  terakhirLogin: string;
+}
+
+// Data Pendaftar Dimulai Bersih (Tanpa Dummy Data)
 export const MOCK_PESERTA_ADMIN: PesertaAdminItem[] = [];
 
+// Data Nilai CBT Dimulai Bersih (Tanpa Dummy Data)
 export const MOCK_NILAI_UJIAN: NilaiUjianItem[] = [];
+
+// Daftar Akun Panitia Pelaksana Resmi
+export const MOCK_PANITIA: PanitiaMember[] = [
+  {
+    id: 'panitia-root-1',
+    nama: 'M. Zainul Arifin',
+    email: 'zainularifin9195@gmail.com',
+    username: 'zainularifin9195',
+    divisi: 'IT & Infrastruktur',
+    role: 'Super Admin',
+    status: 'aktif',
+    terakhirLogin: 'Online Sekarang',
+  },
+  {
+    id: 'panitia-root-2',
+    nama: 'M. Zainul Arifin (Admin ULM)',
+    email: 'mzainul.arifin@ulm.ac.id',
+    username: 'admin',
+    divisi: 'IT & Infrastruktur',
+    role: 'Super Admin',
+    status: 'aktif',
+    terakhirLogin: 'Online Sekarang',
+  },
+  {
+    id: 'panitia-1',
+    nama: 'Koordinator Penjurian & CBT',
+    email: 'cbt@gebyar.id',
+    username: 'cbt_gebyar',
+    divisi: 'Penjurian & CBT',
+    role: 'Koordinator Divisi',
+    status: 'aktif',
+    terakhirLogin: 'Baru ditambahkan',
+  },
+  {
+    id: 'panitia-2',
+    nama: 'Staf Kesekretariatan & Verifikasi',
+    email: 'sekretariat@gebyar.id',
+    username: 'sekretariat_gebyar',
+    divisi: 'Kesekretariatan & Verifikasi',
+    role: 'Staf Panitia',
+    status: 'aktif',
+    terakhirLogin: 'Baru ditambahkan',
+  },
+];
 
 export const MOCK_TEMPLATE_DOKUMEN: TemplateDokumenItem[] = [
   {

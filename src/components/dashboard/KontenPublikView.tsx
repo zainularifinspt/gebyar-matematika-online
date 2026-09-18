@@ -11,14 +11,15 @@ import {
   Eye, 
   X, 
   Film,
-  Clock
+  Clock,
+  Sparkles
 } from 'lucide-react';
-import { 
-  MOCK_VIDEOS, 
-  MOCK_ARSIP_SOAL, 
-  MOCK_PENGUMUMAN 
-} from '../../data/mockData';
 import type { VideoKegiatan, ArsipSoal, Pengumuman } from '../../types';
+import { 
+  useStoredPengumuman, 
+  useStoredVideos, 
+  useStoredArsipSoal 
+} from '../../utils/storage';
 
 interface KontenPublikViewProps {
   onShowToast?: (message: string) => void;
@@ -27,13 +28,13 @@ interface KontenPublikViewProps {
 type SubTab = 'video' | 'arsip' | 'pengumuman';
 
 export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast }) => {
-  const [activeSubTab, setActiveSubTab] = useState<SubTab>('video');
+  const [activeSubTab, setActiveSubTab] = useState<SubTab>('pengumuman');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Datasets state
-  const [videos, setVideos] = useState<VideoKegiatan[]>(MOCK_VIDEOS);
-  const [arsipSoal, setArsipSoal] = useState<ArsipSoal[]>(MOCK_ARSIP_SOAL);
-  const [pengumuman, setPengumuman] = useState<Pengumuman[]>(MOCK_PENGUMUMAN);
+  // Datasets state connected to reactive storage
+  const [videos, setVideos] = useStoredVideos();
+  const [arsipSoal, setArsipSoal] = useStoredArsipSoal();
+  const [pengumuman, setPengumuman] = useStoredPengumuman();
 
   // Modals state
   const [editingVideo, setEditingVideo] = useState<VideoKegiatan | null>(null);
@@ -80,13 +81,15 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
     if (!editingVideo || !editingVideo.judul.trim()) return;
 
     const exists = videos.some(v => v.id === editingVideo.id);
+    let updated: VideoKegiatan[];
     if (exists) {
-      setVideos(prev => prev.map(v => v.id === editingVideo.id ? editingVideo : v));
+      updated = videos.map(v => v.id === editingVideo.id ? editingVideo : v);
       notify(`✓ Video "${editingVideo.judul}" berhasil diperbarui!`);
     } else {
-      setVideos(prev => [editingVideo, ...prev]);
-      notify(`✓ Video baru "${editingVideo.judul}" berhasil ditambahkan!`);
+      updated = [editingVideo, ...videos];
+      notify(`✓ Video baru "${editingVideo.judul}" berhasil ditambahkan & tayang!`);
     }
+    setVideos(updated);
     setIsVideoModalOpen(false);
     setEditingVideo(null);
   };
@@ -119,13 +122,15 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
     if (!editingArsip || !editingArsip.judul.trim()) return;
 
     const exists = arsipSoal.some(a => a.id === editingArsip.id);
+    let updated: ArsipSoal[];
     if (exists) {
-      setArsipSoal(prev => prev.map(a => a.id === editingArsip.id ? editingArsip : a));
+      updated = arsipSoal.map(a => a.id === editingArsip.id ? editingArsip : a);
       notify(`✓ Paket Arsip Soal "${editingArsip.judul}" berhasil diperbarui!`);
     } else {
-      setArsipSoal(prev => [editingArsip, ...prev]);
-      notify(`✓ Paket Arsip Soal baru "${editingArsip.judul}" berhasil ditambahkan!`);
+      updated = [editingArsip, ...arsipSoal];
+      notify(`✓ Paket Arsip Soal baru "${editingArsip.judul}" berhasil ditambahkan & tayang!`);
     }
+    setArsipSoal(updated);
     setIsArsipModalOpen(false);
     setEditingArsip(null);
   };
@@ -157,13 +162,15 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
     if (!editingPengumuman || !editingPengumuman.judul.trim()) return;
 
     const exists = pengumuman.some(p => p.id === editingPengumuman.id);
+    let updated: Pengumuman[];
     if (exists) {
-      setPengumuman(prev => prev.map(p => p.id === editingPengumuman.id ? editingPengumuman : p));
+      updated = pengumuman.map(p => p.id === editingPengumuman.id ? editingPengumuman : p);
       notify(`✓ Pengumuman "${editingPengumuman.judul}" berhasil diperbarui!`);
     } else {
-      setPengumuman(prev => [editingPengumuman, ...prev]);
-      notify(`✓ Pengumuman baru "${editingPengumuman.judul}" berhasil diterbitkan!`);
+      updated = [editingPengumuman, ...pengumuman];
+      notify(`✓ Pengumuman "${editingPengumuman.judul}" langsung tayang di Beranda & Banner!`);
     }
+    setPengumuman(updated);
     setIsPengumumanModalOpen(false);
     setEditingPengumuman(null);
   };
@@ -174,13 +181,13 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
   const handleConfirmDelete = () => {
     if (!itemToDelete) return;
     if (itemToDelete.type === 'video') {
-      setVideos(prev => prev.filter(v => v.id !== itemToDelete.id));
+      setVideos(videos.filter(v => v.id !== itemToDelete.id));
       notify(`✓ Video "${itemToDelete.title}" telah dihapus.`);
     } else if (itemToDelete.type === 'arsip') {
-      setArsipSoal(prev => prev.filter(a => a.id !== itemToDelete.id));
+      setArsipSoal(arsipSoal.filter(a => a.id !== itemToDelete.id));
       notify(`✓ Paket Soal "${itemToDelete.title}" telah dihapus.`);
     } else if (itemToDelete.type === 'pengumuman') {
-      setPengumuman(prev => prev.filter(p => p.id !== itemToDelete.id));
+      setPengumuman(pengumuman.filter(p => p.id !== itemToDelete.id));
       notify(`✓ Pengumuman "${itemToDelete.title}" telah dihapus.`);
     }
     setItemToDelete(null);
@@ -205,180 +212,279 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
   );
 
   return (
-    <div className="rounded-3xl bg-white/90 backdrop-blur-xl border border-slate-200/80 shadow-sm p-6 sm:p-8 space-y-6 animate-fade-in text-slate-800">
+    <div className="space-y-6 animate-fade-in text-slate-800">
       
-      {/* Top Header & Sub-Tabs Switcher */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-200/80">
-        <div>
-          <h3 className="text-xl sm:text-2xl font-black text-slate-900 font-['Outfit']">
-            Manajemen Konten Publik & Media Lomba
-          </h3>
-          <p className="text-xs text-slate-500 mt-1">
-            Kelola arsip soal latihan PDF, galeri video dokumentasi kegiatan, dan pengumuman resmi yang tampil di Beranda publik.
-          </p>
+      {/* Top Header Card */}
+      <div className="rounded-3xl glass-3d-dashboard-shell p-6 sm:p-7 space-y-4 shadow-xl shadow-indigo-950/5">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-100/90 text-indigo-950 text-xs font-black border border-indigo-300 shadow-2xs">
+              <Sparkles className="w-3.5 h-3.5 text-indigo-700" />
+              <span>Sinkronisasi Konten Publik & Landing Page</span>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 font-['Outfit'] mt-2 tracking-tight">
+              Manajemen Konten Publik & Media Lomba
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl leading-relaxed mt-1 font-medium">
+              Semua perubahan pengumuman resmi, materi naskah soal PDF, dan video dokumentasi di sini <strong>langsung tersinkronisasi dan tampil otomatis</strong> di halaman utama (Beranda) peserta.
+            </p>
+          </div>
+
+          {/* Action Button for Active SubTab */}
+          <div className="shrink-0">
+            {activeSubTab === 'video' && (
+              <button
+                onClick={handleOpenAddVideo}
+                className="btn-3d-primary inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Tambah Video Baru</span>
+              </button>
+            )}
+            {activeSubTab === 'arsip' && (
+              <button
+                onClick={handleOpenAddArsip}
+                className="btn-3d-primary inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Unggah Paket Soal</span>
+              </button>
+            )}
+            {activeSubTab === 'pengumuman' && (
+              <button
+                onClick={handleOpenAddPengumuman}
+                className="btn-3d-primary inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Terbitkan Pengumuman</span>
+              </button>
+            )}
+          </div>
         </div>
 
-        {/* Action Button sesuai SubTab Aktif */}
-        <div className="shrink-0">
-          {activeSubTab === 'video' && (
+        {/* Sub-Navigation Tabs & Search Bar */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3 border-t border-slate-200/60">
+          {/* Sub-tabs pills */}
+          <div className="inline-flex p-1.5 rounded-2xl bg-slate-200/60 backdrop-blur-md border border-white/80 text-xs font-bold shadow-inner">
             <button
-              onClick={handleOpenAddVideo}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
+              onClick={() => { setActiveSubTab('pengumuman'); setSearchQuery(''); }}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl transition-all cursor-pointer font-['Outfit'] ${
+                activeSubTab === 'pengumuman'
+                  ? 'bg-white text-indigo-900 shadow-md shadow-slate-900/10 font-black'
+                  : 'text-slate-600 hover:text-slate-900 font-bold'
+              }`}
             >
-              <Plus className="w-4 h-4" />
-              <span>Tambah Video Baru</span>
+              <Bell className="w-4 h-4 text-amber-600" />
+              <span>Pengumuman Beranda</span>
+              <span className={`text-[11px] px-2 py-0.5 rounded-lg font-mono font-bold ${
+                activeSubTab === 'pengumuman' ? 'bg-indigo-100 text-indigo-900' : 'bg-slate-300/80 text-slate-700'
+              }`}>
+                {pengumuman.length}
+              </span>
             </button>
-          )}
-          {activeSubTab === 'arsip' && (
+
             <button
-              onClick={handleOpenAddArsip}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
+              onClick={() => { setActiveSubTab('video'); setSearchQuery(''); }}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl transition-all cursor-pointer font-['Outfit'] ${
+                activeSubTab === 'video'
+                  ? 'bg-white text-indigo-900 shadow-md shadow-slate-900/10 font-black'
+                  : 'text-slate-600 hover:text-slate-900 font-bold'
+              }`}
             >
-              <Plus className="w-4 h-4" />
-              <span>Unggah Paket Soal</span>
+              <Video className="w-4 h-4 text-indigo-600" />
+              <span>Video Kegiatan</span>
+              <span className={`text-[11px] px-2 py-0.5 rounded-lg font-mono font-bold ${
+                activeSubTab === 'video' ? 'bg-indigo-100 text-indigo-900' : 'bg-slate-300/80 text-slate-700'
+              }`}>
+                {videos.length}
+              </span>
             </button>
-          )}
-          {activeSubTab === 'pengumuman' && (
+
             <button
-              onClick={handleOpenAddPengumuman}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
+              onClick={() => { setActiveSubTab('arsip'); setSearchQuery(''); }}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl transition-all cursor-pointer font-['Outfit'] ${
+                activeSubTab === 'arsip'
+                  ? 'bg-white text-indigo-900 shadow-md shadow-slate-900/10 font-black'
+                  : 'text-slate-600 hover:text-slate-900 font-bold'
+              }`}
             >
-              <Plus className="w-4 h-4" />
-              <span>Terbitkan Pengumuman</span>
+              <FileText className="w-4 h-4 text-emerald-600" />
+              <span>Arsip Soal & Kunci</span>
+              <span className={`text-[11px] px-2 py-0.5 rounded-lg font-mono font-bold ${
+                activeSubTab === 'arsip' ? 'bg-indigo-100 text-indigo-900' : 'bg-slate-300/80 text-slate-700'
+              }`}>
+                {arsipSoal.length}
+              </span>
             </button>
-          )}
+          </div>
+
+          {/* Search Bar */}
+          <div className="relative w-full sm:w-72">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder={`Cari dalam ${activeSubTab}...`}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="glass-3d-input w-full pl-10 pr-3 py-2 rounded-xl text-xs text-slate-900 font-medium placeholder:text-slate-400"
+            />
+          </div>
         </div>
-      </div>
-
-      {/* Sub-Navigation Pills & Search Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        
-        {/* Pills */}
-        <div className="inline-flex p-1 rounded-2xl bg-slate-100 border border-slate-200/80 text-xs font-bold self-start">
-          <button
-            onClick={() => { setActiveSubTab('video'); setSearchQuery(''); }}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl transition-all cursor-pointer ${
-              activeSubTab === 'video'
-                ? 'bg-white text-indigo-700 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <Video className="w-3.5 h-3.5" />
-            <span>Video Kegiatan</span>
-            <span className={`text-[10px] px-1.5 py-0.2 rounded-md ${
-              activeSubTab === 'video' ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-200 text-slate-600'
-            }`}>
-              {videos.length}
-            </span>
-          </button>
-
-          <button
-            onClick={() => { setActiveSubTab('arsip'); setSearchQuery(''); }}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl transition-all cursor-pointer ${
-              activeSubTab === 'arsip'
-                ? 'bg-white text-indigo-700 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <FileText className="w-3.5 h-3.5" />
-            <span>Arsip Soal & Kunci</span>
-            <span className={`text-[10px] px-1.5 py-0.2 rounded-md ${
-              activeSubTab === 'arsip' ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-200 text-slate-600'
-            }`}>
-              {arsipSoal.length}
-            </span>
-          </button>
-
-          <button
-            onClick={() => { setActiveSubTab('pengumuman'); setSearchQuery(''); }}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl transition-all cursor-pointer ${
-              activeSubTab === 'pengumuman'
-                ? 'bg-white text-indigo-700 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <Bell className="w-3.5 h-3.5" />
-            <span>Pengumuman Beranda</span>
-            <span className={`text-[10px] px-1.5 py-0.2 rounded-md ${
-              activeSubTab === 'pengumuman' ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-200 text-slate-600'
-            }`}>
-              {pengumuman.length}
-            </span>
-          </button>
-        </div>
-
-        {/* Search Bar */}
-        <div className="relative w-full sm:w-64">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            placeholder={`Cari ${activeSubTab}...`}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors"
-          />
-        </div>
-
       </div>
 
       {/* ============================================================ */}
-      {/* SUBTAB 1: VIDEO KEGIATAN & LIPUTAN */}
+      {/* SUBTAB 1: PENGUMUMAN RESMI BERANDA */}
+      {/* ============================================================ */}
+      {activeSubTab === 'pengumuman' && (
+        <div className="space-y-4">
+          {filteredPengumuman.length === 0 ? (
+            <div className="glass-3d-card text-center py-14 rounded-3xl text-slate-500 text-xs space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-700 flex items-center justify-center mx-auto border border-amber-200">
+                <Bell className="w-6 h-6" />
+              </div>
+              <p className="text-sm font-black text-slate-800 font-['Outfit']">Tidak Ada Pengumuman</p>
+              <p className="text-slate-500 max-w-sm mx-auto">
+                {searchQuery ? `Tidak ada pengumuman yang sesuai dengan "${searchQuery}".` : 'Belum ada pengumuman yang diterbitkan ke halaman utama.'}
+              </p>
+              <button
+                onClick={handleOpenAddPengumuman}
+                className="btn-3d-primary inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Terbitkan Pengumuman Sekarang</span>
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-3.5">
+              {filteredPengumuman.map((ann) => {
+                const categoryBadge = 
+                  ann.kategori === 'Penting' ? 'bg-rose-100/90 text-rose-900 border-rose-300' :
+                  ann.kategori === 'Jadwal' ? 'bg-purple-100/90 text-purple-900 border-purple-300' :
+                  ann.kategori === 'Hasil' ? 'bg-emerald-100/90 text-emerald-900 border-emerald-300' :
+                  'bg-sky-100/90 text-sky-900 border-sky-300';
+
+                return (
+                  <div 
+                    key={ann.id}
+                    className="glass-3d-card p-5 sm:p-6 rounded-3xl flex flex-col sm:flex-row items-start justify-between gap-4 group hover:shadow-xl transition-all"
+                  >
+                    <div className="space-y-2.5 flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className={`px-2.5 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider border shadow-2xs ${categoryBadge}`}>
+                          {ann.kategori}
+                        </span>
+                        {ann.isPenting && (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-amber-100/90 text-amber-950 border border-amber-300 text-[10px] font-black shadow-2xs">
+                            <Sparkles className="w-3 h-3 text-amber-700" />
+                            <span>Tampil di Banner Beranda</span>
+                          </span>
+                        )}
+                        <span className="text-[11px] text-slate-500 font-bold ml-1">
+                          {ann.tanggal}
+                        </span>
+                      </div>
+
+                      <h4 className="font-black text-slate-900 text-base leading-snug font-['Outfit']">
+                        {ann.judul}
+                      </h4>
+
+                      <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                        {ann.ringkasan}
+                      </p>
+
+                      <div className="pt-2 text-[11px] text-slate-700 bg-white/80 p-3.5 rounded-2xl border border-slate-200/80 shadow-2xs leading-relaxed">
+                        <strong className="text-slate-900 font-black">Isi Detail Pengumuman:</strong> {ann.isi}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 shrink-0 self-end sm:self-start pt-1">
+                      <button
+                        onClick={() => handleOpenEditPengumuman(ann)}
+                        className="btn-3d-white inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 cursor-pointer shadow-2xs"
+                      >
+                        <Edit3 className="w-3.5 h-3.5 text-indigo-600" />
+                        <span>Ubah</span>
+                      </button>
+                      <button
+                        onClick={() => setItemToDelete({ type: 'pengumuman', id: ann.id, title: ann.judul })}
+                        className="p-2 rounded-xl bg-white/80 hover:bg-rose-50 text-rose-600 border border-rose-200/80 shadow-2xs hover:shadow-xs transition-all cursor-pointer"
+                        title="Hapus Pengumuman"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ============================================================ */}
+      {/* SUBTAB 2: VIDEO KEGIATAN & LIPUTAN */}
       {/* ============================================================ */}
       {activeSubTab === 'video' && (
         <div className="space-y-4">
           {filteredVideos.length === 0 ? (
-            <div className="text-center py-12 rounded-2xl bg-slate-50 border border-dashed border-slate-200 text-slate-500 text-xs">
-              Tidak ada video yang sesuai dengan pencarian "{searchQuery}".
+            <div className="glass-3d-card text-center py-14 rounded-3xl text-slate-500 text-xs space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-700 flex items-center justify-center mx-auto border border-indigo-200">
+                <Video className="w-6 h-6" />
+              </div>
+              <p className="text-sm font-black text-slate-800 font-['Outfit']">Tidak Ada Video</p>
+              <p className="text-slate-500 max-w-sm mx-auto">
+                {searchQuery ? `Tidak ada video yang cocok dengan "${searchQuery}".` : 'Belum ada video kegiatan yang ditambahkan.'}
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {filteredVideos.map((vid) => (
                 <div 
                   key={vid.id}
-                  className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between"
+                  className="glass-3d-card rounded-3xl overflow-hidden flex flex-col justify-between group hover:shadow-xl transition-all"
                 >
                   <div>
                     {/* Thumbnail Stage */}
-                    <div className="relative aspect-video w-full overflow-hidden bg-slate-900 group">
+                    <div className="relative aspect-video w-full overflow-hidden bg-slate-900">
                       <img 
                         src={vid.thumbnailUrl} 
                         alt={vid.judul} 
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-slate-950/20 group-hover:bg-slate-950/40 transition-colors flex items-center justify-center">
+                      <div className="absolute inset-0 bg-slate-950/25 group-hover:bg-slate-950/45 transition-colors flex items-center justify-center">
                         <button
                           onClick={() => setVideoPreviewUrl(vid.embedUrl)}
-                          className="w-10 h-10 rounded-full bg-white/90 text-indigo-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform cursor-pointer"
+                          className="w-11 h-11 rounded-2xl bg-white/95 text-indigo-700 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform cursor-pointer border border-white"
                           title="Putar Video"
                         >
-                          <Play className="w-5 h-5 ml-0.5 fill-indigo-600" />
+                          <Play className="w-5 h-5 ml-0.5 fill-indigo-700" />
                         </button>
                       </div>
-                      <span className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-xs text-white text-[10px] font-mono font-bold flex items-center gap-1">
+                      <span className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-lg bg-black/80 backdrop-blur-sm text-white text-[10px] font-mono font-bold flex items-center gap-1 border border-white/20">
                         <Clock className="w-3 h-3" />
                         {vid.durasi}
                       </span>
-                      <span className="absolute top-2 left-2 px-2.5 py-0.5 rounded-md bg-indigo-600/90 text-white text-[10px] font-bold">
+                      <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-lg bg-indigo-600/90 backdrop-blur-sm text-white text-[10px] font-black border border-indigo-400/40">
                         Tahun {vid.tahun}
                       </span>
                     </div>
 
                     {/* Content */}
-                    <div className="p-4 space-y-2">
-                      <h4 className="font-bold text-slate-900 text-sm line-clamp-2 leading-snug">
+                    <div className="p-4 sm:p-5 space-y-2">
+                      <h4 className="font-black text-slate-900 text-sm line-clamp-2 leading-snug font-['Outfit']">
                         {vid.judul}
                       </h4>
-                      <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed font-normal">
+                      <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed font-medium">
                         {vid.deskripsi}
                       </p>
                     </div>
                   </div>
 
                   {/* Actions Footer */}
-                  <div className="px-4 py-3 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between">
+                  <div className="px-4 py-3 bg-white/60 border-t border-slate-200/70 flex items-center justify-between">
                     <button
                       onClick={() => setVideoPreviewUrl(vid.embedUrl)}
-                      className="text-xs text-indigo-600 hover:text-indigo-800 font-bold flex items-center gap-1 cursor-pointer"
+                      className="text-xs text-indigo-700 hover:text-indigo-900 font-bold flex items-center gap-1.5 cursor-pointer"
                     >
                       <Eye className="w-3.5 h-3.5" />
                       <span>Preview</span>
@@ -387,14 +493,14 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
                     <div className="flex items-center gap-1.5">
                       <button
                         onClick={() => handleOpenEditVideo(vid)}
-                        className="p-1.5 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-200/70 transition-colors cursor-pointer"
+                        className="p-1.5 rounded-xl bg-white hover:bg-indigo-50 text-indigo-700 border border-slate-200 shadow-2xs transition-colors cursor-pointer"
                         title="Ubah Video"
                       >
                         <Edit3 className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => setItemToDelete({ type: 'video', id: vid.id, title: vid.judul })}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                        className="p-1.5 rounded-xl bg-white hover:bg-rose-50 text-rose-600 border border-rose-200 shadow-2xs transition-colors cursor-pointer"
                         title="Hapus Video"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -410,73 +516,79 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
       )}
 
       {/* ============================================================ */}
-      {/* SUBTAB 2: ARSIP SOAL & PEMBAHASAN PDF */}
+      {/* SUBTAB 3: ARSIP SOAL & PEMBAHASAN PDF */}
       {/* ============================================================ */}
       {activeSubTab === 'arsip' && (
         <div className="space-y-4">
           {filteredArsip.length === 0 ? (
-            <div className="text-center py-12 rounded-2xl bg-slate-50 border border-dashed border-slate-200 text-slate-500 text-xs">
-              Tidak ada paket soal yang sesuai dengan pencarian "{searchQuery}".
+            <div className="glass-3d-card text-center py-14 rounded-3xl text-slate-500 text-xs space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-700 flex items-center justify-center mx-auto border border-emerald-200">
+                <FileText className="w-6 h-6" />
+              </div>
+              <p className="text-sm font-black text-slate-800 font-['Outfit']">Tidak Ada Paket Soal</p>
+              <p className="text-slate-500 max-w-sm mx-auto">
+                {searchQuery ? `Tidak ada paket soal yang cocok dengan "${searchQuery}".` : 'Belum ada arsip naskah soal yang diunggah.'}
+              </p>
             </div>
           ) : (
-            <div className="rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
+            <div className="glass-3d-card rounded-3xl overflow-hidden p-0 shadow-xl shadow-slate-900/5">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-black tracking-wider uppercase text-[10px]">
-                    <th className="py-3 px-4">Tahun</th>
-                    <th className="py-3 px-4">Judul Naskah Soal</th>
-                    <th className="py-3 px-4">Jenjang & Kategori</th>
-                    <th className="py-3 px-4">Ukuran & Halaman</th>
-                    <th className="py-3 px-4 text-right">Aksi</th>
+                  <tr className="bg-slate-100/70 border-b border-slate-200/80 text-slate-600 font-black tracking-wider uppercase text-[10px]">
+                    <th className="py-3.5 px-4 font-['Outfit']">Tahun</th>
+                    <th className="py-3.5 px-4 font-['Outfit']">Judul Naskah Soal</th>
+                    <th className="py-3.5 px-4 font-['Outfit']">Jenjang & Kategori</th>
+                    <th className="py-3.5 px-4 font-['Outfit']">Ukuran & Halaman</th>
+                    <th className="py-3.5 px-4 text-right font-['Outfit']">Aksi</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 bg-white">
+                <tbody className="divide-y divide-slate-100/80 bg-white/60">
                   {filteredArsip.map((soal) => {
                     const badgeColor = 
-                      soal.tingkat.includes('SD') ? 'bg-emerald-50 text-emerald-800 border-emerald-200' :
-                      soal.tingkat.includes('SMP') ? 'bg-sky-50 text-sky-800 border-sky-200' :
-                      soal.tingkat.includes('SMA') ? 'bg-purple-50 text-purple-800 border-purple-200' :
-                      'bg-slate-100 text-slate-800 border-slate-200';
+                      soal.tingkat.includes('SD') ? 'bg-emerald-100/90 text-emerald-900 border-emerald-300' :
+                      soal.tingkat.includes('SMP') ? 'bg-sky-100/90 text-sky-900 border-sky-300' :
+                      soal.tingkat.includes('SMA') ? 'bg-purple-100/90 text-purple-900 border-purple-300' :
+                      'bg-slate-200/80 text-slate-800 border-slate-300';
 
                     return (
-                      <tr key={soal.id} className="hover:bg-slate-50/80 transition-colors">
+                      <tr key={soal.id} className="hover:bg-indigo-50/50 transition-colors">
                         <td className="py-3.5 px-4 font-black font-mono text-slate-900">
                           {soal.tahun}
                         </td>
                         <td className="py-3.5 px-4">
                           <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 border border-rose-200 flex items-center justify-center shrink-0">
+                            <div className="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 border border-rose-200 flex items-center justify-center shrink-0 shadow-2xs">
                               <FileText className="w-4 h-4" />
                             </div>
                             <div>
                               <p className="font-bold text-slate-900 leading-tight">{soal.judul}</p>
-                              <span className="text-[10px] text-slate-400 font-mono">ID: {soal.id}</span>
+                              <span className="text-[10px] text-slate-500 font-mono">ID: {soal.id}</span>
                             </div>
                           </div>
                         </td>
                         <td className="py-3.5 px-4">
-                          <span className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-bold border ${badgeColor}`}>
+                          <span className={`inline-block px-2.5 py-0.5 rounded-md text-[10px] font-black border shadow-2xs ${badgeColor}`}>
                             {soal.tingkat}
                           </span>
-                          <p className="text-[11px] text-slate-500 mt-0.5">{soal.kategoriNama}</p>
+                          <p className="text-[11px] text-slate-600 font-semibold mt-0.5">{soal.kategoriNama}</p>
                         </td>
-                        <td className="py-3.5 px-4 text-slate-600">
-                          <span className="font-semibold">{soal.jumlahHalaman} Halaman</span>
+                        <td className="py-3.5 px-4 text-slate-700">
+                          <span className="font-bold">{soal.jumlahHalaman} Halaman</span>
                           <span className="text-slate-300 mx-1.5">•</span>
-                          <span className="text-slate-500 font-mono">{soal.ukuranFile}</span>
+                          <span className="text-slate-500 font-mono font-bold">{soal.ukuranFile}</span>
                         </td>
                         <td className="py-3.5 px-4 text-right">
                           <div className="flex items-center justify-end gap-1.5">
                             <button
                               onClick={() => handleOpenEditArsip(soal)}
-                              className="p-1.5 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-100 transition-colors cursor-pointer"
+                              className="p-2 rounded-xl bg-white hover:bg-indigo-50 text-indigo-700 border border-slate-200 shadow-2xs transition-colors cursor-pointer"
                               title="Ubah Data Paket Soal"
                             >
                               <Edit3 className="w-4 h-4" />
                             </button>
                             <button
                               onClick={() => setItemToDelete({ type: 'arsip', id: soal.id, title: soal.judul })}
-                              className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                              className="p-2 rounded-xl bg-white hover:bg-rose-50 text-rose-600 border border-rose-200 shadow-2xs transition-colors cursor-pointer"
                               title="Hapus Paket Soal"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -494,89 +606,14 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
       )}
 
       {/* ============================================================ */}
-      {/* SUBTAB 3: PENGUMUMAN RESMI BERANDA */}
-      {/* ============================================================ */}
-      {activeSubTab === 'pengumuman' && (
-        <div className="space-y-4">
-          {filteredPengumuman.length === 0 ? (
-            <div className="text-center py-12 rounded-2xl bg-slate-50 border border-dashed border-slate-200 text-slate-500 text-xs">
-              Tidak ada pengumuman yang sesuai dengan pencarian "{searchQuery}".
-            </div>
-          ) : (
-            <div className="space-y-3.5">
-              {filteredPengumuman.map((ann) => {
-                const categoryStyle = 
-                  ann.kategori === 'Penting' ? 'bg-rose-50 text-rose-700 border-rose-200' :
-                  ann.kategori === 'Jadwal' ? 'bg-purple-50 text-purple-700 border-purple-200' :
-                  ann.kategori === 'Hasil' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
-                  'bg-sky-50 text-sky-700 border-sky-200';
-
-                return (
-                  <div 
-                    key={ann.id}
-                    className="p-5 rounded-2xl border border-slate-200 bg-white hover:border-indigo-200 shadow-xs transition-all flex flex-col sm:flex-row items-start justify-between gap-4"
-                  >
-                    <div className="space-y-2 flex-1">
-                      <div className="flex items-center gap-2.5 flex-wrap">
-                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider border ${categoryStyle}`}>
-                          {ann.kategori}
-                        </span>
-                        {ann.isPenting && (
-                          <span className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-bold">
-                            Tampil di Banner Beranda
-                          </span>
-                        )}
-                        <span className="text-[11px] text-slate-400 font-medium">
-                          {ann.tanggal}
-                        </span>
-                      </div>
-
-                      <h4 className="font-bold text-slate-900 text-sm leading-snug">
-                        {ann.judul}
-                      </h4>
-
-                      <p className="text-xs text-slate-600 font-normal leading-relaxed">
-                        {ann.ringkasan}
-                      </p>
-
-                      <div className="pt-2 text-[11px] text-slate-500 bg-slate-50 p-3 rounded-xl border border-slate-100 line-clamp-2">
-                        <strong>Isi Lengkap:</strong> {ann.isi}
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-1.5 shrink-0 self-end sm:self-start">
-                      <button
-                        onClick={() => handleOpenEditPengumuman(ann)}
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
-                      >
-                        <Edit3 className="w-3.5 h-3.5" />
-                        <span>Ubah</span>
-                      </button>
-                      <button
-                        onClick={() => setItemToDelete({ type: 'pengumuman', id: ann.id, title: ann.judul })}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
-                        title="Hapus Pengumuman"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* ============================================================ */}
       {/* MODAL 1: FORM TAMBAH / UBAH VIDEO */}
       {/* ============================================================ */}
       {isVideoModalOpen && editingVideo && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-sm animate-fade-in">
-          <div className="relative w-full max-w-lg rounded-3xl bg-white p-6 sm:p-7 shadow-2xl border border-slate-200 space-y-5 text-slate-800">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-md animate-fade-in">
+          <div className="relative w-full max-w-lg rounded-3xl glass-3d-elevated p-6 sm:p-7 shadow-2xl border border-white/90 space-y-5 text-slate-800">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200/60">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-indigo-500/20 text-indigo-900 flex items-center justify-center border border-indigo-300 shadow-2xs">
                   <Film className="w-4 h-4" />
                 </div>
                 <h4 className="text-base font-black text-slate-900 font-['Outfit']">
@@ -585,7 +622,7 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
               </div>
               <button 
                 onClick={() => { setIsVideoModalOpen(false); setEditingVideo(null); }}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 cursor-pointer"
+                className="p-1.5 rounded-xl bg-white/80 hover:bg-white text-slate-600 border border-slate-200 shadow-2xs cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -593,87 +630,87 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
 
             <form onSubmit={handleSaveVideo} className="space-y-4 text-xs">
               <div className="space-y-1">
-                <label className="font-bold text-slate-700">Judul Video *</label>
+                <label className="font-black text-slate-800 font-['Outfit']">Judul Video *</label>
                 <input
                   type="text"
                   required
                   value={editingVideo.judul}
                   onChange={(e) => setEditingVideo({ ...editingVideo, judul: e.target.value })}
                   placeholder="Contoh: Aftermovie Gebyar Matematika 2024"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-indigo-500 focus:bg-white"
+                  className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-medium"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Tahun Kegiatan *</label>
+                  <label className="font-black text-slate-800 font-['Outfit']">Tahun Kegiatan *</label>
                   <input
                     type="number"
                     required
                     value={editingVideo.tahun}
                     onChange={(e) => setEditingVideo({ ...editingVideo, tahun: Number(e.target.value) })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 font-mono focus:outline-none focus:border-indigo-500 focus:bg-white"
+                    className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-mono font-bold"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Durasi (MM:SS) *</label>
+                  <label className="font-black text-slate-800 font-['Outfit']">Durasi (MM:SS) *</label>
                   <input
                     type="text"
                     required
                     value={editingVideo.durasi}
                     onChange={(e) => setEditingVideo({ ...editingVideo, durasi: e.target.value })}
                     placeholder="04:18"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 font-mono focus:outline-none focus:border-indigo-500 focus:bg-white"
+                    className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-mono font-bold"
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="font-bold text-slate-700">URL Embed YouTube / Video Player *</label>
+                <label className="font-black text-slate-800 font-['Outfit']">URL Embed YouTube / Video Player *</label>
                 <input
                   type="url"
                   required
                   value={editingVideo.embedUrl}
                   onChange={(e) => setEditingVideo({ ...editingVideo, embedUrl: e.target.value })}
-                  placeholder="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 font-mono text-[11px] focus:outline-none focus:border-indigo-500 focus:bg-white"
+                  placeholder="https://www.youtube-nocookie.com/embed/..."
+                  className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-mono text-[11px]"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="font-bold text-slate-700">URL Gambar Thumbnail Cover *</label>
+                <label className="font-black text-slate-800 font-['Outfit']">URL Gambar Thumbnail Cover *</label>
                 <input
                   type="url"
                   required
                   value={editingVideo.thumbnailUrl}
                   onChange={(e) => setEditingVideo({ ...editingVideo, thumbnailUrl: e.target.value })}
                   placeholder="https://images.unsplash.com/..."
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 font-mono text-[11px] focus:outline-none focus:border-indigo-500 focus:bg-white"
+                  className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-mono text-[11px]"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="font-bold text-slate-700">Deskripsi Ringkas Video</label>
+                <label className="font-black text-slate-800 font-['Outfit']">Deskripsi Ringkas Video</label>
                 <textarea
                   rows={3}
                   value={editingVideo.deskripsi}
                   onChange={(e) => setEditingVideo({ ...editingVideo, deskripsi: e.target.value })}
                   placeholder="Ceritakan kilasan cuplikan video dokumentasi ini..."
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-indigo-500 focus:bg-white"
+                  className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-medium"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-200/60">
                 <button
                   type="button"
                   onClick={() => { setIsVideoModalOpen(false); setEditingVideo(null); }}
-                  className="px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 font-bold cursor-pointer"
+                  className="btn-3d-white px-4 py-2.5 rounded-xl font-bold text-slate-700 cursor-pointer"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-xs cursor-pointer"
+                  className="btn-3d-primary px-5 py-2.5 rounded-xl font-bold cursor-pointer"
                 >
                   Simpan Video
                 </button>
@@ -687,11 +724,11 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
       {/* MODAL 2: FORM TAMBAH / UBAH ARSIP SOAL */}
       {/* ============================================================ */}
       {isArsipModalOpen && editingArsip && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-sm animate-fade-in">
-          <div className="relative w-full max-w-lg rounded-3xl bg-white p-6 sm:p-7 shadow-2xl border border-slate-200 space-y-5 text-slate-800">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-md animate-fade-in">
+          <div className="relative w-full max-w-lg rounded-3xl glass-3d-elevated p-6 sm:p-7 shadow-2xl border border-white/90 space-y-5 text-slate-800">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200/60">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-900 flex items-center justify-center border border-emerald-300 shadow-2xs">
                   <FileText className="w-4 h-4" />
                 </div>
                 <h4 className="text-base font-black text-slate-900 font-['Outfit']">
@@ -700,7 +737,7 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
               </div>
               <button 
                 onClick={() => { setIsArsipModalOpen(false); setEditingArsip(null); }}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 cursor-pointer"
+                className="p-1.5 rounded-xl bg-white/80 hover:bg-white text-slate-600 border border-slate-200 shadow-2xs cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -708,20 +745,20 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
 
             <form onSubmit={handleSaveArsip} className="space-y-4 text-xs">
               <div className="space-y-1">
-                <label className="font-bold text-slate-700">Judul Paket Naskah Soal & Kunci *</label>
+                <label className="font-black text-slate-800 font-['Outfit']">Judul Paket Naskah Soal & Kunci *</label>
                 <input
                   type="text"
                   required
                   value={editingArsip.judul}
                   onChange={(e) => setEditingArsip({ ...editingArsip, judul: e.target.value })}
                   placeholder="Contoh: Naskah Soal & Pembahasan Babak Penyisihan GM 2025"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-indigo-500 focus:bg-white"
+                  className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-medium"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Jenjang Tingkat *</label>
+                  <label className="font-black text-slate-800 font-['Outfit']">Jenjang Tingkat *</label>
                   <select
                     value={editingArsip.tingkat}
                     onChange={(e) => {
@@ -732,7 +769,7 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
                         tingkat === 'SMA' ? 'Olimpiade SMA/MA/SMK' : 'Kompilasi Lengkap Semua Jenjang';
                       setEditingArsip({ ...editingArsip, tingkat, kategoriNama });
                     }}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-indigo-500 focus:bg-white font-semibold"
+                    className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-bold"
                   >
                     <option value="SD">SD / MI</option>
                     <option value="SMP">SMP / MTs</option>
@@ -742,62 +779,62 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Tahun Soal *</label>
+                  <label className="font-black text-slate-800 font-['Outfit']">Tahun Soal *</label>
                   <input
                     type="number"
                     required
                     value={editingArsip.tahun}
                     onChange={(e) => setEditingArsip({ ...editingArsip, tahun: Number(e.target.value) })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 font-mono focus:outline-none focus:border-indigo-500 focus:bg-white"
+                    className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-mono font-bold"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Jumlah Halaman PDF *</label>
+                  <label className="font-black text-slate-800 font-['Outfit']">Jumlah Halaman PDF *</label>
                   <input
                     type="number"
                     required
                     value={editingArsip.jumlahHalaman}
                     onChange={(e) => setEditingArsip({ ...editingArsip, jumlahHalaman: Number(e.target.value) })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 font-mono focus:outline-none focus:border-indigo-500 focus:bg-white"
+                    className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-mono font-bold"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Estimasi Ukuran File *</label>
+                  <label className="font-black text-slate-800 font-['Outfit']">Estimasi Ukuran File *</label>
                   <input
                     type="text"
                     required
                     value={editingArsip.ukuranFile}
                     onChange={(e) => setEditingArsip({ ...editingArsip, ukuranFile: e.target.value })}
                     placeholder="2.4 MB"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 font-mono focus:outline-none focus:border-indigo-500 focus:bg-white"
+                    className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-mono font-bold"
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="font-bold text-slate-700">Nama Kategori Resmi</label>
+                <label className="font-black text-slate-800 font-['Outfit']">Nama Kategori Resmi</label>
                 <input
                   type="text"
                   value={editingArsip.kategoriNama}
                   onChange={(e) => setEditingArsip({ ...editingArsip, kategoriNama: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-indigo-500 focus:bg-white"
+                  className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-medium"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-200/60">
                 <button
                   type="button"
                   onClick={() => { setIsArsipModalOpen(false); setEditingArsip(null); }}
-                  className="px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 font-bold cursor-pointer"
+                  className="btn-3d-white px-4 py-2.5 rounded-xl font-bold text-slate-700 cursor-pointer"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-xs cursor-pointer"
+                  className="btn-3d-primary px-5 py-2.5 rounded-xl font-bold cursor-pointer"
                 >
                   Simpan Paket Soal
                 </button>
@@ -811,11 +848,11 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
       {/* MODAL 3: FORM TAMBAH / UBAH PENGUMUMAN */}
       {/* ============================================================ */}
       {isPengumumanModalOpen && editingPengumuman && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-sm animate-fade-in">
-          <div className="relative w-full max-w-lg rounded-3xl bg-white p-6 sm:p-7 shadow-2xl border border-slate-200 space-y-5 text-slate-800">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-md animate-fade-in">
+          <div className="relative w-full max-w-lg rounded-3xl glass-3d-elevated p-6 sm:p-7 shadow-2xl border border-white/90 space-y-5 text-slate-800">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200/60">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-900 flex items-center justify-center border border-amber-300 shadow-2xs">
                   <Bell className="w-4 h-4" />
                 </div>
                 <h4 className="text-base font-black text-slate-900 font-['Outfit']">
@@ -824,7 +861,7 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
               </div>
               <button 
                 onClick={() => { setIsPengumumanModalOpen(false); setEditingPengumuman(null); }}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 cursor-pointer"
+                className="p-1.5 rounded-xl bg-white/80 hover:bg-white text-slate-600 border border-slate-200 shadow-2xs cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -832,26 +869,26 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
 
             <form onSubmit={handleSavePengumuman} className="space-y-4 text-xs">
               <div className="space-y-1">
-                <label className="font-bold text-slate-700">Judul Pengumuman *</label>
+                <label className="font-black text-slate-800 font-['Outfit']">Judul Pengumuman *</label>
                 <input
                   type="text"
                   required
                   value={editingPengumuman.judul}
                   onChange={(e) => setEditingPengumuman({ ...editingPengumuman, judul: e.target.value })}
                   placeholder="Contoh: Jadwal Sesi Tryout CBT Telah Dibuka"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-indigo-500 focus:bg-white font-semibold"
+                  className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-bold"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Kategori *</label>
+                  <label className="font-black text-slate-800 font-['Outfit']">Kategori *</label>
                   <select
                     value={editingPengumuman.kategori}
                     onChange={(e) => setEditingPengumuman({ ...editingPengumuman, kategori: e.target.value as any })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-indigo-500 focus:bg-white font-semibold"
+                    className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-bold"
                   >
-                    <option value="Penting">Penting (Highlight Merah)</option>
+                    <option value="Penting">Penting (Badge Merah)</option>
                     <option value="Jadwal">Jadwal & Agenda</option>
                     <option value="Hasil">Hasil & Juara</option>
                     <option value="Informasi">Informasi Umum</option>
@@ -859,66 +896,66 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">Tanggal Rilis *</label>
+                  <label className="font-black text-slate-800 font-['Outfit']">Tanggal Rilis *</label>
                   <input
                     type="text"
                     required
                     value={editingPengumuman.tanggal}
                     onChange={(e) => setEditingPengumuman({ ...editingPengumuman, tanggal: e.target.value })}
-                    placeholder="15 September 2027"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-indigo-500 focus:bg-white"
+                    placeholder="18 September 2026"
+                    className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-medium"
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="font-bold text-slate-700">Ringkasan Banner (1-2 Kalimat) *</label>
+                <label className="font-black text-slate-800 font-['Outfit']">Ringkasan Singkat (Muncul di Banner Beranda) *</label>
                 <input
                   type="text"
                   required
                   value={editingPengumuman.ringkasan}
                   onChange={(e) => setEditingPengumuman({ ...editingPengumuman, ringkasan: e.target.value })}
                   placeholder="Teks ringkas yang muncul pada pita banner atas Beranda..."
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-indigo-500 focus:bg-white"
+                  className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-medium"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="font-bold text-slate-700">Isi Lengkap Pengumuman *</label>
+                <label className="font-black text-slate-800 font-['Outfit']">Isi Lengkap Pengumuman *</label>
                 <textarea
                   rows={4}
                   required
                   value={editingPengumuman.isi}
                   onChange={(e) => setEditingPengumuman({ ...editingPengumuman, isi: e.target.value })}
                   placeholder="Tuliskan isi detail pengumuman yang akan dibaca oleh pengunjung..."
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-indigo-500 focus:bg-white"
+                  className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-medium"
                 />
               </div>
 
-              <div className="flex items-center gap-2 p-3 rounded-xl bg-slate-50 border border-slate-200">
+              <div className="flex items-center gap-2.5 p-3 rounded-2xl bg-amber-50/80 border border-amber-200">
                 <input
                   type="checkbox"
                   id="isPenting"
                   checked={editingPengumuman.isPenting}
                   onChange={(e) => setEditingPengumuman({ ...editingPengumuman, isPenting: e.target.checked })}
-                  className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300"
+                  className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-amber-300 cursor-pointer"
                 />
-                <label htmlFor="isPenting" className="text-xs text-slate-700 font-semibold cursor-pointer select-none">
-                  Tampilkan sebagai pengumuman utama di banner Beranda (*Breaking Banner*)
+                <label htmlFor="isPenting" className="text-xs text-amber-950 font-bold cursor-pointer select-none">
+                  Tampilkan sebagai pengumuman utama di banner Beranda (*Breaking Announcement*)
                 </label>
               </div>
 
-              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-200/60">
                 <button
                   type="button"
                   onClick={() => { setIsPengumumanModalOpen(false); setEditingPengumuman(null); }}
-                  className="px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 font-bold cursor-pointer"
+                  className="btn-3d-white px-4 py-2.5 rounded-xl font-bold text-slate-700 cursor-pointer"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-xs cursor-pointer"
+                  className="btn-3d-primary px-5 py-2.5 rounded-xl font-bold cursor-pointer"
                 >
                   Terbitkan Pengumuman
                 </button>
@@ -963,32 +1000,32 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
       {/* MODAL 5: KONFIRMASI HAPUS */}
       {/* ============================================================ */}
       {itemToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-sm animate-fade-in">
-          <div className="relative w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl border border-slate-200 space-y-4 text-slate-800">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-md animate-fade-in">
+          <div className="relative w-full max-w-md rounded-3xl glass-3d-elevated p-6 shadow-2xl border border-white/90 space-y-4 text-slate-800">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-rose-50 text-rose-600 border border-rose-200 flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-2xl bg-rose-500/20 text-rose-800 border border-rose-300 flex items-center justify-center shrink-0 shadow-2xs">
                 <Trash2 className="w-5 h-5" />
               </div>
               <div>
-                <h4 className="font-bold text-slate-900 text-sm">Konfirmasi Hapus Konten</h4>
-                <p className="text-xs text-slate-500">Tindakan ini tidak dapat dibatalkan.</p>
+                <h4 className="font-black text-slate-900 text-sm font-['Outfit']">Konfirmasi Hapus Konten</h4>
+                <p className="text-xs text-slate-600 font-medium">Tindakan ini tidak dapat dibatalkan.</p>
               </div>
             </div>
 
-            <p className="text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100">
+            <p className="text-xs text-slate-700 bg-white/70 p-3.5 rounded-2xl border border-slate-200 shadow-inner leading-relaxed font-medium">
               Apakah Anda yakin ingin menghapus <strong>"{itemToDelete.title}"</strong> dari daftar {itemToDelete.type}?
             </p>
 
-            <div className="flex items-center justify-end gap-2 pt-2">
+            <div className="flex items-center justify-end gap-2.5 pt-2">
               <button
                 onClick={() => setItemToDelete(null)}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 cursor-pointer"
+                className="btn-3d-white px-4 py-2 rounded-xl text-xs font-bold text-slate-700 cursor-pointer"
               >
                 Batal
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 shadow-xs cursor-pointer"
+                className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 shadow-md cursor-pointer transition-all active:translate-y-0.5"
               >
                 Ya, Hapus Sekarang
               </button>

@@ -235,33 +235,33 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
     <div className="space-y-6 animate-fade-in text-slate-800">
       
       {/* Top Banner & Explanation */}
-      <div className="rounded-3xl glass-panel border border-slate-200/90 bg-white/90 shadow-sm p-6 sm:p-7 space-y-4">
+      <div className="rounded-3xl glass-3d-dashboard-shell p-6 sm:p-7 space-y-4 shadow-xl shadow-indigo-950/5">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-extrabold border border-indigo-200">
-              <FileCheck className="w-3.5 h-3.5 text-indigo-600" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100/90 text-indigo-950 text-xs font-black border border-indigo-300 shadow-2xs">
+              <FileCheck className="w-3.5 h-3.5 text-indigo-700" />
               <span>Otomatisasi Cetak Sertifikat & Kartu Ujian</span>
             </div>
-            <h3 className="text-xl sm:text-2xl font-black text-slate-900 font-['Outfit'] mt-1.5">
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 font-['Outfit'] mt-2 tracking-tight">
               Upload Desain Template Foto Panitia & Atur Koordinat Cetak
             </h3>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-3xl leading-relaxed mt-1">
+            <p className="text-xs sm:text-sm text-slate-600 max-w-3xl leading-relaxed mt-1 font-medium">
               Panitia cukup <strong>mendesain foto template kosongan (tanpa nama)</strong> di Canva, Photoshop, atau Figma, lalu <strong>unggah gambarnya di sini</strong>. Sistem Gebyar Matematika akan <strong>otomatis mencetak identitas peserta dan QR code</strong> tepat pada letak yang ditentukan.
             </p>
           </div>
 
           {/* Template Document Type Switcher */}
-          <div className="flex items-center gap-2 shrink-0 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
+          <div className="flex items-center gap-2 shrink-0 bg-slate-200/60 p-1.5 rounded-2xl border border-white/80 backdrop-blur-md shadow-inner">
             {templates.map((tpl) => {
               const isSelected = selectedTemplateId === tpl.id;
               return (
                 <button
                   key={tpl.id}
                   onClick={() => setSelectedTemplateId(tpl.id)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                  className={`px-4 py-2 rounded-xl text-xs font-['Outfit'] transition-all cursor-pointer ${
                     isSelected
-                      ? 'bg-white text-indigo-700 shadow-sm'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-white text-indigo-900 font-black shadow-md shadow-slate-900/10'
+                      : 'text-slate-600 hover:text-slate-900 font-bold'
                   }`}
                 >
                   {tpl.jenis === 'sertifikat' ? '🏆 E-Sertifikat Juara' : '🪪 Kartu Tanda Peserta'}
@@ -272,16 +272,16 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
         </div>
 
         {/* Upload Action Box */}
-        <div className="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="p-4 rounded-2xl glass-3d-card glass-3d-card-indigo flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+            <div className="w-11 h-11 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-sm shadow-indigo-600/30">
               <ImageIcon className="w-5 h-5" />
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-bold text-slate-900 truncate">
-                Foto Template Aktif: <span className="font-mono text-indigo-700 font-semibold">{uploadedFileName[selectedTemplateId]}</span>
+              <p className="text-xs font-black text-slate-900 truncate font-['Outfit']">
+                Foto Template Aktif: <span className="font-mono text-indigo-800 font-bold">{uploadedFileName[selectedTemplateId]}</span>
               </p>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[11px] text-slate-600 font-medium">
                 Mendukung PNG / JPG / WebP resolusi tinggi (Rekomendasi rasio A4: 3508 × 2480 px)
               </p>
             </div>
@@ -297,7 +297,7 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
             />
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-2"
+              className="btn-3d-primary px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 cursor-pointer"
             >
               <Upload className="w-3.5 h-3.5" />
               <span>Upload Desain Foto Baru</span>
@@ -305,7 +305,7 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
 
             <button
               onClick={handleResetToDefault}
-              className="p-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 border border-slate-200 transition-colors"
+              className="p-2.5 rounded-xl btn-3d-white text-slate-700 hover:text-slate-900 cursor-pointer"
               title="Kembalikan ke Template Default"
             >
               <RefreshCw className="w-3.5 h-3.5" />
@@ -315,17 +315,17 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
 
         {/* 3 Step Guide Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
-          <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs space-y-1">
-            <span className="font-bold text-indigo-700 block">1. Desain Bebas di Canva/Photoshop</span>
-            <p className="text-slate-500 text-[11px]">Buat background sertifikat/kartu dengan logo & tanda tangan, kosongkan area nama siswa.</p>
+          <div className="p-3.5 rounded-2xl bg-white/70 border border-slate-200/80 text-xs space-y-1 shadow-2xs">
+            <span className="font-black text-indigo-900 block font-['Outfit']">1. Desain Bebas di Canva/Photoshop</span>
+            <p className="text-slate-600 text-[11px] font-medium">Buat background sertifikat/kartu dengan logo & tanda tangan, kosongkan area nama siswa.</p>
           </div>
-          <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs space-y-1">
-            <span className="font-bold text-indigo-700 block">2. Upload Template Fotonya</span>
-            <p className="text-slate-500 text-[11px]">Unggah gambar template di atas. Gambar tersebut langsung dijadikan latar cetak dokumen.</p>
+          <div className="p-3.5 rounded-2xl bg-white/70 border border-slate-200/80 text-xs space-y-1 shadow-2xs">
+            <span className="font-black text-indigo-900 block font-['Outfit']">2. Upload Template Fotonya</span>
+            <p className="text-slate-600 text-[11px] font-medium">Unggah gambar template di atas. Gambar tersebut langsung dijadikan latar cetak dokumen.</p>
           </div>
-          <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs space-y-1">
-            <span className="font-bold text-indigo-700 block">3. Sistem Otomatis Cetak Identitas</span>
-            <p className="text-slate-500 text-[11px]">Sistem langsung menempatkan Nama Siswa, Sekolah, Nomor & QR Code secara otomatis.</p>
+          <div className="p-3.5 rounded-2xl bg-white/70 border border-slate-200/80 text-xs space-y-1 shadow-2xs">
+            <span className="font-black text-indigo-900 block font-['Outfit']">3. Sistem Otomatis Cetak Identitas</span>
+            <p className="text-slate-600 text-[11px] font-medium">Sistem langsung menempatkan Nama Siswa, Sekolah, Nomor & QR Code secara otomatis.</p>
           </div>
         </div>
       </div>
@@ -334,11 +334,11 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
         {/* Left Column: Interactive Canvas Simulator (8 Cols) */}
-        <div className="lg:col-span-8 rounded-3xl glass-panel border border-slate-200/90 bg-white/90 shadow-sm p-6 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+        <div className="lg:col-span-8 rounded-3xl glass-3d-card p-6 sm:p-7 space-y-4 shadow-xl shadow-slate-900/5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200/60">
             <div className="flex items-center gap-2">
               <Eye className="w-4 h-4 text-indigo-600" />
-              <h4 className="text-xs font-extrabold text-slate-900 uppercase tracking-wider">
+              <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider font-['Outfit']">
                 Pratinjau Otomatisasi Cetak di Atas Template Foto
               </h4>
             </div>
@@ -349,7 +349,7 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
                 <select
                   value={selectedStudentIndex}
                   onChange={(e) => setSelectedStudentIndex(Number(e.target.value))}
-                  className="px-2.5 py-1 rounded-xl text-xs font-bold bg-white border border-slate-200 text-slate-700 shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="glass-3d-input px-2.5 py-1.5 rounded-xl text-xs font-bold text-slate-800"
                 >
                   {SAMPLE_STUDENTS.map((st, idx) => (
                     <option key={st.id} value={idx}>
@@ -359,23 +359,23 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
                 </select>
               )}
 
-              <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-[11px] font-bold">
+              <div className="flex items-center gap-1 bg-slate-200/70 p-1 rounded-xl text-[11px] font-bold border border-white/80 shadow-inner">
                 <button
                   onClick={() => setPreviewMode('real_data')}
-                  className={`px-2.5 py-1 rounded-lg transition-all ${
+                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                     previewMode === 'real_data' 
-                      ? 'bg-white text-indigo-700 shadow-sm' 
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-white text-indigo-900 font-black shadow-sm' 
+                      : 'text-slate-600 hover:text-slate-900 font-bold'
                   }`}
                 >
                   Data Siswa
                 </button>
                 <button
                   onClick={() => setPreviewMode('placeholder')}
-                  className={`px-2.5 py-1 rounded-lg transition-all ${
+                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                     previewMode === 'placeholder' 
-                      ? 'bg-white text-indigo-700 shadow-sm' 
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-white text-indigo-900 font-black shadow-sm' 
+                      : 'text-slate-600 hover:text-slate-900 font-bold'
                   }`}
                 >
                   Tag Variabel
@@ -385,7 +385,7 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
           </div>
 
           {/* Canvas Viewport (A4 Ratio) */}
-          <div className="relative aspect-[16/11] w-full rounded-2xl overflow-hidden border border-slate-300 bg-slate-100 shadow-md flex items-center justify-center select-none">
+          <div className="relative aspect-[16/11] w-full rounded-2xl overflow-hidden border-2 border-white/90 bg-slate-900/10 shadow-2xl flex items-center justify-center select-none">
             
             {/* The Panitia's Uploaded Background Design Photo */}
             <img
@@ -395,7 +395,7 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
             />
 
             {/* Simulated Watermark frame hairline */}
-            <div className="absolute inset-3 rounded-xl border border-black/10 pointer-events-none" />
+            <div className="absolute inset-3 rounded-xl border border-black/15 pointer-events-none" />
 
             {/* System Overlay: Dynamic Student Identifiers Printed Automatically */}
             <div className="relative w-full h-full select-none pointer-events-none">
@@ -406,12 +406,12 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
                 style={{ top: `${coords.namaY}%`, transform: 'translate(-50%, -50%)' }}
               >
                 <p className={`font-black tracking-tight font-['Outfit'] ${textColorClasses[textColor]} ${
-                  nameFontSize === 'xlarge' ? 'text-xl sm:text-3xl' : nameFontSize === 'large' ? 'text-lg sm:text-2xl' : 'text-base sm:text-xl'
+                  nameFontSize === 'xlarge' ? 'text-xl sm:text-3xl drop-shadow-sm' : nameFontSize === 'large' ? 'text-lg sm:text-2xl drop-shadow-sm' : 'text-base sm:text-xl drop-shadow-sm'
                 }`}>
                   {previewMode === 'real_data' ? currentStudent.nama : '[ NAMA LENGKAP SISWA PESERTA ]'}
                 </p>
                 {previewMode === 'placeholder' && (
-                  <span className="text-[9px] font-mono text-indigo-600 bg-indigo-50/90 px-1.5 py-0.5 rounded border border-indigo-200">
+                  <span className="text-[9px] font-mono text-indigo-900 bg-indigo-100/90 px-2 py-0.5 rounded border border-indigo-300 font-bold shadow-2xs">
                     variable: peserta.nama_lengkap
                   </span>
                 )}
@@ -422,11 +422,11 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
                 className="absolute left-1/2 -translate-x-1/2 text-center transition-all px-3 py-0.5"
                 style={{ top: `${coords.sekolahY}%`, transform: 'translate(-50%, -50%)' }}
               >
-                <p className={`text-xs sm:text-base font-bold ${textColorClasses[textColor]} opacity-90`}>
+                <p className={`text-xs sm:text-base font-black ${textColorClasses[textColor]} opacity-95`}>
                   {previewMode === 'real_data' ? currentStudent.sekolah : '[ ASAL SATUAN PENDIDIKAN / SEKOLAH ]'}
                 </p>
                 {previewMode === 'placeholder' && (
-                  <span className="text-[9px] font-mono text-purple-600 bg-purple-50/90 px-1.5 py-0.5 rounded border border-purple-200">
+                  <span className="text-[9px] font-mono text-purple-900 bg-purple-100/90 px-2 py-0.5 rounded border border-purple-300 font-bold shadow-2xs">
                     variable: peserta.asal_sekolah
                   </span>
                 )}
@@ -437,7 +437,7 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
                 className="absolute left-1/2 -translate-x-1/2 text-center transition-all px-3 py-0.5"
                 style={{ top: `${coords.nomorY}%`, transform: 'translate(-50%, -50%)' }}
               >
-                <p className={`text-[11px] sm:text-xs font-mono font-bold ${textColorClasses[textColor]} opacity-85`}>
+                <p className={`text-[11px] sm:text-xs font-mono font-bold ${textColorClasses[textColor]} opacity-90`}>
                   {previewMode === 'real_data' 
                     ? (isSertifikat ? `${currentStudent.predikat} • ${currentStudent.kategori}` : `NO. PESERTA: ${currentStudent.nomor} • RUANG CBT 01`) 
                     : '[ NOMOR REGISTRASI / PREDIKAT JUARA ]'}
@@ -446,7 +446,7 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
 
               {/* Field 4: Official QR Code Verification */}
               <div 
-                className="absolute p-2 rounded-xl bg-white shadow-md border border-slate-200 transition-all flex flex-col items-center justify-center pointer-events-none"
+                className="absolute p-2 rounded-2xl bg-white/95 shadow-xl border border-white/90 backdrop-blur-sm transition-all flex flex-col items-center justify-center pointer-events-none"
                 style={{ 
                   right: `${100 - coords.qrX}%`, 
                   bottom: `${100 - coords.qrY}%`, 
@@ -454,7 +454,7 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
                 }}
               >
                 <QrCode className="w-8 h-8 sm:w-10 sm:h-10 text-slate-900" />
-                <span className="text-[8px] font-mono font-bold text-slate-500 mt-0.5">VERIFIKASI RESMI</span>
+                <span className="text-[8px] font-mono font-black text-slate-600 mt-0.5 tracking-wider">VERIFIKASI RESMI</span>
               </div>
 
             </div>
@@ -462,13 +462,13 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
           </div>
 
           {/* Canvas Footer Controls & Simulation Download */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-500 pt-1">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-600 pt-1 font-medium">
             <span>Standar Lembar: A4 Landscape (High-DPI PDF Generator)</span>
             
             <button
               onClick={handleDownloadSimulation}
               disabled={isDownloading}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-colors"
+              className="btn-3d-white inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-bold text-slate-800 cursor-pointer shadow-2xs"
             >
               <Download className="w-3.5 h-3.5 text-indigo-600" />
               <span>{isDownloading ? 'Memproses...' : 'Unduh Contoh Cetak Hasil (PNG)'}</span>
@@ -477,36 +477,36 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
         </div>
 
         {/* Right Column: Coordinate & Styling Adjustment Controls (4 Cols) */}
-        <div className="lg:col-span-4 rounded-3xl glass-panel border border-slate-200/90 bg-white/90 shadow-sm p-6 space-y-6">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="lg:col-span-4 rounded-3xl glass-3d-card p-6 sm:p-7 space-y-6 shadow-xl shadow-slate-900/5">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-200/60">
             <div className="flex items-center gap-2">
               <Sliders className="w-4 h-4 text-indigo-600" />
-              <h4 className="text-sm font-extrabold text-slate-900 font-['Outfit']">
+              <h4 className="text-sm font-black text-slate-900 font-['Outfit']">
                 Kalibrasi Posisi Cetak
               </h4>
             </div>
-            <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">
+            <span className="text-[10px] font-black text-indigo-900 bg-indigo-100/90 px-2 py-0.5 rounded-md border border-indigo-200">
               Koordinat %
             </span>
           </div>
 
           {/* Color & Style Settings for the Text */}
-          <div className="space-y-3 p-4 rounded-2xl bg-slate-50 border border-slate-200">
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-800">
+          <div className="space-y-3 p-4 rounded-2xl bg-white/70 border border-slate-200/80 shadow-2xs">
+            <div className="flex items-center gap-2 text-xs font-black text-slate-900 font-['Outfit']">
               <Type className="w-3.5 h-3.5 text-indigo-600" />
               <span>Gaya & Warna Teks Cetak:</span>
             </div>
 
             {/* Text Color Selector */}
             <div className="space-y-1.5">
-              <span className="text-[11px] text-slate-500 font-medium">Warna Teks Identitas:</span>
+              <span className="text-[11px] text-slate-600 font-bold">Warna Teks Identitas:</span>
               <div className="grid grid-cols-4 gap-1.5">
                 <button
                   type="button"
                   onClick={() => setTextColor('navy')}
-                  className={`py-1.5 text-[10px] font-bold rounded-lg border transition-all flex items-center justify-center gap-1 ${
+                  className={`py-1.5 text-[10px] font-black rounded-xl border transition-all flex items-center justify-center gap-1 cursor-pointer ${
                     textColor === 'navy' 
-                      ? 'bg-indigo-900 text-white border-indigo-900 shadow-sm' 
+                      ? 'bg-indigo-950 text-white border-indigo-950 shadow-sm' 
                       : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
                   }`}
                 >
@@ -517,7 +517,7 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setTextColor('dark')}
-                  className={`py-1.5 text-[10px] font-bold rounded-lg border transition-all flex items-center justify-center gap-1 ${
+                  className={`py-1.5 text-[10px] font-black rounded-xl border transition-all flex items-center justify-center gap-1 cursor-pointer ${
                     textColor === 'dark' 
                       ? 'bg-slate-900 text-white border-slate-900 shadow-sm' 
                       : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
@@ -530,7 +530,7 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setTextColor('gold')}
-                  className={`py-1.5 text-[10px] font-bold rounded-lg border transition-all flex items-center justify-center gap-1 ${
+                  className={`py-1.5 text-[10px] font-black rounded-xl border transition-all flex items-center justify-center gap-1 cursor-pointer ${
                     textColor === 'gold' 
                       ? 'bg-amber-800 text-white border-amber-800 shadow-sm' 
                       : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
@@ -543,7 +543,7 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setTextColor('white')}
-                  className={`py-1.5 text-[10px] font-bold rounded-lg border transition-all flex items-center justify-center gap-1 ${
+                  className={`py-1.5 text-[10px] font-black rounded-xl border transition-all flex items-center justify-center gap-1 cursor-pointer ${
                     textColor === 'white' 
                       ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm' 
                       : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
@@ -557,14 +557,14 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
 
             {/* Font Size Selector */}
             <div className="space-y-1.5 pt-1">
-              <span className="text-[11px] text-slate-500 font-medium">Ukuran Font Nama Siswa:</span>
+              <span className="text-[11px] text-slate-600 font-bold">Ukuran Font Nama Siswa:</span>
               <div className="grid grid-cols-3 gap-1.5">
                 {(['normal', 'large', 'xlarge'] as const).map((sz) => (
                   <button
                     key={sz}
                     type="button"
                     onClick={() => setNameFontSize(sz)}
-                    className={`py-1.5 text-[10px] font-bold rounded-lg border uppercase transition-all ${
+                    className={`py-1.5 text-[10px] font-black rounded-xl border uppercase transition-all cursor-pointer ${
                       nameFontSize === sz 
                         ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm' 
                         : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
@@ -583,8 +583,8 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
             {/* Slider 1: Nama Siswa */}
             <div className="space-y-1.5">
               <div className="flex justify-between text-xs text-slate-700">
-                <span className="font-bold text-indigo-700">Posisi Vertikal Nama Siswa:</span>
-                <span className="font-mono font-bold">{coords.namaY}%</span>
+                <span className="font-bold text-indigo-900">Posisi Vertikal Nama Siswa:</span>
+                <span className="font-mono font-bold text-indigo-900">{coords.namaY}%</span>
               </div>
               <input
                 type="range"
@@ -594,14 +594,14 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
                 onChange={(e) => setCoords({ ...coords, namaY: Number(e.target.value) })}
                 className="w-full accent-indigo-600 cursor-pointer"
               />
-              <span className="text-[10px] text-slate-400 block">Geser agar pas di atas garis nama pada template foto panitia</span>
+              <span className="text-[10px] text-slate-500 font-medium block">Geser agar pas di atas garis nama pada template foto panitia</span>
             </div>
 
             {/* Slider 2: Asal Sekolah */}
             <div className="space-y-1.5">
               <div className="flex justify-between text-xs text-slate-700">
-                <span className="font-bold text-purple-700">Posisi Vertikal Asal Sekolah:</span>
-                <span className="font-mono font-bold">{coords.sekolahY}%</span>
+                <span className="font-bold text-purple-900">Posisi Vertikal Asal Sekolah:</span>
+                <span className="font-mono font-bold text-purple-900">{coords.sekolahY}%</span>
               </div>
               <input
                 type="range"
@@ -616,8 +616,8 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
             {/* Slider 3: Nomor Peserta / Predikat */}
             <div className="space-y-1.5">
               <div className="flex justify-between text-xs text-slate-700">
-                <span className="font-bold text-cyan-700">Posisi Vertikal No. Peserta / Keterangan:</span>
-                <span className="font-mono font-bold">{coords.nomorY}%</span>
+                <span className="font-bold text-cyan-900">Posisi Vertikal No. Peserta / Keterangan:</span>
+                <span className="font-mono font-bold text-cyan-900">{coords.nomorY}%</span>
               </div>
               <input
                 type="range"
@@ -630,10 +630,10 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
             </div>
 
             {/* Slider 4: QR Code Coordinates */}
-            <div className="space-y-3 pt-3 border-t border-slate-100">
+            <div className="space-y-3 pt-3 border-t border-slate-200/60">
               <div className="flex justify-between text-xs text-slate-700">
-                <span className="font-bold text-emerald-700">Posisi Horizontal QR Code (X):</span>
-                <span className="font-mono font-bold">{coords.qrX}%</span>
+                <span className="font-bold text-emerald-900">Posisi Horizontal QR Code (X):</span>
+                <span className="font-mono font-bold text-emerald-900">{coords.qrX}%</span>
               </div>
               <input
                 type="range"
@@ -645,8 +645,8 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
               />
 
               <div className="flex justify-between text-xs text-slate-700">
-                <span className="font-bold text-emerald-700">Posisi Vertikal QR Code (Y):</span>
-                <span className="font-mono font-bold">{coords.qrY}%</span>
+                <span className="font-bold text-emerald-900">Posisi Vertikal QR Code (Y):</span>
+                <span className="font-mono font-bold text-emerald-900">{coords.qrY}%</span>
               </div>
               <input
                 type="range"
@@ -661,23 +661,23 @@ export const TemplateEditorView: React.FC<TemplateEditorViewProps> = ({
           </div>
 
           {/* Action Save Button */}
-          <div className="pt-4 border-t border-slate-100 space-y-2">
+          <div className="pt-4 border-t border-slate-200/60 space-y-2">
             <button
               onClick={handleSave}
-              className="w-full py-3.5 px-4 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-all shadow-md flex items-center justify-center gap-2"
+              className="btn-3d-primary w-full py-3 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer"
             >
               <Save className="w-4 h-4" />
               <span>{isSavedNotice ? 'Template & Koordinat Berhasil Disimpan!' : 'Simpan & Terapkan Desain Template'}</span>
             </button>
 
             {isSavedNotice && (
-              <p className="text-[11px] text-emerald-700 font-bold text-center flex items-center justify-center gap-1 animate-fade-in">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+              <p className="text-[11px] text-emerald-800 font-black text-center flex items-center justify-center gap-1 animate-fade-in bg-emerald-100/90 py-1.5 px-2 rounded-xl border border-emerald-300">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
                 <span>Desain foto panitia & koordinat aktif untuk cetak otomatis peserta!</span>
               </p>
             )}
 
-            <div className="flex items-center gap-1.5 text-[11px] text-slate-500 justify-center pt-1">
+            <div className="flex items-center gap-1.5 text-[11px] text-slate-500 justify-center pt-1 font-medium">
               <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
               <span>PDF digenerate otomatis per peserta saat unduh</span>
             </div>

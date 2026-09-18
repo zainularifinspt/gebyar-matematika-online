@@ -356,6 +356,136 @@
 }
 
 /* ============================================================
+   3D GLASSMORPHISM DASHBOARD SUITE
+   Frosted acrylic, specular rim highlights, tactile button depth
+   ============================================================ */
+
+.glass-3d-dashboard-shell {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.72) 100%);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 
+    0 16px 40px -12px rgba(15, 23, 42, 0.06),
+    0 4px 12px -2px rgba(15, 23, 42, 0.02),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 20px rgba(255, 255, 255, 0.35);
+  transform: translateZ(0);
+}
+
+.glass-3d-card {
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.75) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.88);
+  box-shadow: 
+    0 10px 25px -6px rgba(15, 23, 42, 0.05),
+    0 2px 6px -1px rgba(15, 23, 42, 0.02),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 16px rgba(255, 255, 255, 0.35);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.25s ease,
+              border-color 0.25s ease;
+  transform: translateZ(0);
+}
+.glass-3d-card:hover {
+  transform: translateY(-4px) translateZ(0);
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.85) 100%);
+  border-color: rgba(255, 255, 255, 0.98);
+  box-shadow: 
+    0 20px 38px -8px rgba(99, 102, 241, 0.12),
+    0 8px 16px -4px rgba(15, 23, 42, 0.04),
+    inset 0 1.5px 0 rgba(255, 255, 255, 1),
+    inset 0 0 24px rgba(255, 255, 255, 0.55);
+}
+
+/* Polychromatic Jewel Metric Cards */
+.glass-3d-card-indigo {
+  background: linear-gradient(140deg, rgba(238, 242, 255, 0.92) 0%, rgba(224, 231, 255, 0.72) 100%);
+  border: 1px solid rgba(199, 210, 254, 0.85);
+  box-shadow: 
+    0 10px 25px -6px rgba(99, 102, 241, 0.12),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 18px rgba(255, 255, 255, 0.50);
+}
+.glass-3d-card-indigo:hover {
+  box-shadow: 
+    0 20px 38px -8px rgba(99, 102, 241, 0.22),
+    inset 0 1.5px 0 rgba(255, 255, 255, 1),
+    inset 0 0 24px rgba(255, 255, 255, 0.70);
+}
+
+.glass-3d-card-emerald {
+  background: linear-gradient(140deg, rgba(236, 253, 245, 0.92) 0%, rgba(209, 250, 229, 0.72) 100%);
+  border: 1px solid rgba(167, 243, 208, 0.85);
+  box-shadow: 
+    0 10px 25px -6px rgba(16, 185, 129, 0.12),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 18px rgba(255, 255, 255, 0.50);
+}
+.glass-3d-card-emerald:hover {
+  box-shadow: 
+    0 20px 38px -8px rgba(16, 185, 129, 0.22),
+    inset 0 1.5px 0 rgba(255, 255, 255, 1),
+    inset 0 0 24px rgba(255, 255, 255, 0.70);
+}
+
+.glass-3d-card-amber {
+  background: linear-gradient(140deg, rgba(255, 251, 235, 0.92) 0%, rgba(254, 243, 199, 0.72) 100%);
+  border: 1px solid rgba(253, 230, 138, 0.85);
+  box-shadow: 
+    0 10px 25px -6px rgba(245, 158, 11, 0.12),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 18px rgba(255, 255, 255, 0.50);
+}
+.glass-3d-card-amber:hover {
+  box-shadow: 
+    0 20px 38px -8px rgba(245, 158, 11, 0.22),
+    inset 0 1.5px 0 rgba(255, 255, 255, 1),
+    inset 0 0 24px rgba(255, 255, 255, 0.70);
+}
+
+.glass-3d-card-cyan {
+  background: linear-gradient(140deg, rgba(240, 249, 255, 0.92) 0%, rgba(224, 242, 254, 0.72) 100%);
+  border: 1px solid rgba(186, 230, 253, 0.85);
+  box-shadow: 
+    0 10px 25px -6px rgba(14, 165, 233, 0.12),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 18px rgba(255, 255, 255, 0.50);
+}
+.glass-3d-card-cyan:hover {
+  box-shadow: 
+    0 20px 38px -8px rgba(14, 165, 233, 0.22),
+    inset 0 1.5px 0 rgba(255, 255, 255, 1),
+    inset 0 0 24px rgba(255, 255, 255, 0.70);
+}
+
+/* 3D Glass Form Inputs */
+.glass-3d-input {
+  background: rgba(255, 255, 255, 0.80);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(203, 213, 225, 0.70);
+  box-shadow: inset 0 2px 4px rgba(15, 23, 42, 0.03), inset 0 0 8px rgba(255, 255, 255, 0.6);
+  transition: all 0.2s ease;
+}
+.glass-3d-input:focus {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18), inset 0 1px 2px rgba(15, 23, 42, 0.02);
+}
+
+/* 3D Glass Pill & Badges */
+.glass-3d-pill {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(248, 250, 252, 0.72) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.90);
+  box-shadow: 0 2px 6px -1px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+/* ============================================================
    GPU COMPOSITED HARDWARE-ACCELERATED BACKGROUND
    CRITICAL PERFORMANCE: Replaces background-attachment: fixed
    which previously forced full screen CPU repaints on every scroll pixel!

@@ -36,7 +36,7 @@ export const PesertaTableView: React.FC<PesertaTableViewProps> = ({
   });
 
   return (
-    <div className="rounded-3xl glass-panel border border-slate-200/80 bg-white/80 shadow-sm overflow-hidden space-y-6 animate-fade-in p-6 sm:p-8">
+    <div className="rounded-3xl glass-3d-dashboard-shell overflow-hidden space-y-6 animate-fade-in p-6 sm:p-8 shadow-xl shadow-indigo-950/5">
       
       {/* Search & Filter Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -49,16 +49,16 @@ export const PesertaTableView: React.FC<PesertaTableViewProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Cari nama siswa, sekolah, pendaftar, atau Order ID..."
-            className="w-full pl-10 pr-4 py-2.5 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-indigo-500 focus:bg-white shadow-sm"
+            className="glass-3d-input w-full pl-10 pr-4 py-2.5 text-xs rounded-2xl text-slate-900 placeholder:text-slate-400 font-medium"
           />
         </div>
 
-        {/* Filter Dropdowns */}
+        {/* Filter Dropdowns & Export */}
         <div className="flex flex-wrap items-center gap-2.5">
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="px-3 py-2.5 text-xs rounded-xl bg-white border border-slate-200 text-slate-700 focus:outline-none focus:border-indigo-500 shadow-sm font-semibold"
+            className="glass-3d-input px-3.5 py-2.5 text-xs rounded-2xl text-slate-800 font-bold cursor-pointer"
           >
             <option value="all">Semua Jenjang</option>
             <option value="kat-sd">SD / MI</option>
@@ -69,7 +69,7 @@ export const PesertaTableView: React.FC<PesertaTableViewProps> = ({
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2.5 text-xs rounded-xl bg-white border border-slate-200 text-slate-700 focus:outline-none focus:border-indigo-500 shadow-sm font-semibold"
+            className="glass-3d-input px-3.5 py-2.5 text-xs rounded-2xl text-slate-800 font-bold cursor-pointer"
           >
             <option value="all">Semua Status Bayar</option>
             <option value="lunas">Lunas</option>
@@ -78,7 +78,7 @@ export const PesertaTableView: React.FC<PesertaTableViewProps> = ({
 
           <button
             onClick={onExportCsv}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-sm"
+            className="btn-3d-primary inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs font-bold cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Ekspor Data</span>
@@ -88,9 +88,9 @@ export const PesertaTableView: React.FC<PesertaTableViewProps> = ({
       </div>
 
       {/* Table of Students & Registrants */}
-      <div className="overflow-x-auto rounded-2xl border border-slate-200/80 bg-white">
+      <div className="overflow-x-auto rounded-2xl border border-slate-200/80 bg-white/60 backdrop-blur-md shadow-2xs">
         <table className="w-full text-left text-xs">
-          <thead className="bg-slate-50 text-slate-600 uppercase text-[10px] tracking-wider border-b border-slate-200 font-bold">
+          <thead className="bg-slate-100/70 text-slate-700 uppercase text-[10px] tracking-wider border-b border-slate-200/80 font-black">
             <tr>
               <th className="py-3.5 px-4">Nama Siswa & Kelas</th>
               <th className="py-3.5 px-4">Asal Sekolah & Kota</th>
@@ -101,10 +101,10 @@ export const PesertaTableView: React.FC<PesertaTableViewProps> = ({
               <th className="py-3.5 px-4 text-right">Kartu Peserta</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 text-slate-700">
+          <tbody className="divide-y divide-slate-100 text-slate-800">
             {filteredPeserta.length === 0 ? (
               <tr>
-                <td colSpan={7} className="py-8 text-center text-slate-500 font-medium">
+                <td colSpan={7} className="py-10 text-center text-slate-500 font-medium">
                   Tidak ditemukan data peserta yang cocok dengan kriteria pencarian.
                 </td>
               </tr>
@@ -112,26 +112,26 @@ export const PesertaTableView: React.FC<PesertaTableViewProps> = ({
               filteredPeserta.map((p) => {
                 const isPaid = p.statusPembayaran === 'lunas';
                 return (
-                  <tr key={p.id} className="hover:bg-indigo-50/40 transition-colors">
+                  <tr key={p.id} className="hover:bg-indigo-50/50 transition-colors">
                     <td className="py-3.5 px-4">
-                      <p className="font-bold text-slate-900 font-['Outfit']">{p.namaSiswa}</p>
-                      <span className="text-[11px] text-slate-500">Kelas: {p.kelas}</span>
+                      <p className="font-bold text-slate-900 font-['Outfit'] text-sm">{p.namaSiswa}</p>
+                      <span className="text-[11px] text-slate-500 font-medium">{p.kelas}</span>
                     </td>
 
                     <td className="py-3.5 px-4">
                       <p className="font-bold text-slate-800">{p.asalSekolah}</p>
-                      <span className="text-[11px] text-slate-500">{p.kota}</span>
+                      <span className="text-[11px] text-slate-500 font-medium">{p.kota}</span>
                     </td>
 
                     <td className="py-3.5 px-4">
-                      <span className="px-2.5 py-1 rounded-md text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                      <span className="px-2.5 py-1 rounded-lg text-[10px] font-black bg-indigo-50 text-indigo-700 border border-indigo-200 shadow-2xs">
                         {p.kategoriNama}
                       </span>
                     </td>
 
                     <td className="py-3.5 px-4">
                       <p className="font-bold text-slate-900">{p.namaPendaftar}</p>
-                      <span className="text-[11px] text-slate-500 block">{p.emailPendaftar}</span>
+                      <span className="text-[11px] text-slate-500 block font-mono">{p.emailPendaftar}</span>
                       <span className="text-[10px] text-indigo-600 font-bold">{p.rolePendaftar}</span>
                     </td>
 
@@ -142,22 +142,22 @@ export const PesertaTableView: React.FC<PesertaTableViewProps> = ({
 
                     <td className="py-3.5 px-4">
                       {isPaid ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-900 border border-emerald-300 shadow-2xs">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                           Lunas
                         </span>
                       ) : (
-                        <div className="space-y-1">
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                            <Clock className="w-3.5 h-3.5 text-amber-600" />
+                        <div className="space-y-1.5">
+                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs">
+                            <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
                             Menunggu
                           </span>
                           {onManualVerify && (
                             <button
                               onClick={() => onManualVerify(p.id)}
-                              className="text-[10px] text-indigo-600 hover:text-indigo-800 font-bold underline block"
+                              className="btn-3d-white text-[10px] text-indigo-700 hover:text-indigo-900 font-bold px-2 py-0.5 rounded-md border border-indigo-200 shadow-2xs block cursor-pointer transition-all"
                             >
-                              Verifikasi Manual
+                              ✓ Verifikasi Manual
                             </button>
                           )}
                         </div>
@@ -166,7 +166,8 @@ export const PesertaTableView: React.FC<PesertaTableViewProps> = ({
 
                     <td className="py-3.5 px-4 text-right">
                       {p.kartuTercetak ? (
-                        <span className="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-200">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 text-[10px] font-black border border-emerald-300 shadow-2xs">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                           Siap Cetak
                         </span>
                       ) : (
@@ -183,9 +184,9 @@ export const PesertaTableView: React.FC<PesertaTableViewProps> = ({
         </table>
       </div>
 
-      <div className="flex items-center justify-between text-xs text-slate-500 pt-2">
-        <span>Menampilkan {filteredPeserta.length} dari total {pesertaList.length} peserta terdaftar</span>
-        <span>Data terenkripsi dan terlindungi hak privasi siswa</span>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-600 pt-2 border-t border-slate-200/60 font-medium">
+        <span>Menampilkan <strong className="text-slate-900 font-mono">{filteredPeserta.length}</strong> dari total <strong className="text-slate-900 font-mono">{pesertaList.length}</strong> peserta terdaftar</span>
+        <span className="text-[11px] text-slate-500">Privasi data siswa dilindungi standar keamanan GM 2027</span>
       </div>
 
     </div>

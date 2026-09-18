@@ -52,6 +52,12 @@ export const AnnouncementListSection: React.FC<AnnouncementListSectionProps> = (
 }) => {
   const [activeModalAnn, setActiveModalAnn] = useState<Pengumuman | null>(selectedAnnouncement || null);
 
+  React.useEffect(() => {
+    if (selectedAnnouncement) {
+      setActiveModalAnn(selectedAnnouncement);
+    }
+  }, [selectedAnnouncement]);
+
   const handleOpen = (ann: Pengumuman) => {
     setActiveModalAnn(ann);
     onOpenModal?.(ann);

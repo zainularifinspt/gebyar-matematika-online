@@ -27,9 +27,20 @@ function App() {
           onBackToHome={() => setCurrentView('home')}
           onLoginSuccess={(user) => {
             setActiveUser(user);
-            if (user.role === 'Guru Pendamping') {
+            const roleLower = (user.role || '').toLowerCase();
+            const isPanitiaOrAdmin = 
+              roleLower.includes('admin') || 
+              roleLower.includes('panitia') || 
+              roleLower.includes('koordinator') || 
+              roleLower.includes('staf') ||
+              user.role === 'Super Admin' ||
+              user.role === 'Panitia Pelaksana' ||
+              user.role === 'Koordinator Divisi' ||
+              user.role === 'Staf Panitia';
+
+            if (roleLower.includes('guru')) {
               setCurrentView('guru');
-            } else if (user.role === 'Panitia Pelaksana' || user.role === 'Super Admin' || user.role.includes('Admin') || user.role.includes('Panitia')) {
+            } else if (isPanitiaOrAdmin) {
               setCurrentView('dashboard');
             } else {
               setCurrentView('registration');

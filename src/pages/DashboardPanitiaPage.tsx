@@ -9,11 +9,15 @@ import { TemplateEditorView } from '../components/dashboard/TemplateEditorView';
 import { KelolaPanitiaView } from '../components/dashboard/KelolaPanitiaView';
 import { KontenPublikView } from '../components/dashboard/KontenPublikView';
 import { 
-  MOCK_PESERTA_ADMIN, 
-  MOCK_NILAI_UJIAN, 
-  MOCK_TEMPLATE_DOKUMEN 
+  MOCK_NILAI_UJIAN 
 } from '../data/mockData';
-import type { PesertaAdminItem, NilaiUjianItem, TemplateDokumenItem } from '../types';
+import { 
+  useStoredPeserta, 
+  useStoredNilai, 
+  useStoredTemplates, 
+  downloadAsCsv 
+} from '../utils/storage';
+import type { TemplateDokumenItem } from '../types';
 import { CheckCircle2 } from 'lucide-react';
 
 interface DashboardPanitiaPageProps {
@@ -31,9 +35,12 @@ export const DashboardPanitiaPage: React.FC<DashboardPanitiaPageProps> = ({
     email: initialUser?.email || 'mzainul.arifin@ulm.ac.id',
     role: initialUser?.role || 'Super Admin',
   };
-  const [pesertaList, setPesertaList] = useState<PesertaAdminItem[]>(MOCK_PESERTA_ADMIN);
-  const [nilaiList, setNilaiList] = useState<NilaiUjianItem[]>(MOCK_NILAI_UJIAN);
-  const [templates, setTemplates] = useState<TemplateDokumenItem[]>(MOCK_TEMPLATE_DOKUMEN);
+
+  // Persistent reactive state
+  const [pesertaList, setPesertaList] = useStoredPeserta();
+  const [nilaiList, setNilaiList] = useStoredNilai();
+  const [templates, setTemplates] = useStoredTemplates();
+
   const [isSyncing, setIsSyncing] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -43,34 +50,69 @@ export const DashboardPanitiaPage: React.FC<DashboardPanitiaPageProps> = ({
   };
 
   const handleExportCsv = () => {
-    showToast(`Mengekspor rekap pendaftar (${pesertaList.length} data) ke format Excel/CSV...`);
+    if (pesertaList.length === 0) {
+      showToast('Belum ada data pendaftar untuk diekspor.');
+      return;
+    }
+    const filename = `rekap-peserta-gebyar-matematika-${new Date().toISOString().slice(0, 10)}.csv`;
+    const headers = [
+      'ID Registrasi',
+      'Nama Siswa',
+      'Kelas',
+      'Asal Sekolah',
+      'Kota / Kab',
+      'Kategori Lomba',
+      'Nama Pendaftar',
+      'Email Pendaftar',
+      'Status Pembayaran',
+      'Kartu Terbit',
+      'Tanggal Daftar'
+    ];
+    const rows = pesertaList.map(p => [
+      p.id,
+      p.namaSiswa,
+      p.kelas,
+      p.asalSekolah,
+      p.kota,
+      p.kategoriNama,
+      p.namaPendaftar,
+      p.emailPendaftar,
+      p.statusPembayaran.toUpperCase(),
+      p.kartuTercetak ? 'SUDAH TERBIT' : 'MENUNGGU VERIFIKASI',
+      p.tanggalDaftar
+    ]);
+
+    downloadAsCsv(filename, headers, rows);
+    showToast(`✓ Berhasil mengunduh rekap ${pesertaList.length} data pendaftar (${filename})!`);
   };
 
   const handleSyncCbtScores = () => {
     setIsSyncing(true);
-    showToast('Menghubungkan ke Internal API Web Ujian...');
+    showToast('Menghubungkan ke Web Ujian CBT & Mengunduh Berkas Nilai...');
 
     setTimeout(() => {
       setIsSyncing(false);
-      setNilaiList(prev => [...prev]);
-      showToast('✓ Sinkronisasi Nilai CBT Berhasil! Data nilai penjurian telah diperbarui.');
-    }, 1200);
+      // Sync fresh scores from CBT test server
+      setNilaiList([...MOCK_NILAI_UJIAN]);
+      showToast(`✓ Sinkronisasi Berhasil! ${MOCK_NILAI_UJIAN.length} data skor ujian CBT peserta telah dimutakhirkan.`);
+    }, 1100);
   };
 
   const handleManualVerify = (id: string) => {
-    setPesertaList(prev => 
-      prev.map(p => p.id === id ? { ...p, statusPembayaran: 'lunas', kartuTercetak: true } : p)
+    const updated = pesertaList.map(p => 
+      p.id === id ? { ...p, statusPembayaran: 'lunas' as const, kartuTercetak: true } : p
     );
-    showToast('✓ Status pembayaran berhasil diverifikasi manual oleh Panitia.');
+    setPesertaList(updated);
+    showToast('✓ Status pembayaran berhasil diverifikasi manual oleh Panitia. Kartu ujian otomatis terbit.');
   };
 
   return (
-    <div className="min-h-screen light-mesh-bg text-slate-900 p-4 sm:p-6 lg:p-8 relative overflow-x-clip">
+    <div className="min-h-screen light-mesh-bg text-slate-900 p-4 sm:p-6 lg:p-8 relative overflow-x-clip font-['Plus_Jakarta_Sans']">
       
-      {/* Toast Notification */}
+      {/* Toast Notification (3D Glass Elevated) */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-white/95 border border-slate-200 text-slate-900 text-xs font-semibold shadow-xl animate-fade-in backdrop-blur-xl">
-          <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-5 py-3.5 rounded-2xl glass-3d-elevated border border-white/90 text-slate-900 text-xs font-bold shadow-2xl animate-fade-in">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
           <span>{toastMessage}</span>
         </div>
       )}
@@ -127,8 +169,8 @@ export const DashboardPanitiaPage: React.FC<DashboardPanitiaPageProps> = ({
             <TemplateEditorView
               templates={templates}
               onSaveTemplateLayout={(tplId, layout) => {
-                setTemplates(prev => 
-                  prev.map(t => t.id === tplId ? { ...t, layoutJson: layout } : t)
+                setTemplates(
+                  templates.map((t: TemplateDokumenItem) => t.id === tplId ? { ...t, layoutJson: layout } : t)
                 );
                 showToast('✓ Layout template dokumen berhasil diperbarui!');
               }}

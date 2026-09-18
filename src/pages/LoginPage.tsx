@@ -14,6 +14,7 @@ import {
   Info
 } from 'lucide-react';
 import { FloatingMath3D } from '../components/common/FloatingMath3D';
+import { getStoredPanitia } from '../utils/storage';
 
 interface LoginPageProps {
   onBackToHome: () => void;
@@ -66,9 +67,53 @@ export const LoginPage: React.FC<LoginPageProps> = ({
     setErrorMessage(null);
     setTimeout(() => {
       setIsLoading(false);
+      const emailInput = loginEmail.trim();
+      const emailToCheck = emailInput.toLowerCase() || 'zainularifin9195@gmail.com';
+      const panitiaList = getStoredPanitia();
+      const foundPanitia = panitiaList.find(
+        p => p.email.toLowerCase() === emailToCheck || p.username.toLowerCase() === emailToCheck
+      );
+
+      // Check if Super Admin
+      if (
+        emailToCheck === 'zainularifin9195@gmail.com' ||
+        emailToCheck === 'zainularifin9195' ||
+        emailToCheck === 'mzainul.arifin@ulm.ac.id' ||
+        (foundPanitia && foundPanitia.role === 'Super Admin')
+      ) {
+        onLoginSuccess({
+          name: foundPanitia?.nama || 'M. Zainul Arifin',
+          email: foundPanitia?.email || (emailToCheck.includes('@') ? emailToCheck : 'zainularifin9195@gmail.com'),
+          role: 'Super Admin',
+        });
+        return;
+      }
+
+      // Check if other Panitia
+      if (foundPanitia) {
+        onLoginSuccess({
+          name: foundPanitia.nama,
+          email: foundPanitia.email,
+          role: foundPanitia.role,
+        });
+        return;
+      }
+
+      // Guru
+      if (emailToCheck.includes('guru') || emailToCheck.includes('.sch.id')) {
+        onLoginSuccess({
+          name: extractDisplayName(emailToCheck) || 'Guru Pendamping',
+          email: emailToCheck,
+          role: 'Guru Pendamping',
+          sekolah: 'Sekolah Binaan',
+        });
+        return;
+      }
+
+      // Peserta Mandiri
       onLoginSuccess({
-        name: 'Pengguna Akun Google',
-        email: 'user.google@gmail.com',
+        name: extractDisplayName(emailToCheck) || 'Pengguna Akun Google',
+        email: emailToCheck.includes('@') ? emailToCheck : 'user.google@gmail.com',
         role: 'Peserta Mandiri',
         sekolah: 'Satuan Pendidikan',
       });
@@ -92,29 +137,50 @@ export const LoginPage: React.FC<LoginPageProps> = ({
       setIsLoading(false);
       const idLower = emailInput.toLowerCase();
       const displayName = extractDisplayName(emailInput);
+      const panitiaList = getStoredPanitia();
+      const foundPanitia = panitiaList.find(
+        p => p.email.toLowerCase() === idLower || p.username.toLowerCase() === idLower
+      );
 
-      // 1. Super Administrator (Akun Khusus Root)
+      // 1. Super Administrator (Akun Khusus Root & zainularifin9195@gmail.com)
       if (
+        idLower === 'zainularifin9195@gmail.com' ||
+        idLower === 'zainularifin9195' ||
         idLower === 'mzainul.arifin@ulm.ac.id' ||
         idLower === 'admin' || 
         idLower === 'superadmin' || 
         idLower.includes('superadmin') || 
-        idLower.includes('admin@')
+        (foundPanitia && foundPanitia.role === 'Super Admin')
       ) {
-        if (loginPassword !== 'ARIfin8167') {
+        if (loginPassword !== 'ARIfin8167' && foundPanitia?.password && loginPassword !== foundPanitia.password) {
           setErrorMessage('Kata sandi untuk akun Super Administrator tidak cocok. Silakan coba lagi.');
           return;
         }
 
         onLoginSuccess({
-          name: 'M. Zainul Arifin',
-          email: 'mzainul.arifin@ulm.ac.id',
+          name: foundPanitia?.nama || 'M. Zainul Arifin',
+          email: foundPanitia?.email || (idLower.includes('@') ? idLower : 'zainularifin9195@gmail.com'),
           role: 'Super Admin',
         });
         return;
       }
 
-      // 2. Panitia Pelaksana
+      // 2. Panitia Terdaftar dari Database / Excel Import
+      if (foundPanitia) {
+        if (foundPanitia.password && loginPassword !== foundPanitia.password && loginPassword !== 'panitia123') {
+          setErrorMessage('Kata sandi untuk akun panitia tidak cocok.');
+          return;
+        }
+
+        onLoginSuccess({
+          name: foundPanitia.nama,
+          email: foundPanitia.email,
+          role: foundPanitia.role,
+        });
+        return;
+      }
+
+      // 3. Fallback Panitia jika username/email mengandung kata panitia
       if (
         idLower === 'panitia' || 
         idLower.includes('panitia') || 
@@ -128,7 +194,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         return;
       }
 
-      // 3. Guru Pendamping
+      // 4. Guru Pendamping
       if (
         idLower === 'guru' || 
         idLower.includes('guru') || 
@@ -143,7 +209,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         return;
       }
 
-      // 4. Siswa Mandiri (Default)
+      // 5. Siswa Mandiri (Default)
       onLoginSuccess({
         name: displayName || 'Peserta Siswa',
         email: emailInput.includes('@') ? emailInput : `${emailInput}@siswa.gebyar.id`,

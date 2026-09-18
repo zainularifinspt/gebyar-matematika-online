@@ -6,9 +6,10 @@ import {
   ShieldCheck, 
   ArrowRight, 
   Eye, 
-  EyeOff,
-  AlertCircle
+  EyeOff, 
+  AlertCircle 
 } from 'lucide-react';
+import { getStoredPanitia } from '../../utils/storage';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -44,9 +45,55 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setErrorMessage(null);
     setTimeout(() => {
       setLoading(false);
+      const emailInput = username.trim();
+      const emailToCheck = emailInput.toLowerCase() || 'zainularifin9195@gmail.com';
+      const panitiaList = getStoredPanitia();
+      const foundPanitia = panitiaList.find(
+        p => p.email.toLowerCase() === emailToCheck || p.username.toLowerCase() === emailToCheck
+      );
+
+      // Check Super Admin
+      if (
+        emailToCheck === 'zainularifin9195@gmail.com' ||
+        emailToCheck === 'zainularifin9195' ||
+        emailToCheck === 'mzainul.arifin@ulm.ac.id' ||
+        (foundPanitia && foundPanitia.role === 'Super Admin')
+      ) {
+        onLoginSuccess?.({
+          name: foundPanitia?.nama || 'M. Zainul Arifin',
+          email: foundPanitia?.email || (emailToCheck.includes('@') ? emailToCheck : 'zainularifin9195@gmail.com'),
+          role: 'Super Admin',
+        });
+        onClose();
+        return;
+      }
+
+      // Check Panitia
+      if (foundPanitia) {
+        onLoginSuccess?.({
+          name: foundPanitia.nama,
+          email: foundPanitia.email,
+          role: foundPanitia.role,
+        });
+        onClose();
+        return;
+      }
+
+      // Check Guru
+      if (emailToCheck.includes('guru') || emailToCheck.includes('.sch.id')) {
+        onLoginSuccess?.({
+          name: extractDisplayName(emailToCheck) || 'Guru Pendamping',
+          email: emailToCheck,
+          role: 'Guru Pendamping',
+        });
+        onClose();
+        return;
+      }
+
+      // Siswa Mandiri
       onLoginSuccess?.({
-        name: 'Pengguna Akun Google',
-        email: 'user.google@gmail.com',
+        name: extractDisplayName(emailToCheck) || 'Pengguna Akun Google',
+        email: emailToCheck.includes('@') ? emailToCheck : 'user.google@gmail.com',
         role: 'Peserta Mandiri',
       });
       onClose();
@@ -63,29 +110,53 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       setLoading(false);
       const idLower = username.toLowerCase().trim();
       const displayName = extractDisplayName(username);
+      const panitiaList = getStoredPanitia();
+      const foundPanitia = panitiaList.find(
+        p => p.email.toLowerCase() === idLower || p.username.toLowerCase() === idLower
+      );
 
-      // Super Administrator Detection
+      // 1. Super Administrator Detection (Root & zainularifin9195@gmail.com)
       if (
+        idLower === 'zainularifin9195@gmail.com' ||
+        idLower === 'zainularifin9195' ||
         idLower === 'mzainul.arifin@ulm.ac.id' ||
         idLower === 'admin' || 
         idLower === 'superadmin' || 
         idLower.includes('superadmin') || 
-        idLower.includes('admin@')
+        (foundPanitia && foundPanitia.role === 'Super Admin')
       ) {
-        if (password !== 'ARIfin8167') {
-          setErrorMessage('Kata sandi untuk Super Administrator salah.');
+        if (password !== 'ARIfin8167' && foundPanitia?.password && password !== foundPanitia.password) {
+          setErrorMessage('Kata sandi untuk akun Super Administrator tidak cocok. Silakan coba lagi.');
           return;
         }
 
         onLoginSuccess?.({
-          name: 'M. Zainul Arifin',
-          email: 'mzainul.arifin@ulm.ac.id',
+          name: foundPanitia?.nama || 'M. Zainul Arifin',
+          email: foundPanitia?.email || (idLower.includes('@') ? idLower : 'zainularifin9195@gmail.com'),
           role: 'Super Admin',
         });
         onClose();
         return;
-      } else if (idLower === 'panitia' || idLower.includes('panitia') || idLower.includes('@panitia')) {
-        // Panitia Staf Detection
+      }
+
+      // 2. Panitia Terdaftar dari Database / Excel Import
+      if (foundPanitia) {
+        if (foundPanitia.password && password !== foundPanitia.password && password !== 'panitia123') {
+          setErrorMessage('Kata sandi untuk akun panitia tidak cocok.');
+          return;
+        }
+
+        onLoginSuccess?.({
+          name: foundPanitia.nama,
+          email: foundPanitia.email,
+          role: foundPanitia.role,
+        });
+        onClose();
+        return;
+      }
+
+      // 3. Fallback Panitia jika username mengandung panitia
+      if (idLower === 'panitia' || idLower.includes('panitia') || idLower.includes('@panitia')) {
         onLoginSuccess?.({
           name: displayName || 'Panitia Pelaksana',
           email: username.includes('@') ? username : 'panitia@gebyar.id',
