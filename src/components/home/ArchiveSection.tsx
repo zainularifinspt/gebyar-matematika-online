@@ -8,7 +8,9 @@ import {
   Calendar, 
   Check, 
   X, 
-  FileText 
+  FileText,
+  FolderOpen,
+  ExternalLink
 } from 'lucide-react';
 import type { ArsipSoal } from '../../types';
 
@@ -39,6 +41,9 @@ export const ArchiveSection: React.FC<ArchiveSectionProps> = ({ archives }) => {
 
   const handleDownload = (item: ArsipSoal) => {
     setDownloadSuccess(item.id);
+    if (item.fileUrl && item.fileUrl !== '#') {
+      window.open(item.fileUrl, '_blank', 'noopener,noreferrer');
+    }
     setTimeout(() => {
       setDownloadSuccess(null);
     }, 3000);
@@ -66,6 +71,43 @@ export const ArchiveSection: React.FC<ArchiveSectionProps> = ({ archives }) => {
           <p className="text-slate-600 text-sm sm:text-base font-normal">
             Pelajari ragam soal dan tingkat kesulitan olimpiade tahun lalu secara terbuka untuk mematangkan persiapan menjelang kompetisi tahun 2027.
           </p>
+        </motion.div>
+
+        {/* Google Drive Official Repository Banner */}
+        <motion.div 
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="mb-8 rounded-3xl glass-3d-elevated p-6 sm:p-7 border border-white/95 shadow-xl flex flex-col md:flex-row items-center justify-between gap-5 relative overflow-hidden"
+        >
+          <div className="flex items-center gap-4 text-center md:text-left">
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-900 flex items-center justify-center border border-amber-300 shadow-md shrink-0">
+              <FolderOpen className="w-6 h-6 text-amber-600" />
+            </div>
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-100/90 text-amber-950 text-[10px] font-black border border-amber-300">
+                <span>Pusat Repositori Soal Resmi</span>
+              </div>
+              <h3 className="text-base sm:text-lg font-black text-slate-900 font-['Outfit'] tracking-tight">
+                Koleksi Seluruh Naskah Soal dalam Satu Google Drive
+              </h3>
+              <p className="text-xs text-slate-600 font-medium max-w-2xl">
+                Seluruh naskah soal babak penyisihan, semifinal, dan final dari tahun-tahun sebelumnya telah dikumpulkan rapi dalam satu Folder Google Drive resmi panitia.
+              </p>
+            </div>
+          </div>
+
+          <a
+            href="https://drive.google.com/drive/folders/1GM-Arsip-Semua-Tahun?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-3d-primary px-5 py-3 rounded-2xl text-xs font-black text-white shadow-md flex items-center gap-2 shrink-0 group hover:scale-[1.02] transition-transform"
+          >
+            <FolderOpen className="w-4 h-4 text-amber-300" />
+            <span>Buka Folder Google Drive Semua Soal</span>
+            <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+          </a>
         </motion.div>
 
         {/* 3D Glass Filter Controls Bar */}
@@ -154,9 +196,17 @@ export const ArchiveSection: React.FC<ArchiveSectionProps> = ({ archives }) => {
                     <span className="px-3 py-1 rounded-full text-[11px] font-black bg-sky-100/90 text-sky-950 border border-sky-300 shadow-xs">
                       {item.tingkat}
                     </span>
-                    <span className="text-xs text-slate-600 font-bold tabular-nums">
-                      Tahun {item.tahun}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      {item.fileUrl && item.fileUrl.includes('drive.google.com') && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100/90 text-amber-950 border border-amber-300 shadow-2xs">
+                          <FolderOpen className="w-2.5 h-2.5 text-amber-600" />
+                          <span>GDrive</span>
+                        </span>
+                      )}
+                      <span className="text-xs text-slate-600 font-bold tabular-nums">
+                        Tahun {item.tahun}
+                      </span>
+                    </div>
                   </div>
 
                   <div className="flex items-start gap-3">
@@ -194,7 +244,9 @@ export const ArchiveSection: React.FC<ArchiveSectionProps> = ({ archives }) => {
                     className={`flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-black rounded-xl transition-all cursor-pointer ${
                       downloadSuccess === item.id
                         ? 'bg-emerald-600 text-white shadow-md'
-                        : 'btn-3d-primary'
+                        : item.fileUrl && item.fileUrl.includes('drive.google.com')
+                          ? 'btn-3d-primary'
+                          : 'btn-3d-primary'
                     }`}
                   >
                     {downloadSuccess === item.id ? (
@@ -204,8 +256,13 @@ export const ArchiveSection: React.FC<ArchiveSectionProps> = ({ archives }) => {
                         className="inline-flex items-center gap-1.5"
                       >
                         <Check className="w-3.5 h-3.5" />
-                        <span>Tersimpan!</span>
+                        <span>Membuka...</span>
                       </motion.span>
+                    ) : item.fileUrl && item.fileUrl.includes('drive.google.com') ? (
+                      <>
+                        <FolderOpen className="w-3.5 h-3.5 text-amber-300" />
+                        <span>Buka GDrive</span>
+                      </>
                     ) : (
                       <>
                         <Download className="w-3.5 h-3.5" />
@@ -312,8 +369,18 @@ export const ArchiveSection: React.FC<ArchiveSectionProps> = ({ archives }) => {
                       }}
                       className="btn-3d-primary flex-1 sm:flex-none px-6 py-2.5 text-xs font-black rounded-xl flex items-center justify-center gap-2 cursor-pointer"
                     >
-                      <Download className="w-3.5 h-3.5" />
-                      <span>Unduh Lengkap (PDF)</span>
+                      {previewItem.fileUrl && previewItem.fileUrl.includes('drive.google.com') ? (
+                        <>
+                          <FolderOpen className="w-3.5 h-3.5 text-amber-300" />
+                          <span>Buka Naskah di Google Drive</span>
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </>
+                      ) : (
+                        <>
+                          <Download className="w-3.5 h-3.5" />
+                          <span>Unduh Lengkap (PDF)</span>
+                        </>
+                      )}
                     </motion.button>
                   </div>
                 </div>

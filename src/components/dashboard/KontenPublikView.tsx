@@ -12,7 +12,14 @@ import {
   X, 
   Film,
   Clock,
-  Sparkles
+  Sparkles,
+  UploadCloud,
+  ExternalLink,
+  FolderOpen,
+  HardDrive,
+  CheckCircle2,
+  Link2,
+  FileCheck
 } from 'lucide-react';
 import type { VideoKegiatan, ArsipSoal, Pengumuman } from '../../types';
 import { 
@@ -44,6 +51,9 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
 
   const [editingArsip, setEditingArsip] = useState<ArsipSoal | null>(null);
   const [isArsipModalOpen, setIsArsipModalOpen] = useState(false);
+  const [arsipSourceType, setArsipSourceType] = useState<'gdrive' | 'upload'>('gdrive');
+  const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
+  const mainGdriveLink = 'https://drive.google.com/drive/folders/1GM-Arsip-Semua-Tahun?usp=sharing';
 
   const [editingPengumuman, setEditingPengumuman] = useState<Pengumuman | null>(null);
   const [isPengumumanModalOpen, setIsPengumumanModalOpen] = useState(false);
@@ -66,14 +76,14 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
       tahun: new Date().getFullYear(),
       deskripsi: '',
       embedUrl: '',
-      thumbnailUrl: 'https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=800&auto=format&fit=crop&q=80',
-      durasi: '03:45',
+      thumbnailUrl: '',
+      durasi: '05:30',
     });
     setIsVideoModalOpen(true);
   };
 
-  const handleOpenEditVideo = (video: VideoKegiatan) => {
-    setEditingVideo({ ...video });
+  const handleOpenEditVideo = (vid: VideoKegiatan) => {
+    setEditingVideo({ ...vid });
     setIsVideoModalOpen(true);
   };
 
@@ -85,10 +95,10 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
     let updated: VideoKegiatan[];
     if (exists) {
       updated = videos.map(v => v.id === editingVideo.id ? editingVideo : v);
-      notify(`✓ Video "${editingVideo.judul}" berhasil diperbarui!`);
+      notify(`✓ Video "${editingVideo.judul}" berhasil diperbarui.`);
     } else {
       updated = [editingVideo, ...videos];
-      notify(`✓ Video baru "${editingVideo.judul}" berhasil ditambahkan & tayang!`);
+      notify(`✓ Video baru "${editingVideo.judul}" berhasil ditambahkan.`);
     }
     setVideos(updated);
     setIsVideoModalOpen(false);
@@ -107,29 +117,79 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
       tingkat: 'SMA',
       judul: '',
       jumlahHalaman: 10,
-      fileUrl: '#',
+      fileUrl: '',
       ukuranFile: '2.0 MB',
     });
+    setArsipSourceType('gdrive');
+    setUploadedFileName(null);
     setIsArsipModalOpen(true);
   };
 
   const handleOpenEditArsip = (arsip: ArsipSoal) => {
     setEditingArsip({ ...arsip });
+    if (arsip.fileUrl && (arsip.fileUrl.startsWith('data:') || arsip.fileUrl.startsWith('blob:'))) {
+      setArsipSourceType('upload');
+      setUploadedFileName('Berkas PDF Tersimpan');
+    } else {
+      setArsipSourceType('gdrive');
+      setUploadedFileName(null);
+    }
     setIsArsipModalOpen(true);
+  };
+
+  const handlePdfFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+      notify('⚠️ Mohon pilih berkas dengan format PDF (.pdf).');
+      return;
+    }
+
+    const sizeInMB = (file.size / (1024 * 1024)).toFixed(1) + ' MB';
+    setUploadedFileName(file.name);
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      setEditingArsip(prev => {
+        if (!prev) return null;
+        const autoTitle = prev.judul.trim() ? prev.judul : file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+        return {
+          ...prev,
+          judul: autoTitle,
+          ukuranFile: sizeInMB,
+          fileUrl: dataUrl,
+        };
+      });
+      notify(`✓ Berkas "${file.name}" (${sizeInMB}) siap disimpan!`);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSaveArsip = (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingArsip || !editingArsip.judul.trim()) return;
 
-    const exists = arsipSoal.some(a => a.id === editingArsip.id);
+    let finalArsip = { ...editingArsip };
+    if (!finalArsip.fileUrl || finalArsip.fileUrl.trim() === '' || finalArsip.fileUrl === '#') {
+      if (arsipSourceType === 'gdrive') {
+        notify('⚠️ Mohon masukkan tautan Google Drive untuk naskah soal.');
+        return;
+      } else {
+        notify('⚠️ Mohon unggah berkas PDF naskah soal terlebih dahulu.');
+        return;
+      }
+    }
+
+    const exists = arsipSoal.some(a => a.id === finalArsip.id);
     let updated: ArsipSoal[];
     if (exists) {
-      updated = arsipSoal.map(a => a.id === editingArsip.id ? editingArsip : a);
-      notify(`✓ Paket Arsip Soal "${editingArsip.judul}" berhasil diperbarui!`);
+      updated = arsipSoal.map(a => a.id === finalArsip.id ? finalArsip : a);
+      notify(`✓ Paket Arsip Soal "${finalArsip.judul}" berhasil diperbarui!`);
     } else {
-      updated = [editingArsip, ...arsipSoal];
-      notify(`✓ Paket Arsip Soal baru "${editingArsip.judul}" berhasil ditambahkan & tayang!`);
+      updated = [finalArsip, ...arsipSoal];
+      notify(`✓ Paket Arsip Soal baru "${finalArsip.judul}" berhasil ditambahkan & tayang!`);
     }
     setArsipSoal(updated);
     setIsArsipModalOpen(false);
@@ -243,13 +303,26 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
               </button>
             )}
             {activeSubTab === 'arsip' && (
-              <button
-                onClick={handleOpenAddArsip}
-                className="btn-3d-primary inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold cursor-pointer"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Unggah Paket Soal</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <a
+                  href={mainGdriveLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-3d-white inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold text-slate-700 hover:text-indigo-900 border border-slate-200 shadow-sm transition-all"
+                  title="Buka Folder Induk Google Drive Soal"
+                >
+                  <FolderOpen className="w-4 h-4 text-emerald-600" />
+                  <span className="hidden sm:inline">Folder Utama GDrive</span>
+                  <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+                </a>
+                <button
+                  onClick={handleOpenAddArsip}
+                  className="btn-3d-primary inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Unggah Paket Soal</span>
+                </button>
+              </div>
             )}
             {activeSubTab === 'pengumuman' && (
               <button
@@ -561,9 +634,26 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
                             <div className="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 border border-rose-200 flex items-center justify-center shrink-0 shadow-2xs">
                               <FileText className="w-4 h-4" />
                             </div>
-                            <div>
+                            <div className="space-y-0.5">
                               <p className="font-bold text-slate-900 leading-tight">{soal.judul}</p>
-                              <span className="text-[10px] text-slate-500 font-mono">ID: {soal.id}</span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[10px] text-slate-400 font-mono">ID: {soal.id}</span>
+                                {soal.fileUrl && soal.fileUrl.includes('drive.google.com') ? (
+                                  <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                                    <FolderOpen className="w-2.5 h-2.5 text-amber-600" />
+                                    Google Drive
+                                  </span>
+                                ) : soal.fileUrl && soal.fileUrl !== '#' ? (
+                                  <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                                    <FileCheck className="w-2.5 h-2.5 text-emerald-600" />
+                                    Berkas PDF
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded text-[9px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
+                                    Belum Ada Link
+                                  </span>
+                                )}
+                              </div>
                             </div>
                           </div>
                         </td>
@@ -580,6 +670,21 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
                         </td>
                         <td className="py-3.5 px-4 text-right">
                           <div className="flex items-center justify-end gap-1.5">
+                            {soal.fileUrl && soal.fileUrl !== '#' && (
+                              <a
+                                href={soal.fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-2 rounded-xl bg-white hover:bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs transition-colors cursor-pointer inline-flex items-center justify-center"
+                                title={soal.fileUrl.includes('drive.google.com') ? "Buka di Google Drive" : "Buka / Unduh Berkas"}
+                              >
+                                {soal.fileUrl.includes('drive.google.com') ? (
+                                  <FolderOpen className="w-4 h-4 text-emerald-600" />
+                                ) : (
+                                  <ExternalLink className="w-4 h-4 text-emerald-600" />
+                                )}
+                              </a>
+                            )}
                             <button
                               onClick={() => handleOpenEditArsip(soal)}
                               className="p-2 rounded-xl bg-white hover:bg-indigo-50 text-indigo-700 border border-slate-200 shadow-2xs transition-colors cursor-pointer"
@@ -822,6 +927,118 @@ export const KontenPublikView: React.FC<KontenPublikViewProps> = ({ onShowToast 
                   onChange={(e) => setEditingArsip({ ...editingArsip, kategoriNama: e.target.value })}
                   className="glass-3d-input w-full px-3.5 py-2.5 rounded-xl text-slate-900 font-medium"
                 />
+              </div>
+
+              {/* Sumber Berkas Soal: Google Drive vs Upload File */}
+              <div className="space-y-2.5 p-4 rounded-2xl bg-white/70 border border-slate-200/90 shadow-2xs">
+                <div className="flex items-center justify-between">
+                  <label className="font-black text-slate-900 font-['Outfit'] flex items-center gap-1.5 text-xs">
+                    <FolderOpen className="w-4 h-4 text-emerald-600" />
+                    <span>Sumber Berkas Naskah Soal *</span>
+                  </label>
+                  <span className="text-[10px] text-slate-500 font-medium">Pilih metode integrasi</span>
+                </div>
+
+                {/* Switcher Tab */}
+                <div className="grid grid-cols-2 gap-2 p-1 rounded-xl bg-slate-100/90 border border-slate-200 text-[11px] font-bold">
+                  <button
+                    type="button"
+                    onClick={() => setArsipSourceType('gdrive')}
+                    className={`py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                      arsipSourceType === 'gdrive'
+                        ? 'bg-white text-indigo-900 shadow-sm font-black'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    <HardDrive className="w-3.5 h-3.5 text-amber-500" />
+                    <span>Tautan Google Drive</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setArsipSourceType('upload')}
+                    className={`py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                      arsipSourceType === 'upload'
+                        ? 'bg-white text-indigo-900 shadow-sm font-black'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    <UploadCloud className="w-3.5 h-3.5 text-indigo-600" />
+                    <span>Unggah Berkas PDF</span>
+                  </button>
+                </div>
+
+                {/* Option 1: Google Drive */}
+                {arsipSourceType === 'gdrive' ? (
+                  <div className="space-y-2 pt-1">
+                    <div className="flex gap-2">
+                      <div className="relative flex-1">
+                        <Link2 className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                        <input
+                          type="url"
+                          required
+                          value={editingArsip.fileUrl}
+                          onChange={(e) => setEditingArsip({ ...editingArsip, fileUrl: e.target.value })}
+                          placeholder="https://drive.google.com/drive/folders/... atau link file dokumen"
+                          className="glass-3d-input w-full pl-8 pr-3 py-2.5 rounded-xl text-slate-900 font-mono text-xs"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (editingArsip.fileUrl && editingArsip.fileUrl.startsWith('http')) {
+                            window.open(editingArsip.fileUrl, '_blank');
+                          } else {
+                            notify('⚠️ Masukkan link URL yang valid diawali http:// atau https://');
+                          }
+                        }}
+                        disabled={!editingArsip.fileUrl || !editingArsip.fileUrl.startsWith('http')}
+                        className="btn-3d-white px-3.5 py-2 rounded-xl text-xs font-bold text-slate-700 disabled:opacity-50 disabled:cursor-not-allowed shrink-0 flex items-center gap-1.5 cursor-pointer"
+                        title="Buka / Uji Link Google Drive"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
+                        <span>Uji Link</span>
+                      </button>
+                    </div>
+
+                    <div className="p-2.5 rounded-xl bg-amber-50/90 border border-amber-200/80 text-[11px] text-amber-900 leading-relaxed font-medium">
+                      💡 <strong>Disarankan:</strong> Masukkan tautan folder Google Drive atau berkas PDF yang sudah disetel ke <em>"Siapa saja yang memiliki link dapat melihat"</em> (Public Viewer) agar peserta lomba dapat mengaksesnya tanpa terkendala izin akses.
+                    </div>
+                  </div>
+                ) : (
+                  /* Option 2: Upload File PDF */
+                  <div className="space-y-2 pt-1">
+                    <label className="block border-2 border-dashed border-slate-300 hover:border-indigo-400 rounded-2xl p-5 text-center cursor-pointer transition-colors bg-slate-50/60 hover:bg-indigo-50/40">
+                      <input
+                        type="file"
+                        accept=".pdf"
+                        onChange={handlePdfFileUpload}
+                        className="hidden"
+                      />
+                      {uploadedFileName ? (
+                        <div className="flex items-center justify-center gap-3 text-emerald-800 font-bold text-xs py-1">
+                          <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0" />
+                          <div className="text-left">
+                            <p className="text-slate-900 font-black text-sm">{uploadedFileName}</p>
+                            <p className="text-[11px] text-slate-500 font-medium mt-0.5">Ukuran: {editingArsip.ukuranFile} • Klik untuk mengganti berkas</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="space-y-1.5 py-1">
+                          <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto border border-indigo-100">
+                            <UploadCloud className="w-5 h-5" />
+                          </div>
+                          <p className="font-bold text-slate-800 text-xs">
+                            Klik atau seret berkas naskah PDF ke sini
+                          </p>
+                          <p className="text-[10px] text-slate-500">
+                            Format PDF (.pdf) • Ukuran file akan otomatis terhitung
+                          </p>
+                        </div>
+                      )}
+                    </label>
+                  </div>
+                )}
               </div>
 
               <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-200/60">

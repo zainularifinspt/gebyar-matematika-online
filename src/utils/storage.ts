@@ -175,7 +175,17 @@ export function getStoredArsipSoal(): ArsipSoal[] {
       return MOCK_ARSIP_SOAL;
     }
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) && parsed.length > 0 ? parsed : MOCK_ARSIP_SOAL;
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      // Migrate any legacy '#' fileUrls to sample Google Drive links
+      return parsed.map((item: ArsipSoal) => {
+        if (!item.fileUrl || item.fileUrl === '#') {
+          const match = MOCK_ARSIP_SOAL.find(m => m.id === item.id);
+          return match ? { ...item, fileUrl: match.fileUrl } : { ...item, fileUrl: 'https://drive.google.com/drive/folders/1GM-Arsip-Semua-Tahun?usp=sharing' };
+        }
+        return item;
+      });
+    }
+    return MOCK_ARSIP_SOAL;
   } catch {
     return MOCK_ARSIP_SOAL;
   }

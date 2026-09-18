@@ -175,7 +175,7 @@ export const MOCK_ARSIP_SOAL: ArsipSoal[] = [
     tingkat: 'SMA',
     judul: 'Naskah Soal & Kunci Jawaban Babak Penyisihan GM 2024',
     jumlahHalaman: 12,
-    fileUrl: '#',
+    fileUrl: 'https://drive.google.com/drive/folders/1GM-Olimpiade-SMA-2024?usp=sharing',
     ukuranFile: '2.4 MB',
   },
   {
@@ -186,7 +186,7 @@ export const MOCK_ARSIP_SOAL: ArsipSoal[] = [
     tingkat: 'SMP',
     judul: 'Naskah Soal & Pembahasan Analitis Babak Penyisihan GM 2024',
     jumlahHalaman: 10,
-    fileUrl: '#',
+    fileUrl: 'https://drive.google.com/drive/folders/1GM-Terapan-SMP-2024?usp=sharing',
     ukuranFile: '1.9 MB',
   },
   {
@@ -197,7 +197,7 @@ export const MOCK_ARSIP_SOAL: ArsipSoal[] = [
     tingkat: 'SD',
     judul: 'Naskah Soal Eksplorasi Aritmetika & Logika GM 2024',
     jumlahHalaman: 8,
-    fileUrl: '#',
+    fileUrl: 'https://drive.google.com/drive/folders/1GM-Dasar-SD-2024?usp=sharing',
     ukuranFile: '1.6 MB',
   },
   {
@@ -208,7 +208,7 @@ export const MOCK_ARSIP_SOAL: ArsipSoal[] = [
     tingkat: 'SMA',
     judul: 'Paket Soal Final & Kunci Solusi Gebyar Matematika 2023',
     jumlahHalaman: 14,
-    fileUrl: '#',
+    fileUrl: 'https://drive.google.com/drive/folders/1GM-Olimpiade-SMA-2023?usp=sharing',
     ukuranFile: '3.1 MB',
   },
   {
@@ -219,7 +219,7 @@ export const MOCK_ARSIP_SOAL: ArsipSoal[] = [
     tingkat: 'SMP',
     judul: 'Paket Soal Penyisihan & Final Gebyar Matematika 2023',
     jumlahHalaman: 11,
-    fileUrl: '#',
+    fileUrl: 'https://drive.google.com/drive/folders/1GM-Terapan-SMP-2023?usp=sharing',
     ukuranFile: '2.1 MB',
   },
   {
@@ -230,7 +230,7 @@ export const MOCK_ARSIP_SOAL: ArsipSoal[] = [
     tingkat: 'Semua Tingkat',
     judul: 'Kompilasi Soal Seleksi Gebyar Matematika Nasional 2022',
     jumlahHalaman: 28,
-    fileUrl: '#',
+    fileUrl: 'https://drive.google.com/drive/folders/1GM-Arsip-Semua-Tahun?usp=sharing',
     ukuranFile: '4.8 MB',
   },
 ];
