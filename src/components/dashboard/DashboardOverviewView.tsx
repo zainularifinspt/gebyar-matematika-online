@@ -6,14 +6,16 @@ import {
   GraduationCap, 
   ArrowUpRight, 
   ChevronRight,
-  Award
+  Award,
+  Trophy
 } from 'lucide-react';
 import type { PesertaAdminItem, NilaiUjianItem } from '../../types';
+import { useStoredKategori } from '../../utils/storage';
 
 interface DashboardOverviewViewProps {
   pesertaList: PesertaAdminItem[];
   nilaiList: NilaiUjianItem[];
-  onNavigateTab: (tab: 'peserta' | 'nilai' | 'pembayaran') => void;
+  onNavigateTab: (tab: 'peserta' | 'nilai' | 'pembayaran' | 'kategori') => void;
 }
 
 export const DashboardOverviewView: React.FC<DashboardOverviewViewProps> = ({
@@ -21,12 +23,9 @@ export const DashboardOverviewView: React.FC<DashboardOverviewViewProps> = ({
   nilaiList,
   onNavigateTab,
 }) => {
+  const [kategoriList] = useStoredKategori();
   const totalLunas = pesertaList.filter(p => p.statusPembayaran === 'lunas').length;
   const totalPending = pesertaList.filter(p => p.statusPembayaran !== 'lunas').length;
-
-  const countSd = pesertaList.filter(p => p.kategoriId === 'kat-sd').length;
-  const countSmp = pesertaList.filter(p => p.kategoriId === 'kat-smp').length;
-  const countSma = pesertaList.filter(p => p.kategoriId === 'kat-sma').length;
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -122,84 +121,82 @@ export const DashboardOverviewView: React.FC<DashboardOverviewViewProps> = ({
                   Distribusi Pendaftar per Kategori
                 </h3>
               </div>
-              <p className="text-xs text-slate-500 font-medium mt-0.5">Alokasi kuota dan kepesertaan aktif nasional</p>
+              <p className="text-xs text-slate-500 font-medium mt-0.5">Kepesertaan aktif dan alokasi pendaftar nasional</p>
             </div>
-            <span className="text-xs font-black text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200 shadow-2xs font-mono">
-              Total Kuota: 1.700
+            <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 shadow-2xs inline-flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              Pendaftaran Terbuka
             </span>
           </div>
 
-          <div className="space-y-4">
-            
-            {/* SD */}
-            <div className="p-3.5 rounded-2xl bg-white/70 border border-white/90 space-y-2">
-              <div className="flex justify-between items-center text-xs">
-                <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full bg-emerald-500 shadow-2xs" />
-                  <span className="font-extrabold text-slate-900 font-['Outfit']">Matematika Dasar SD / MI</span>
-                </div>
-                <span className="text-slate-800 font-bold font-mono tabular-nums">
-                  {countSd} / 500 Kuota <span className="text-emerald-700 font-black">({Math.round((countSd / 500) * 100)}%)</span>
-                </span>
-              </div>
-              <div className="w-full h-3 rounded-full bg-slate-100/90 overflow-hidden p-0.5 shadow-inner border border-slate-200/60">
-                <div 
-                  className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-500 shadow-xs" 
-                  style={{ width: `${Math.max(3, (countSd / 500) * 100)}%` }} 
-                />
-              </div>
-            </div>
+          <div className="space-y-3.5">
+            {kategoriList.map((kat) => {
+              const regCount = pesertaList.filter(
+                p => p.kategoriId === kat.id || p.kategoriNama.toLowerCase() === kat.nama.toLowerCase()
+              ).length;
+              const percent = pesertaList.length > 0 ? Math.round((regCount / pesertaList.length) * 100) : 0;
+              const isGroup = kat.tipeKepesertaan === 'kelompok';
 
-            {/* SMP */}
-            <div className="p-3.5 rounded-2xl bg-white/70 border border-white/90 space-y-2">
-              <div className="flex justify-between items-center text-xs">
-                <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full bg-cyan-500 shadow-2xs" />
-                  <span className="font-extrabold text-slate-900 font-['Outfit']">Matematika Terapan SMP / MTs</span>
+              return (
+                <div key={kat.id} className="p-3.5 rounded-2xl bg-white/70 border border-white/90 space-y-2">
+                  <div className="flex justify-between items-center text-xs">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${
+                        kat.warnaAksen === 'amber' ? 'bg-amber-500' :
+                        kat.warnaAksen === 'cyan' ? 'bg-cyan-500' :
+                        kat.warnaAksen === 'purple' ? 'bg-purple-500' :
+                        kat.warnaAksen === 'emerald' ? 'bg-emerald-500' :
+                        kat.warnaAksen === 'rose' ? 'bg-rose-500' : 'bg-blue-500'
+                      }`} />
+                      <span className="font-extrabold text-slate-900 font-['Outfit'] truncate">{kat.nama}</span>
+                      <span className="text-[10px] font-bold px-2 py-0.2 rounded-full bg-slate-100 text-slate-600 border border-slate-200 shrink-0">
+                        {isGroup ? `Kelompok (${kat.maksAnggota || 3} Orang)` : 'Individu'}
+                      </span>
+                    </div>
+                    <span className="text-slate-800 font-bold font-mono tabular-nums shrink-0 ml-2">
+                      {regCount} Peserta <span className="text-indigo-700 font-black">({percent}%)</span>
+                    </span>
+                  </div>
+                  <div className="w-full h-2.5 rounded-full bg-slate-100/90 overflow-hidden p-0.5 shadow-inner border border-slate-200/60">
+                    <div 
+                      className={`h-full rounded-full transition-all duration-500 shadow-xs ${
+                        kat.warnaAksen === 'amber' ? 'bg-gradient-to-r from-amber-400 to-amber-600' :
+                        kat.warnaAksen === 'cyan' ? 'bg-gradient-to-r from-cyan-400 to-cyan-600' :
+                        kat.warnaAksen === 'purple' ? 'bg-gradient-to-r from-purple-400 to-purple-600' :
+                        kat.warnaAksen === 'emerald' ? 'bg-gradient-to-r from-emerald-400 to-emerald-600' :
+                        kat.warnaAksen === 'rose' ? 'bg-gradient-to-r from-rose-400 to-rose-600' : 'bg-gradient-to-r from-blue-400 to-blue-600'
+                      }`}
+                      style={{ width: `${Math.max(regCount > 0 ? 5 : 2, percent)}%` }} 
+                    />
+                  </div>
                 </div>
-                <span className="text-slate-800 font-bold font-mono tabular-nums">
-                  {countSmp} / 600 Kuota <span className="text-cyan-700 font-black">({Math.round((countSmp / 600) * 100)}%)</span>
-                </span>
-              </div>
-              <div className="w-full h-3 rounded-full bg-slate-100/90 overflow-hidden p-0.5 shadow-inner border border-slate-200/60">
-                <div 
-                  className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-cyan-600 transition-all duration-500 shadow-xs" 
-                  style={{ width: `${Math.max(3, (countSmp / 600) * 100)}%` }} 
-                />
-              </div>
-            </div>
-
-            {/* SMA */}
-            <div className="p-3.5 rounded-2xl bg-white/70 border border-white/90 space-y-2">
-              <div className="flex justify-between items-center text-xs">
-                <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full bg-purple-500 shadow-2xs" />
-                  <span className="font-extrabold text-slate-900 font-['Outfit']">Olimpiade SMA / MA / SMK</span>
-                </div>
-                <span className="text-slate-800 font-bold font-mono tabular-nums">
-                  {countSma} / 600 Kuota <span className="text-purple-700 font-black">({Math.round((countSma / 600) * 100)}%)</span>
-                </span>
-              </div>
-              <div className="w-full h-3 rounded-full bg-slate-100/90 overflow-hidden p-0.5 shadow-inner border border-slate-200/60">
-                <div 
-                  className="h-full rounded-full bg-purple-600 transition-all duration-500 shadow-xs" 
-                  style={{ width: `${Math.max(3, (countSma / 600) * 100)}%` }} 
-                />
-              </div>
-            </div>
-
+              );
+            })}
           </div>
 
           {/* Quick Info Box */}
-          <div className="p-4 rounded-2xl bg-white/80 border border-white/95 text-xs text-slate-700 flex items-center justify-between shadow-2xs">
-            <span className="font-semibold">Sisa total kuota: <strong className="text-slate-900 font-mono">{1700 - pesertaList.length}</strong> kursi tersedia.</span>
-            <button
-              onClick={() => onNavigateTab('peserta')}
-              className="text-indigo-600 hover:text-indigo-800 font-bold flex items-center gap-1 cursor-pointer transition-colors"
-            >
-              <span>Lihat Semua Peserta</span>
-              <ChevronRight className="w-4 h-4" />
-            </button>
+          <div className="p-4 rounded-2xl bg-white/80 border border-white/95 text-xs text-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-2xs">
+            <span className="font-semibold text-slate-800 flex items-center gap-1.5">
+              <Trophy className="w-4 h-4 text-amber-600" />
+              <span>{kategoriList.length} Kategori Kompetisi Aktif Nasional</span>
+            </span>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => onNavigateTab('kategori')}
+                className="text-amber-700 hover:text-amber-900 font-bold flex items-center gap-1 cursor-pointer transition-colors"
+              >
+                <span>Kelola Kategori</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+              <span className="text-slate-300">•</span>
+              <button
+                onClick={() => onNavigateTab('peserta')}
+                className="text-indigo-600 hover:text-indigo-800 font-bold flex items-center gap-1 cursor-pointer transition-colors"
+              >
+                <span>Lihat Semua Peserta</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
         </div>
 

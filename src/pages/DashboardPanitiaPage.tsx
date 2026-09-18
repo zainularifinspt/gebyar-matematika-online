@@ -19,6 +19,7 @@ import {
 } from '../utils/storage';
 import type { TemplateDokumenItem } from '../types';
 import { CheckCircle2 } from 'lucide-react';
+import { KelolaKategoriView } from '../components/dashboard/KelolaKategoriView';
 
 interface DashboardPanitiaPageProps {
   onExitDashboard: () => void;
@@ -147,6 +148,10 @@ export const DashboardPanitiaPage: React.FC<DashboardPanitiaPageProps> = ({
               nilaiList={nilaiList}
               onNavigateTab={(tab) => setActiveTab(tab)}
             />
+          )}
+
+          {activeTab === 'kategori' && (
+            <KelolaKategoriView onShowToast={(msg) => showToast(msg)} />
           )}
 
           {(activeTab === 'peserta' || activeTab === 'pembayaran') && (

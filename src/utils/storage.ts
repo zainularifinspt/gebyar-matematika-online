@@ -5,7 +5,8 @@ import type {
   ArsipSoal, 
   PesertaAdminItem, 
   NilaiUjianItem, 
-  TemplateDokumenItem 
+  TemplateDokumenItem,
+  KategoriLomba
 } from '../types';
 import { 
   MOCK_PENGUMUMAN, 
@@ -13,6 +14,7 @@ import {
   MOCK_ARSIP_SOAL, 
   MOCK_TEMPLATE_DOKUMEN,
   MOCK_PANITIA,
+  MOCK_KATEGORI,
   type PanitiaMember
 } from '../data/mockData';
 
@@ -25,6 +27,7 @@ const KEYS = {
   NILAI: 'gm_nilai_ujian_v2',
   TEMPLATES: 'gm_templates_v2',
   PANITIA: 'gm_panitia_v2',
+  KATEGORI: 'gm_kategori_lomba_v2',
 } as const;
 
 // Custom Event Name for real-time reactive sync across components
@@ -254,6 +257,13 @@ export function saveStoredPeserta(list: PesertaAdminItem[]): void {
   }
 }
 
+export function addStoredPeserta(peserta: PesertaAdminItem): PesertaAdminItem[] {
+  const current = getStoredPeserta();
+  const updated = [peserta, ...current.filter(p => p.id !== peserta.id)];
+  saveStoredPeserta(updated);
+  return updated;
+}
+
 export function verifyPesertaManual(id: string): PesertaAdminItem[] {
   const current = getStoredPeserta();
   const updated = current.map(p => 
@@ -471,4 +481,70 @@ export function downloadAsCsv(filename: string, headers: string[], rows: (string
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
+}
+
+// ----------------------------------------------------
+// KATEGORI & JENIS LOMBA STORAGE
+// ----------------------------------------------------
+export function getStoredKategori(): KategoriLomba[] {
+  if (typeof window === 'undefined') return MOCK_KATEGORI;
+  try {
+    const raw = localStorage.getItem(KEYS.KATEGORI);
+    if (!raw) {
+      localStorage.setItem(KEYS.KATEGORI, JSON.stringify(MOCK_KATEGORI));
+      return MOCK_KATEGORI;
+    }
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : MOCK_KATEGORI;
+  } catch {
+    return MOCK_KATEGORI;
+  }
+}
+
+export function saveStoredKategori(list: KategoriLomba[]): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(KEYS.KATEGORI, JSON.stringify(list));
+    notifyStorageChange(KEYS.KATEGORI, list);
+  } catch (e) {
+    console.error('Error saving kategori:', e);
+  }
+}
+
+export function addStoredKategori(cat: KategoriLomba): KategoriLomba[] {
+  const current = getStoredKategori();
+  const updated = [cat, ...current.filter(c => c.id !== cat.id)];
+  saveStoredKategori(updated);
+  return updated;
+}
+
+export function updateStoredKategori(cat: KategoriLomba): KategoriLomba[] {
+  const current = getStoredKategori();
+  const updated = current.map(c => c.id === cat.id ? cat : c);
+  saveStoredKategori(updated);
+  return updated;
+}
+
+export function deleteStoredKategori(id: string): KategoriLomba[] {
+  const current = getStoredKategori();
+  const updated = current.filter(c => c.id !== id);
+  saveStoredKategori(updated);
+  return updated;
+}
+
+export function useStoredKategori(): [KategoriLomba[], (list: KategoriLomba[]) => void] {
+  const [data, setData] = useState<KategoriLomba[]>(getStoredKategori);
+
+  useEffect(() => {
+    const handleUpdate = (e: Event) => {
+      const ce = e as CustomEvent<{ key: string; data: KategoriLomba[] }>;
+      if (ce.detail?.key === KEYS.KATEGORI) {
+        setData(ce.detail.data);
+      }
+    };
+    window.addEventListener(STORAGE_EVENT, handleUpdate);
+    return () => window.removeEventListener(STORAGE_EVENT, handleUpdate);
+  }, []);
+
+  return [data, saveStoredKategori];
 }

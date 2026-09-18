@@ -8,10 +8,11 @@ import {
   ArrowLeft, 
   Award,
   Crown,
-  UserCheck
+  UserCheck,
+  Trophy
 } from 'lucide-react';
 
-export type DashboardTab = 'overview' | 'peserta' | 'nilai' | 'pembayaran' | 'template' | 'konten' | 'panitia_mgmt';
+export type DashboardTab = 'overview' | 'kategori' | 'peserta' | 'nilai' | 'pembayaran' | 'template' | 'konten' | 'panitia_mgmt';
 
 interface DashboardSidebarProps {
   activeTab: DashboardTab;
@@ -33,9 +34,10 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
   const isSuperAdmin = currentUser?.role === 'Super Admin' || 
                        currentUser?.role?.includes('Admin');
 
-  // Navigation Items: Super Admin gets exclusive access to 'panitia_mgmt'
+  // Navigation Items
   const navItems: { id: DashboardTab; label: string; icon: React.ReactNode; badge?: string; superAdminOnly?: boolean }[] = [
     { id: 'overview', label: 'Ringkasan & Metrik', icon: <LayoutDashboard className="w-4 h-4" /> },
+    { id: 'kategori', label: 'Jenis & Kategori Lomba', icon: <Trophy className="w-4 h-4 text-amber-600" />, badge: 'Live' },
     { id: 'peserta', label: 'Data Peserta', icon: <Users className="w-4 h-4" />, badge: pesertaCount > 0 ? String(pesertaCount) : undefined },
     { id: 'nilai', label: 'Nilai Ujian CBT', icon: <GraduationCap className="w-4 h-4" />, badge: 'Sync' },
     { id: 'pembayaran', label: 'Status Pembayaran', icon: <CreditCard className="w-4 h-4" /> },

@@ -55,7 +55,7 @@ export const PaymentOverviewCard: React.FC<PaymentOverviewCardProps> = ({
             <AlertCircle className="w-5 h-5 text-amber-700 shrink-0" />
             <div>
               <p className="text-xs font-black text-amber-950">Batas Waktu Penyelesaian Pembayaran</p>
-              <p className="text-[11px] text-amber-800 font-medium">Selesaikan sebelum batas waktu agar kuota tidak dibatalkan.</p>
+              <p className="text-[11px] text-amber-800 font-medium">Selesaikan sebelum batas waktu agar verifikasi pendaftaran Anda diproses otomatis.</p>
             </div>
           </div>
           <div className="text-right shrink-0">

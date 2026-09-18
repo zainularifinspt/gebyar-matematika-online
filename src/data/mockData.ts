@@ -20,10 +20,18 @@ export const MOCK_KATEGORI: KategoriLomba[] = [
   {
     id: 'kat-sd',
     nama: 'Matematika Dasar SD / MI',
+    kategori: 'Olimpiade Perorangan',
     tingkat: 'SD/MI',
+    tipeKepesertaan: 'individu',
     biaya: 50000,
-    kuota: 500,
     terdaftar: 0,
+    status: 'aktif',
+    persyaratan: [
+      'Siswa aktif kelas 4, 5, atau 6 SD/MI se-Indonesia',
+      'Memiliki NISN valid yang terdaftar di Kemendikbudristek/Kemenag',
+      'Surat keterangan siswa aktif atau Kartu Pelajar',
+      'Pas foto formal berwarna ukuran 3x4'
+    ],
     jadwalPenyisihan: '24 Oktober 2027, 08:30 - 10:30 WIB',
     jadwalFinal: '07 November 2027, 09:00 - 11:30 WIB',
     deskripsi: 'Kompetisi penalaran aritmetika, pola bilangan, geometri dasar, dan pemecahan masalah kontekstual untuk siswa kelas 4, 5, dan 6 SD/MI.',
@@ -44,10 +52,18 @@ export const MOCK_KATEGORI: KategoriLomba[] = [
   {
     id: 'kat-smp',
     nama: 'Matematika Terapan SMP / MTs',
+    kategori: 'Olimpiade Perorangan',
     tingkat: 'SMP/MTs',
+    tipeKepesertaan: 'individu',
     biaya: 65000,
-    kuota: 600,
     terdaftar: 0,
+    status: 'aktif',
+    persyaratan: [
+      'Siswa aktif kelas 7, 8, atau 9 SMP/MTs se-Indonesia',
+      'Memiliki NISN aktif dan terverifikasi',
+      'Kartu Pelajar atau Surat Keterangan dari Kepala Sekolah',
+      'Pas foto formal berwarna ukuran 3x4'
+    ],
     jadwalPenyisihan: '24 Oktober 2027, 13:00 - 15:00 WIB',
     jadwalFinal: '07 November 2027, 13:00 - 15:30 WIB',
     deskripsi: 'Tantangan aljabar, teori bilangan, statistika terapan, dan eksplorasi logika matematika untuk siswa kelas 7, 8, dan 9 SMP/MTs.',
@@ -68,10 +84,18 @@ export const MOCK_KATEGORI: KategoriLomba[] = [
   {
     id: 'kat-sma',
     nama: 'Olimpiade Matematika SMA / MA / SMK',
+    kategori: 'Olimpiade Perorangan',
     tingkat: 'SMA/MA/SMK',
+    tipeKepesertaan: 'individu',
     biaya: 75000,
-    kuota: 600,
     terdaftar: 0,
+    status: 'aktif',
+    persyaratan: [
+      'Siswa aktif kelas 10, 11, atau 12 SMA/MA/SMK se-Indonesia',
+      'Memiliki NISN aktif dan terdaftar resmi',
+      'Kartu Pelajar yang masih berlaku',
+      'Pas foto formal berwarna ukuran 3x4'
+    ],
     jadwalPenyisihan: '25 Oktober 2027, 09:00 - 11:30 WIB',
     jadwalFinal: '08 November 2027, 09:00 - 12:00 WIB',
     deskripsi: 'Kompetisi tingkat tinggi berstandar olimpiade nasional mencakup aljabar abstrak, trigonometri, kalkulus dasar, dan kombinatorika analitik.',
@@ -88,6 +112,39 @@ export const MOCK_KATEGORI: KategoriLomba[] = [
       'Prinsip Pigeonhole & Kombinatorika Pembuktian'
     ],
     warnaAksen: 'purple',
+  },
+  {
+    id: 'kat-ccm',
+    nama: 'Cerdas Cermat Matematika (CCM)',
+    kategori: 'Cerdas Cermat Cepat Tepat',
+    tingkat: 'SMP/MTs & SMA',
+    tipeKepesertaan: 'kelompok',
+    maksAnggota: 3,
+    biaya: 120000,
+    terdaftar: 0,
+    status: 'aktif',
+    persyaratan: [
+      'Tim terdiri dari 3 siswa aktif dari sekolah yang sama',
+      'Surat Rekomendasi/Tugas Resmi dari Kepala Sekolah atau Guru Pembina',
+      'Kartu Pelajar masing-masing anggota tim',
+      '1 Ketua Tim bertindak sebagai kontak perwakilan delegasi'
+    ],
+    jadwalPenyisihan: '26 Oktober 2027, 09:00 - 12:00 WIB',
+    jadwalFinal: '09 November 2027, 09:00 - 13:00 WIB',
+    deskripsi: 'Kompetisi beregu 3 siswa yang menguji kecepatan berhitung, analisis strategi pemecahan masalah, dan kekompakan tim dalam babak rebutan & adu cepat matematika.',
+    hadiah: [
+      'Juara 1: Trofi Bergilir Dekan FKIP ULM + Uang Pembinaan Rp 6.000.000 + Sertifikat Tim Juara',
+      'Juara 2: Trofi Perak + Piagam + Uang Pembinaan Rp 4.000.000',
+      'Juara 3: Trofi Perunggu + Piagam + Uang Pembinaan Rp 2.500.000',
+      'Harapan 1: Piagam Apresiasi + Paket Buku Olimpiade'
+    ],
+    materi: [
+      'Aritmetika Cepat & Pola Bilangan Kilat',
+      'Logika Matematika & Teka-Teki Pemecahan Masalah',
+      'Aljabar Terapan & Geometri Praktis',
+      'Strategi Adu Cepat & Babak Rebutan'
+    ],
+    warnaAksen: 'emerald',
   },
 ];
 
@@ -126,14 +183,14 @@ export const MOCK_JADWAL: JadwalEvent[] = [
     id: 'j-1',
     fase: 'Pendaftaran Gelombang 1',
     tanggal: '15 Sep - 10 Okt 2027',
-    keterangan: 'Pendaftaran dibuka untuk peserta mandiri & delegasi sekolah dengan kuota terbatas.',
+    keterangan: 'Pendaftaran dibuka terbuka untuk seluruh peserta mandiri & delegasi sekolah nasional.',
     status: 'berlangsung',
   },
   {
     id: 'j-2',
     fase: 'Pendaftaran Gelombang 2',
     tanggal: '11 Okt - 20 Okt 2027',
-    keterangan: 'Pendaftaran kuota reguler dan penutupan data peserta.',
+    keterangan: 'Pendaftaran reguler nasional dan finalisasi data peserta lomba.',
     status: 'akan_datang',
   },
   {

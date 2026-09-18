@@ -49,7 +49,7 @@ export const Footer: React.FC = () => {
               <li>
                 <a href="#kategori" className="text-slate-600 hover:text-indigo-600 flex items-center gap-1.5 transition-colors font-medium">
                   <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                  Kategori & Kuota Lomba
+                  Kategori & Jenis Lomba
                 </a>
               </li>
               <li>

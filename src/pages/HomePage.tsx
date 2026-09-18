@@ -17,16 +17,16 @@ const FormPendaftaranModal = lazy(() => import('../components/registration/FormP
 const AnnouncementDetailModal = lazy(() => import('../components/home/AnnouncementDetailModal').then(m => ({ default: m.AnnouncementDetailModal })));
 
 import { 
-  MOCK_KATEGORI, 
   MOCK_JADWAL, 
   MOCK_FAQ 
 } from '../data/mockData';
 import { 
   useStoredPengumuman, 
   useStoredVideos, 
-  useStoredArsipSoal 
+  useStoredArsipSoal,
+  useStoredKategori 
 } from '../utils/storage';
-import type { KategoriLomba, Pengumuman } from '../types';
+import type { KategoriLomba, Pengumuman, Pembayaran } from '../types';
 import { CheckCircle2, UserCheck } from 'lucide-react';
 
 interface HomePageProps {
@@ -35,6 +35,7 @@ interface HomePageProps {
   onNavigateToLogin?: () => void;
   onNavigateToGuru?: () => void;
   onNavigateToRegistrationDetail?: () => void;
+  onProceedToPaymentWithOrder?: (order: Pembayaran) => void;
   activeUser?: { name: string; email: string; role: string; sekolah?: string } | null;
   onLogout?: () => void;
 }
@@ -45,6 +46,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   onNavigateToLogin,
   onNavigateToGuru,
   onNavigateToRegistrationDetail,
+  onProceedToPaymentWithOrder,
   activeUser: externalActiveUser,
   onLogout,
 }) => {
@@ -52,6 +54,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isFormPendaftaranOpen, setIsFormPendaftaranOpen] = useState(false);
   const [selectedKategoriForRegister, setSelectedKategoriForRegister] = useState<KategoriLomba | null>(null);
+  const [pendingKategoriForRegister, setPendingKategoriForRegister] = useState<KategoriLomba | null>(null);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState<Pengumuman | null>(null);
   const [internalUser, setInternalUser] = useState<{ name: string; email: string; role: string } | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -60,6 +63,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   const [storedPengumuman] = useStoredPengumuman();
   const [storedVideos] = useStoredVideos();
   const [storedArsipSoal] = useStoredArsipSoal();
+  const [storedKategori] = useStoredKategori();
 
   const breakingAnnouncement = storedPengumuman.find(p => p.isPenting) || storedPengumuman[0];
 
@@ -80,12 +84,31 @@ export const HomePage: React.FC<HomePageProps> = ({
   };
 
   const handleSelectCategory = (category: KategoriLomba) => {
+    // Alur Baru: User harus login terlebih dahulu
+    if (!activeUser) {
+      setPendingKategoriForRegister(category);
+      setIsAuthModalOpen(true);
+      showToast(`Silakan masuk atau daftar akun peserta terlebih dahulu untuk mendaftar "${category.nama}".`);
+      return;
+    }
+
     setSelectedKategoriForRegister(category);
     setIsFormPendaftaranOpen(true);
   };
 
   const handleLoginSuccess = (user: { name: string; email: string; role: string }) => {
     setInternalUser(user);
+    
+    // Jika login dipicu oleh klik "Pilih Kategori Ini", lanjutkan langsung ke formulir pendaftaran
+    if (pendingKategoriForRegister) {
+      const targetKat = pendingKategoriForRegister;
+      setPendingKategoriForRegister(null);
+      setSelectedKategoriForRegister(targetKat);
+      setIsFormPendaftaranOpen(true);
+      showToast(`Selamat datang, ${user.name}! Formulir pendaftaran "${targetKat.nama}" telah dibuka.`);
+      return;
+    }
+
     showToast(`Selamat datang, ${user.name}! Akun ${user.role} siap digunakan.`);
     const roleLower = (user.role || '').toLowerCase();
     const isPanitiaOrAdmin = 
@@ -186,6 +209,11 @@ export const HomePage: React.FC<HomePageProps> = ({
         {/* Hero Section */}
         <HeroSection
           onRegisterClick={() => {
+            if (!activeUser) {
+              setIsAuthModalOpen(true);
+              showToast('Silakan login atau daftar akun peserta terlebih dahulu untuk mendaftar.');
+              return;
+            }
             setSelectedKategoriForRegister(null);
             setIsFormPendaftaranOpen(true);
           }}
@@ -198,7 +226,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
         {/* Kategori Lomba & Jadwal Timeline Section */}
         <CategoryScheduleSection
-          categories={MOCK_KATEGORI}
+          categories={storedKategori}
           schedules={MOCK_JADWAL}
           onSelectCategory={handleSelectCategory}
         />
@@ -254,9 +282,9 @@ export const HomePage: React.FC<HomePageProps> = ({
             defaultKategori={selectedKategoriForRegister}
             currentUser={activeUser}
             onSuccessRegister={(orderData) => {
-              showToast(`Pendaftaran ${orderData.namaSiswa} dari ${orderData.sekolah} berhasil dibuat!`);
-              if (onNavigateToRegistrationDetail) {
-                onNavigateToRegistrationDetail();
+              showToast(`Pendaftaran ${orderData.peserta?.namaSiswa} berhasil dibuat! Mengalihkan ke halaman pembayaran...`);
+              if (onProceedToPaymentWithOrder) {
+                onProceedToPaymentWithOrder(orderData);
               } else if (onNavigateToPayment) {
                 onNavigateToPayment();
               }

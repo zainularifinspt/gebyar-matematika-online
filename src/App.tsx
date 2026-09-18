@@ -1,5 +1,6 @@
 import { useState, lazy, Suspense } from 'react';
 import { HomePage } from './pages/HomePage';
+import type { Pembayaran } from './types';
 
 const PaymentPage = lazy(() => import('./pages/PaymentPage').then(m => ({ default: m.PaymentPage })));
 const DashboardPanitiaPage = lazy(() => import('./pages/DashboardPanitiaPage').then(m => ({ default: m.DashboardPanitiaPage })));
@@ -19,6 +20,7 @@ const PageLoadingFallback = () => (
 function App() {
   const [currentView, setCurrentView] = useState<'home' | 'payment' | 'dashboard' | 'login' | 'guru' | 'registration'>('home');
   const [activeUser, setActiveUser] = useState<{ name: string; email: string; role: string; sekolah?: string } | null>(null);
+  const [activeOrder, setActiveOrder] = useState<Pembayaran | null>(null);
 
   if (currentView === 'login') {
     return (
@@ -76,7 +78,10 @@ function App() {
   if (currentView === 'payment') {
     return (
       <Suspense fallback={<PageLoadingFallback />}>
-        <PaymentPage onBackToHome={() => setCurrentView('home')} />
+        <PaymentPage 
+          onBackToHome={() => setCurrentView('home')} 
+          orderData={activeOrder}
+        />
       </Suspense>
     );
   }
@@ -99,8 +104,15 @@ function App() {
       onNavigateToLogin={() => setCurrentView('login')}
       onNavigateToGuru={() => setCurrentView('guru')}
       onNavigateToRegistrationDetail={() => setCurrentView('registration')}
+      onProceedToPaymentWithOrder={(order) => {
+        setActiveOrder(order);
+        setCurrentView('payment');
+      }}
       activeUser={activeUser}
-      onLogout={() => setActiveUser(null)}
+      onLogout={() => {
+        setActiveUser(null);
+        setActiveOrder(null);
+      }}
     />
   );
 }

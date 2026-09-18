@@ -17,26 +17,56 @@ import { PaymentHistoryTable } from '../components/payment/PaymentHistoryTable';
 import { loadMidtransSnap } from '../utils/midtrans';
 import { 
   MOCK_PEMBAYARAN_AKTIF, 
-  MOCK_RIWAYAT_PEMBAYARAN, 
-  MOCK_KARTU_PESERTA 
+  MOCK_RIWAYAT_PEMBAYARAN 
 } from '../data/mockData';
 import type { Pembayaran } from '../types';
+import { getStoredPeserta, saveStoredPeserta } from '../utils/storage';
 
 interface PaymentPageProps {
   onBackToHome: () => void;
+  orderData?: Pembayaran | null;
 }
 
-export const PaymentPage: React.FC<PaymentPageProps> = ({ onBackToHome }) => {
-  const [currentPayment, setCurrentPayment] = useState<Pembayaran>(MOCK_PEMBAYARAN_AKTIF);
+export const PaymentPage: React.FC<PaymentPageProps> = ({ onBackToHome, orderData }) => {
+  const [currentPayment, setCurrentPayment] = useState<Pembayaran>(() => {
+    return orderData || MOCK_PEMBAYARAN_AKTIF;
+  });
   const [paymentHistory, setPaymentHistory] = useState<Pembayaran[]>(MOCK_RIWAYAT_PEMBAYARAN);
   const [activeTab, setActiveTab] = useState<'checkout' | 'history'>('checkout');
   const [selectedMethod, setSelectedMethod] = useState<'QRIS' | 'VA'>('QRIS');
   const [isProcessing, setIsProcessing] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  React.useEffect(() => {
+    if (orderData) {
+      setCurrentPayment(orderData);
+      setPaymentHistory(prev => [orderData, ...prev.filter(p => p.id !== orderData.id)]);
+    }
+  }, [orderData]);
+
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 4000);
+  };
+
+  const markPaymentAsVerified = (paymentToVerify: Pembayaran) => {
+    const updatedPayment: Pembayaran = {
+      ...paymentToVerify,
+      status: 'lunas',
+      waktuLunas: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB',
+    };
+    setCurrentPayment(updatedPayment);
+    setPaymentHistory(prev => [updatedPayment, ...prev.filter(p => p.id !== updatedPayment.id)]);
+
+    // Synchronize automatically with storedPeserta so admin dashboard instantly reflects lunas
+    const pesertaList = getStoredPeserta();
+    const updatedPesertaList = pesertaList.map(p => 
+      (p.orderId === updatedPayment.orderId || p.pendaftaranId === updatedPayment.pendaftaranId)
+        ? { ...p, statusPembayaran: 'lunas' as const, kartuTercetak: true }
+        : p
+    );
+    saveStoredPeserta(updatedPesertaList);
+    showToast('✓ Pembayaran Berhasil Dikonfirmasi! Pendaftaran Anda Resmi Terverifikasi.');
   };
 
   // Real Online Payment with graceful offline simulation fallback
@@ -71,14 +101,7 @@ export const PaymentPage: React.FC<PaymentPageProps> = ({ onBackToHome }) => {
           setIsProcessing(false);
           window.snap.pay(data.token, {
             onSuccess: () => {
-              const updatedPayment: Pembayaran = {
-                ...currentPayment,
-                status: 'lunas',
-                waktuLunas: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB',
-              };
-              setCurrentPayment(updatedPayment);
-              setPaymentHistory(prev => [updatedPayment, ...prev]);
-              showToast('✓ Pembayaran Berhasil Dikonfirmasi Otomatis!');
+              markPaymentAsVerified(currentPayment);
             },
             onPending: () => {
               showToast('Transaksi dibuat. Silakan selesaikan pembayaran di aplikasi m-Banking/e-Wallet Anda.');
@@ -100,14 +123,7 @@ export const PaymentPage: React.FC<PaymentPageProps> = ({ onBackToHome }) => {
     // Fallback simulation
     setTimeout(() => {
       setIsProcessing(false);
-      const updatedPayment: Pembayaran = {
-        ...currentPayment,
-        status: 'lunas',
-        waktuLunas: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB',
-      };
-      setCurrentPayment(updatedPayment);
-      setPaymentHistory(prev => [updatedPayment, ...prev.filter(p => p.id !== currentPayment.id)]);
-      showToast('✓ Pembayaran Berhasil Dikonfirmasi Otomatis!');
+      markPaymentAsVerified(currentPayment);
     }, 1200);
   };
 
@@ -211,7 +227,20 @@ export const PaymentPage: React.FC<PaymentPageProps> = ({ onBackToHome }) => {
             {currentPayment.status === 'lunas' ? (
               <PaymentSuccessCard
                 payment={currentPayment}
-                card={MOCK_KARTU_PESERTA}
+                card={{
+                  id: `kartu-${currentPayment.orderId}`,
+                  pendaftaranId: currentPayment.pendaftaranId,
+                  kodeKartu: `KARTU-${currentPayment.peserta?.tingkat?.replace(/[^a-zA-Z]/g, '') || 'SMA'}-${currentPayment.orderId.slice(-4)}`,
+                  namaSiswa: currentPayment.peserta?.namaSiswa || 'Peserta Terdaftar',
+                  asalSekolah: currentPayment.peserta?.asalSekolah || 'Satuan Pendidikan',
+                  kategori: currentPayment.peserta?.kategoriNama || 'Olimpiade Matematika',
+                  jadwalUjian: '25 Oktober 2027, 09:00 - 11:30 WIB',
+                  sesi: 'Sesi 1 (Online CBT)',
+                  qrCodeUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(`GM2027:VERIFIED:${currentPayment.orderId}:${currentPayment.peserta?.namaSiswa}`),
+                  fileUrl: '#',
+                  tipeKepesertaan: currentPayment.peserta?.tipeKepesertaan,
+                  namaTim: currentPayment.peserta?.namaTim,
+                }}
                 onGoToExamPortal={() => showToast('Membuka Web Ujian Daring (SSO Aktif)...')}
               />
             ) : (

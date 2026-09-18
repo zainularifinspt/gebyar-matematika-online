@@ -1,16 +1,21 @@
 export interface KategoriLomba {
   id: string;
   nama: string;
-  tingkat: 'SD/MI' | 'SMP/MTs' | 'SMA/MA/SMK';
+  kategori?: string;
+  tingkat: 'SD/MI' | 'SMP/MTs' | 'SMA/MA/SMK' | 'Umum' | string;
+  tipeKepesertaan: 'individu' | 'kelompok';
+  maksAnggota?: number;
   biaya: number;
-  kuota: number;
-  terdaftar: number;
-  jadwalPenyisihan: string;
-  jadwalFinal: string;
   deskripsi: string;
-  hadiah: string[];
-  materi: string[];
-  warnaAksen: 'amber' | 'cyan' | 'purple';
+  persyaratan?: string[];
+  jadwalPenyisihan?: string;
+  jadwalFinal?: string;
+  hadiah?: string[];
+  materi?: string[];
+  warnaAksen: 'amber' | 'cyan' | 'purple' | 'emerald' | 'rose' | 'blue';
+  status: 'aktif' | 'tutup';
+  terdaftar?: number;
+  kuota?: number;
 }
 
 export interface Pengumuman {
@@ -70,6 +75,9 @@ export interface DetailPesertaOrder {
   tingkat: string;
   emailPendaftar: string;
   noHp: string;
+  tipeKepesertaan?: 'individu' | 'kelompok';
+  namaTim?: string;
+  anggotaTim?: string[];
 }
 
 export interface Pembayaran {
@@ -99,6 +107,8 @@ export interface KartuPeserta {
   sesi: string;
   qrCodeUrl: string;
   fileUrl: string;
+  tipeKepesertaan?: 'individu' | 'kelompok';
+  namaTim?: string;
 }
 
 export interface PesertaAdminItem {
@@ -117,6 +127,8 @@ export interface PesertaAdminItem {
   orderId: string;
   tanggalDaftar: string;
   kartuTercetak: boolean;
+  tipeKepesertaan?: 'individu' | 'kelompok';
+  namaTim?: string;
 }
 
 export interface NilaiUjianItem {
